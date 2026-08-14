@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lekra/services/date_formatters_and_converters.dart';
 import 'package:lekra/views/screens/dashboard/card/form_for_apply_card/form_for_apply_card_screen.dart';
+import 'package:lekra/views/screens/dashboard/creadit_card/screen/check_custom_kyc/check_custom_kyc_screen.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/home_screen.dart';
 import 'package:lekra/views/screens/transcation_history/transaction_history_screen.dart';
 import 'package:lekra/views/screens/drawer_screen/drawer_screen.dart';
@@ -50,7 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     isReload: true,
                     scaffoldKey: _dashboardScaffoldKey,
                   ),
-                  // FormForApplyCardScreen(),
+                  CheckCustomerKycScreen(),
                   TransactionHistoryScreen(
                     fromDateValue: DateTime(2024, 1, 1),
                     todateValue: getDateTime(),
@@ -92,17 +93,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           icon: Assets.svgsHome,
                           isActive: controller.dashPage == 0,
                         ),
-                        // BottomNavigationItemWidget(
-                        //   onTap: () => controller.dashPage = 1,
-                        //   title: 'Card',
-                        //   icon: Assets.svgsCard,
-                        //   isActive: controller.dashPage == 1,
-                        // ),
                         BottomNavigationItemWidget(
                           onTap: () => controller.dashPage = 1,
+                          title: 'Card',
+                          icon: Assets.svgsCard,
+                          isActive: controller.dashPage == 1,
+                        ),
+                        BottomNavigationItemWidget(
+                          onTap: () => controller.dashPage = 2,
                           title: 'Report',
                           icon: Assets.svgsReport,
-                          isActive: controller.dashPage == 1,
+                          isActive: controller.dashPage == 2,
                         ),
                       ],
                     ),

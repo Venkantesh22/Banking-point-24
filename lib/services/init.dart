@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:get/instance_manager.dart';
 import 'package:lekra/controllers/basic_controlller.dart';
 import 'package:lekra/controllers/card_controller.dart';
+import 'package:lekra/controllers/card_money_controller/custom_kyc_controller.dart';
 import 'package:lekra/controllers/dashboard_controller.dart';
 import 'package:lekra/controllers/dispute_controller.dart';
 import 'package:lekra/controllers/kyc_controller/bank_details_controller.dart';
@@ -105,7 +106,7 @@ class Init {
           sharedPreferences: sharedPreferences));
       Get.lazyPut(() => VoiceServiceController());
 
-      //KYC controller list
+      //*KYC controller list
       Get.lazyPut(() => RegistrationKycFromController());
       Get.lazyPut(() => KycDocumentUploadController());
       Get.lazyPut(() => DocumentDetailsController());
@@ -115,6 +116,10 @@ class Init {
       Get.lazyPut(() => BankDetailsController());
       Get.lazyPut(() => BankDocumentUploadController());
       Get.lazyPut(() => KycReviewController());
+
+      //* Custom KYC controller list
+
+      Get.lazyPut(() => CustomKycController());
     } catch (e) {
       log('---- ${e.toString()} ----', name: "ERROR AT initialize()");
     }

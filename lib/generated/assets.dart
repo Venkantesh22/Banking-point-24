@@ -98,6 +98,10 @@ class Assets {
   /// assets/images/QR.png
   static const String imagesQR = "assets/images/QR.png";
 
+  /// Assets for imagesSearchInMobile
+  /// assets/images/search-in-mobile.png
+  static const String imagesSearchInMobile = "assets/images/search-in-mobile.png";
+
   /// Assets for imagesServiceTopBg
   /// assets/images/service-top-bg.png
   static const String imagesServiceTopBg = "assets/images/service-top-bg.png";
