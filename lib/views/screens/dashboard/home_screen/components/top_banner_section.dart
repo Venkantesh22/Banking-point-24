@@ -36,7 +36,7 @@ class TopBannerSection extends StatelessWidget {
         ),
         Positioned(
           right: 12.w,
-         top: 10.h,
+          top: 10.h,
           bottom: 10.h,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -91,7 +91,7 @@ class TopBannerSection extends StatelessWidget {
                     horizontal: 10.w,
                   ),
                   child: CustomText(
-                    "Today's Collection",
+                    "View Statement",
                     style: TextStyle(
                       fontSize: 10.sp,
                       fontWeight: FontWeight.w800,
