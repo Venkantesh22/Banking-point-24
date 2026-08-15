@@ -11,7 +11,7 @@ import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/common_button.dart';
 import 'package:lekra/views/base/custom_image.dart';
-import 'package:lekra/views/screens/dashboard/creadit_card/screen/custom_kyc_screen/custom_kyc_screen.dart';
+import 'package:lekra/views/screens/creadit_card/screen/custom_kyc_screen/custom_kyc_screen.dart';
 import 'package:lekra/views/screens/widget/text_box/app_text_box.dart';
 
 class CheckCustomerKycScreen extends StatelessWidget {

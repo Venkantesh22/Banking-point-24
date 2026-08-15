@@ -9,9 +9,9 @@ import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/common_button.dart';
-import 'package:lekra/views/screens/dashboard/creadit_card/screen/custom_kyc_screen/widget/custom_otp_verification.dart';
-import 'package:lekra/views/screens/dashboard/creadit_card/screen/custom_kyc_screen/widget/upload_verification_widget.dart';
-import 'package:lekra/views/screens/dashboard/creadit_card/widget/section_title.dart';
+import 'package:lekra/views/screens/creadit_card/screen/custom_kyc_screen/widget/custom_otp_verification.dart';
+import 'package:lekra/views/screens/creadit_card/screen/custom_kyc_screen/widget/upload_verification_widget.dart';
+import 'package:lekra/views/screens/creadit_card/widget/section_title.dart';
 import 'package:lekra/views/screens/widget/text_box/app_text_box.dart';
 
 class CustomKycScreen extends StatelessWidget {

@@ -4,6 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+enum KycStatus {
+  pending,
+  verified,
+  rejected,
+}
+
 class CustomKycController extends GetxController
     implements GetxService {
   // ============================================================
@@ -351,6 +357,50 @@ class CustomKycController extends GetxController
     update();
   }
 
+
+   // ============================================================
+  // STATE
+  // ============================================================
+
+  KycStatus status = KycStatus.pending;
+
+  bool isLoading = false;
+
+  // ============================================================
+  // STATUS
+  // ============================================================
+
+  void setStatus(KycStatus value) {
+    status = value;
+    update();
+  }
+
+  // ============================================================
+  // RETRY
+  // ============================================================
+
+  void retryKyc() {
+    isLoading = true;
+    update();
+
+    debugPrint('Retry KYC');
+
+    // API will be added later.
+
+    isLoading = false;
+    update();
+  }
+
+  // ============================================================
+  // RESET
+  // ============================================================
+
+  void resetStatus() {
+    status = KycStatus.pending;
+    isLoading = false;
+    update();
+  }
+
   // ============================================================
   // DISPOSE
   // ============================================================
@@ -367,4 +417,5 @@ class CustomKycController extends GetxController
 
     super.onClose();
   }
+
 }
