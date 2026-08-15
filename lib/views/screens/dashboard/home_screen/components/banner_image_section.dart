@@ -10,7 +10,7 @@ class BannerImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomImage(
-      path: Assets.imagesBanner,
+      path: Assets.imagesCreditCard,
       height: 160.h,
       width: double.infinity,
       fit: BoxFit.cover,

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lekra/generated/assets.dart';
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/date_formatters_and_converters.dart';
 import 'package:lekra/services/theme.dart';
+import 'package:lekra/views/screens/creadit_card/screen/check_custom_kyc/check_custom_kyc_screen.dart';
 import 'package:lekra/views/screens/drawer_screen/screen/payment_sound_notficantion/payment_sound_notification_screen.dart';
 import 'package:lekra/views/screens/kyc_form/kyc_form_screen.dart';
 import 'package:lekra/views/screens/transcation_history/transaction_history_screen.dart';
@@ -15,21 +18,21 @@ class QuickActionsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<_QuickActionItem> actions = [
       _QuickActionItem(
-        title: 'Collect\nPayment',
-        icon: Icons.qr_code_scanner_rounded,
+        title: 'Cash Withdrawal',
         iconColor: const Color(0xFF16A36A),
         backgroundColor: const Color(0xFFEFFBF5),
+        svgIcon: Assets.svgsCashWithdraw,
         onTap: () {
-          navigate(context: context, page: KycFormScreen());
+          navigate(context: context, page: CheckCustomerKycScreen());
         },
       ),
       _QuickActionItem(
-        title: 'Sound Box',
-        icon: Icons.volume_up_rounded,
+        title: 'Add\nCard/Manage',
+        svgIcon: Assets.svgsAddCard,
         iconColor: const Color(0xFF7C3AED),
         backgroundColor: const Color(0xFFF5F0FF),
         onTap: () {
-          navigate(context: context, page: PaymentSoundNotificationScreen());
+          // navigate(context: context, page: PaymentSoundNotificationScreen());
         },
       ),
       _QuickActionItem(
@@ -138,11 +141,23 @@ class _QuickActionCard extends StatelessWidget {
                 color: item.backgroundColor,
                 borderRadius: BorderRadius.circular(16.r),
               ),
-              child: Icon(
-                item.icon,
-                color: item.iconColor,
-                size: 27.r,
-              ),
+              child: item.icon != null
+                  ? Icon(
+                      item.icon,
+                      color: item.iconColor,
+                      size: 27.r,
+                    )
+                  : Padding(
+                      padding: EdgeInsets.all(16.w),
+                      child: SvgPicture.asset(
+                        item.svgIcon ?? "",
+                        height: 24.h,
+                        width: 24.w,
+                        fit: BoxFit.cover,
+                        colorFilter:
+                            ColorFilter.mode(item.iconColor, BlendMode.srcIn),
+                      ),
+                    ),
             ),
           ),
           SizedBox(height: 12.h),
@@ -169,16 +184,18 @@ class _QuickActionCard extends StatelessWidget {
 
 class _QuickActionItem {
   final String title;
-  final IconData icon;
+  final IconData? icon;
+  final String? svgIcon;
   final Color iconColor;
   final Color backgroundColor;
   final VoidCallback? onTap;
 
   const _QuickActionItem({
     required this.title,
-    required this.icon,
     required this.iconColor,
     required this.backgroundColor,
     this.onTap,
+    this.icon,
+    this.svgIcon,
   });
 }

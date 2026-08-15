@@ -26,6 +26,10 @@ class Assets {
   /// assets/images/coin.png
   static const String imagesCoin = "assets/images/coin.png";
 
+  /// Assets for imagesCreditCard
+  /// assets/images/credit-card.png
+  static const String imagesCreditCard = "assets/images/credit-card.png";
+
   /// Assets for imagesDemo1
   /// assets/images/demo-1.png
   static const String imagesDemo1 = "assets/images/demo-1.png";
@@ -134,6 +138,10 @@ class Assets {
   /// assets/svgs/add-balance.svg
   static const String svgsAddBalance = "assets/svgs/add-balance.svg";
 
+  /// Assets for svgsAddCard
+  /// assets/svgs/add-card.svg
+  static const String svgsAddCard = "assets/svgs/add-card.svg";
+
   /// Assets for svgsAllStatus
   /// assets/svgs/all-status.svg
   static const String svgsAllStatus = "assets/svgs/all-status.svg";
@@ -185,6 +193,10 @@ class Assets {
   /// Assets for svgsCardTransactionHistory
   /// assets/svgs/card-transaction-history.svg
   static const String svgsCardTransactionHistory = "assets/svgs/card-transaction-history.svg";
+
+  /// Assets for svgsCashWithdraw
+  /// assets/svgs/cash-withdraw.svg
+  static const String svgsCashWithdraw = "assets/svgs/cash-withdraw.svg";
 
   /// Assets for svgsChangePin
   /// assets/svgs/change-pin.svg
