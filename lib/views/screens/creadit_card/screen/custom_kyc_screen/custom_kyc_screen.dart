@@ -11,6 +11,7 @@ import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/common_button.dart';
 import 'package:lekra/views/screens/creadit_card/screen/custom_kyc_screen/widget/custom_otp_verification.dart';
 import 'package:lekra/views/screens/creadit_card/screen/custom_kyc_screen/widget/upload_verification_widget.dart';
+import 'package:lekra/views/screens/creadit_card/screen/custom_kyc_status_screen/custom_kyc_status_screen.dart';
 import 'package:lekra/views/screens/creadit_card/widget/section_title.dart';
 import 'package:lekra/views/screens/widget/text_box/app_text_box.dart';
 
@@ -360,55 +361,58 @@ class CustomKycScreen extends StatelessWidget {
                       onTap: controller.isSubmitting
                           ? null
                           : () {
-                              final bool valid =
-                                  formKey.currentState?.validate() ?? false;
+                              navigate(
+                                  context: context,
+                                  page: CustomKycStatusScreen());
+                              // final bool valid =
+                              //     formKey.currentState?.validate() ?? false;
 
-                              if (!valid) {
-                                return;
-                              }
+                              // if (!valid) {
+                              //   return;
+                              // }
 
-                              if (!controller.isMobileVerified) {
-                                _showMessage(
-                                  context,
-                                  'Please verify mobile number',
-                                );
-                                return;
-                              }
+                              // if (!controller.isMobileVerified) {
+                              //   _showMessage(
+                              //     context,
+                              //     'Please verify mobile number',
+                              //   );
+                              //   return;
+                              // }
 
-                              if (!controller.isOtpVerified) {
-                                _showMessage(
-                                  context,
-                                  'Please verify OTP',
-                                );
-                                return;
-                              }
+                              // if (!controller.isOtpVerified) {
+                              //   _showMessage(
+                              //     context,
+                              //     'Please verify OTP',
+                              //   );
+                              //   return;
+                              // }
 
-                              if (controller.panCardImage == null) {
-                                _showMessage(
-                                  context,
-                                  'Please upload PAN card',
-                                );
-                                return;
-                              }
+                              // if (controller.panCardImage == null) {
+                              //   _showMessage(
+                              //     context,
+                              //     'Please upload PAN card',
+                              //   );
+                              //   return;
+                              // }
 
-                              if (controller.aadhaarFrontImage == null ||
-                                  controller.aadhaarBackImage == null) {
-                                _showMessage(
-                                  context,
-                                  'Please upload Aadhaar front and back',
-                                );
-                                return;
-                              }
+                              // if (controller.aadhaarFrontImage == null ||
+                              //     controller.aadhaarBackImage == null) {
+                              //   _showMessage(
+                              //     context,
+                              //     'Please upload Aadhaar front and back',
+                              //   );
+                              //   return;
+                              // }
 
-                              if (controller.livePhoto == null) {
-                                _showMessage(
-                                  context,
-                                  'Please capture live photo',
-                                );
-                                return;
-                              }
+                              // if (controller.livePhoto == null) {
+                              //   _showMessage(
+                              //     context,
+                              //     'Please capture live photo',
+                              //   );
+                              //   return;
+                              // }
 
-                              controller.submitKyc();
+                              // controller.submitKyc();
                             },
                     ),
 
