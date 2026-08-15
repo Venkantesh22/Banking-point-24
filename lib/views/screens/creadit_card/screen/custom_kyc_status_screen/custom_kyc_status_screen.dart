@@ -5,9 +5,11 @@ import 'package:lekra/controllers/card_money_controller/custom_kyc_controller.da
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
+import 'package:lekra/views/base/base/custom_button.dart';
 import 'package:lekra/views/screens/creadit_card/screen/custom_kyc_status_screen/widget/kyc_status_card.dart';
 import 'package:lekra/views/screens/creadit_card/screen/custom_kyc_status_screen/widget/kyc_status_timeline.dart';
 import 'package:lekra/views/screens/creadit_card/screen/custom_kyc_status_screen/widget/kyc_withdraw_info_card.dart';
+import 'package:lekra/views/screens/creadit_card/screen/withdraw_money_screen/withdraw_money_screen.dart';
 
 class CustomKycStatusScreen extends StatelessWidget {
   const CustomKycStatusScreen({
@@ -52,6 +54,12 @@ class CustomKycStatusScreen extends StatelessWidget {
                   sizedBoxHeight(height: 18),
                   KycWithdrawInfoCard(),
                   sizedBoxHeight(height: 20),
+                  CustomButton(
+                    onTap: () {
+                      navigate(context: context, page: WithdrawMoneyScreen());
+                    },
+                    title: "Container",
+                  )
                 ],
               ),
             ),
