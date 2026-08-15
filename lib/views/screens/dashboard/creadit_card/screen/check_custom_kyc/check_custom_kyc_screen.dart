@@ -1,17 +1,25 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import 'package:lekra/controllers/card_money_controller/custom_kyc_controller.dart';
+import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/common_button.dart';
 import 'package:lekra/views/base/custom_image.dart';
+import 'package:lekra/views/screens/dashboard/creadit_card/screen/custom_kyc_screen/custom_kyc_screen.dart';
+import 'package:lekra/views/screens/widget/text_box/app_text_box.dart';
 
 class CheckCustomerKycScreen extends StatelessWidget {
-  const CheckCustomerKycScreen({
+  CheckCustomerKycScreen({
     super.key,
   });
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -42,326 +50,284 @@ class CheckCustomerKycScreen extends StatelessWidget {
             ),
             centerTitle: true,
           ),
+
+          // ==========================================================
+          // BODY
+          // ==========================================================
+
           body: SafeArea(
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              padding: EdgeInsets.symmetric(
-                horizontal: 20.w,
-                vertical: 10.h,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  
-                  Center(
-                    child: CustomImage(
-                      path: Assets.imagesSearchInMobile,
-                      height: 300,
-                      fit: BoxFit.cover,
+            child: Form(
+              key: formKey,
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                  vertical: 10.h,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // ==================================================
+                    // IMAGE
+                    // ==================================================
+
+                    Center(
+                      child: CustomImage(
+                        path: Assets.imagesSearchInMobile,
+                        height: 300.h,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
 
+                    // ==================================================
+                    // TITLE
+                    // ==================================================
 
-                  Center(
-                    child: CustomText(
-                      'Enter Customer Mobile Number',
-                      textAlign: TextAlign.center,
+                    Center(
+                      child: CustomText(
+                        'Enter Customer Mobile Number',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF101B5C),
+                        ),
+                      ),
+                    ),
+
+                    sizedBoxHeight(height: 8),
+
+                    // ==================================================
+                    // DESCRIPTION
+                    // ==================================================
+
+                    Center(
+                      child: CustomText(
+                        'We will check if this customer is registered\n'
+                        'and KYC is completed.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          height: 1.6,
+                          color: greyDark,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+
+                    sizedBoxHeight(height: 28),
+
+                    // ==================================================
+                    // MOBILE NUMBER
+                    // ==================================================
+
+                    AppTextFieldWithHeading(
+                      controller: controller.mobileNumberController,
+                      heading: 'Mobile Number',
+                      hindText: 'Enter mobile number',
+                      prefixText: '+91 ',
+                      prefixStyle: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF101B5C),
+                      ),
+                      keyboardType: TextInputType.phone,
+                      textInputAction: TextInputAction.done,
+                      maxLength: 10,
+                      isRequired: true,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(
+                          10,
+                        ),
+                      ],
+                      bgColor: white,
+                      borderColor: const Color(0xFFD6DCE8),
+                      borderWidth: 1,
+                      borderRadius: 12,
+                      validator: (value) {
+                        final String mobile = value?.trim() ?? '';
+
+                        if (mobile.isEmpty) {
+                          return 'Please enter customer mobile number';
+                        }
+
+                        if (!RegExp(
+                          r'^[6-9][0-9]{9}$',
+                        ).hasMatch(mobile)) {
+                          return 'Please enter a valid 10 digit mobile number';
+                        }
+
+                        return null;
+                      },
+                    ),
+
+                    sizedBoxHeight(height: 18),
+
+                    // ==================================================
+                    // INFO CARD
+                    // ==================================================
+
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(14.w),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF1F6FF),
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(
+                          color: const Color(0xFFD5E3FF),
+                        ),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 32.w,
+                            height: 32.w,
+                            decoration: const BoxDecoration(
+                              color: primaryColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.info_outline_rounded,
+                              color: white,
+                              size: 19.r,
+                            ),
+                          ),
+                          sizedBoxWidth(width: 10),
+                          Expanded(
+                            child: CustomText(
+                              'We will check this number in our '
+                              'system and return the customer KYC status.',
+                              overflow: TextOverflow.clip,
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                height: 1.5,
+                                color: const Color(
+                                  0xFF27366F,
+                                ),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    sizedBoxHeight(height: 26),
+
+                    // ==================================================
+                    // WHAT HAPPENS NEXT
+                    // ==================================================
+
+                    CustomText(
+                      'What happens next?',
                       style: TextStyle(
-                        fontSize: 22.sp,
+                        fontSize: 17.sp,
                         fontWeight: FontWeight.w700,
                         color: const Color(0xFF101B5C),
                       ),
                     ),
-                  ),
 
-                  SizedBox(height: 8.h),
+                    sizedBoxHeight(height: 14),
 
-                  Center(
-                    child: CustomText(
-                      'We will check if this customer is registered\n'
-                      'and KYC is completed.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        height: 1.6,
-                        color: greyDark,
-                        fontWeight: FontWeight.w400,
+                    _StatusInfoRow(
+                      icon: Icons.check_rounded,
+                      iconColor: const Color(0xFF16B66A),
+                      title: 'If KYC is already completed',
+                      description: 'You will be directed to withdraw money.',
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 22.w,
+                      ),
+                      child: Divider(
+                        height: 22.h,
+                        color: const Color(0xFFE5E9F2),
                       ),
                     ),
-                  ),
 
-                  SizedBox(height: 28.h),
-
-                  // ==================================================
-                  // MOBILE LABEL
-                  // ==================================================
-
-                  CustomText(
-                    'Mobile Number',
-                    style: TextStyle(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF101B5C),
+                    _StatusInfoRow(
+                      icon: Icons.person_outline_rounded,
+                      iconColor: const Color(0xFFF59E0B),
+                      title: 'If KYC is not completed',
+                      description:
+                          'You will be directed to complete customer KYC.',
                     ),
-                  ),
 
-                  SizedBox(height: 8.h),
+                    sizedBoxHeight(height: 28),
 
-                  // ==================================================
-                  // MOBILE FIELD
-                  // ==================================================
+                    // ==================================================
+                    // CHECK BUTTON
+                    // ==================================================
 
-                  Container(
-                    height: 54.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.r),
-                      border: Border.all(
-                        color: controller.mobileError != null
-                            ? Colors.red
-                            : const Color(0xFFD6DCE8),
+                    CustomButton(
+                      title: 'Check Customer KYC',
+                      height: 52.h,
+                      radius: 12.r,
+                      gradient: const LinearGradient(
+                        colors: [
+                          primaryColor,
+                          Color(0xFF1747B8),
+                        ],
                       ),
+                      onTap: () {
+                        // final bool isValid =
+                        //     formKey.currentState?.validate() ?? false;
+
+                        // if (!isValid) {
+                        //   return;
+                        // }
+
+                        final String mobile =
+                            controller.mobileNumberController.text.trim();
+
+                        debugPrint(
+                          'Customer mobile: $mobile',
+                        );
+                        navigate(context: context, page: CustomKycScreen());
+
+                        /*
+                         * API LOGIC WILL BE ADDED LATER.
+                         *
+                         * For now only validate the
+                         * mobile number and continue.
+                         */
+                      },
                     ),
-                    child: Row(
-                      children: [
-                        // Country code
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                          ),
-                          child: CustomText(
-                            '+91',
-                            style: TextStyle(
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w700,
-                              color: const Color(0xFF101B5C),
-                            ),
-                          ),
-                        ),
 
-                        Container(
-                          width: 1,
-                          height: 28.h,
-                          color: const Color(0xFFD6DCE8),
-                        ),
+                    sizedBoxHeight(height: 18),
 
-                        // Mobile number
-                        Expanded(
-                          child: TextField(
-                            controller: controller.mobileNumberController,
-                            keyboardType: TextInputType.phone,
-                            textInputAction: TextInputAction.done,
-                            maxLength: 10,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              LengthLimitingTextInputFormatter(
-                                10,
-                              ),
-                            ],
-                            onChanged: (_) {
-                              if (controller.mobileError != null) {
-                                controller.mobileError = null;
-                                controller.update();
-                              }
-                            },
-                            decoration: InputDecoration(
-                              counterText: '',
-                              border: InputBorder.none,
-                              hintText: 'Enter mobile number',
-                              hintStyle: TextStyle(
-                                fontSize: 14.sp,
-                                color: const Color(0xFF9AA4BA),
-                              ),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 14.w,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                    // ==================================================
+                    // SECURITY
+                    // ==================================================
 
-                  // ==================================================
-                  // ERROR
-                  // ==================================================
-
-                  if (controller.mobileError != null) ...[
-                    SizedBox(height: 6.h),
-                    CustomText(
-                      controller.mobileError!,
-                      style: TextStyle(
-                        fontSize: 11.sp,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ],
-
-                  SizedBox(height: 18.h),
-
-                  // ==================================================
-                  // INFO CARD
-                  // ==================================================
-
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(14.w),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF1F6FF),
-                      borderRadius: BorderRadius.circular(12.r),
-                      border: Border.all(
-                        color: const Color(0xFFD5E3FF),
-                      ),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 32.w,
-                          height: 32.w,
-                          decoration: BoxDecoration(
-                            color: primaryColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.info_outline_rounded,
-                            color: white,
-                            size: 19.r,
-                          ),
-                        ),
-                        SizedBox(width: 10.w),
-                        Expanded(
-                          child: CustomText(
-                            'We will check this number in our '
-                            'system and return the customer KYC status.',
-                            overflow: TextOverflow.clip,
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              height: 1.5,
-                              color: const Color(0xFF27366F),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: 26.h),
-
-                  // ==================================================
-                  // WHAT HAPPENS NEXT
-                  // ==================================================
-
-                  CustomText(
-                    'What happens next?',
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF101B5C),
-                    ),
-                  ),
-
-                  SizedBox(height: 14.h),
-
-                  _StatusInfoRow(
-                    icon: Icons.check_rounded,
-                    iconColor: const Color(0xFF16B66A),
-                    title: 'If KYC is already completed',
-                    description: 'You will be directed to withdraw money.',
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: 22.w,
-                    ),
-                    child: Divider(
-                      height: 22.h,
-                      color: const Color(0xFFE5E9F2),
-                    ),
-                  ),
-
-                  _StatusInfoRow(
-                    icon: Icons.person_outline_rounded,
-                    iconColor: const Color(0xFFF59E0B),
-                    title: 'If KYC is not completed',
-                    description:
-                        'You will be directed to complete customer KYC.',
-                  ),
-
-                  SizedBox(height: 28.h),
-
-                  // ==================================================
-                  // CHECK BUTTON
-                  // ==================================================
-
-                  CustomButton(
-                    title: controller.isCheckingKyc
-                        ? 'Checking...'
-                        : 'Check Customer KYC',
-                    height: 52.h,
-                    radius: 12.r,
-                    gradient: LinearGradient(
-                      colors: [
-                        primaryColor,
-                        const Color(0xFF1747B8),
-                      ],
-                    ),
-                    onTap: controller.isCheckingKyc
-                        ? null
-                        : () async {
-                            final bool? isKycCompleted =
-                                await controller.checkCustomerKyc();
-
-                            if (!context.mounted || isKycCompleted == null) {
-                              return;
-                            }
-
-                            if (isKycCompleted) {
-                              // navigate(
-                              //   context: context,
-                              //   page:
-                              //       const WithdrawMoneyScreen(),
-                              // );
-                            } else {
-                              // navigate(
-                              //   context: context,
-                              //   page:
-                              //       const CustomerKycScreen(),
-                              // );
-                            }
-                          },
-                  ),
-
-                  SizedBox(height: 18.h),
-
-                  // ==================================================
-                  // SECURITY
-                  // ==================================================
-
-                  Center(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.lock_outline_rounded,
-                          size: 16.r,
-                          color: greyDark,
-                        ),
-                        SizedBox(width: 6.w),
-                        CustomText(
-                          'Your information is secure and protected',
-                          style: TextStyle(
-                            fontSize: 11.sp,
+                    Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.lock_outline_rounded,
+                            size: 16.r,
                             color: greyDark,
-                            fontWeight: FontWeight.w400,
                           ),
-                        ),
-                      ],
+                          sizedBoxWidth(width: 6),
+                          CustomText(
+                            'Your information is secure and protected',
+                            style: TextStyle(
+                              fontSize: 11.sp,
+                              color: greyDark,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
 
-                  SizedBox(height: 20.h),
-                ],
+                    sizedBoxHeight(height: 200),
+                  ],
+                ),
               ),
             ),
           ),
@@ -406,7 +372,7 @@ class _StatusInfoRow extends StatelessWidget {
             size: 24.r,
           ),
         ),
-        SizedBox(width: 14.w),
+        sizedBoxWidth(width: 14),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -419,7 +385,7 @@ class _StatusInfoRow extends StatelessWidget {
                   color: const Color(0xFF101B5C),
                 ),
               ),
-              SizedBox(height: 4.h),
+              sizedBoxHeight(height: 4),
               CustomText(
                 description,
                 style: TextStyle(
