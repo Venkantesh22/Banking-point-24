@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lekra/services/theme.dart';
+import 'package:lekra/views/base/common_button.dart';
 
-import '../custom_button.dart';
 
 showLogoutDialogue({required BuildContext context}) async {
   return await showDialog(

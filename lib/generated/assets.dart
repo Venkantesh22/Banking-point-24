@@ -114,6 +114,14 @@ class Assets {
   /// assets/images/shimmer.gif
   static const String imagesShimmer = "assets/images/shimmer.gif";
 
+  /// Assets for imagesTopBanner
+  /// assets/images/top-banner.png
+  static const String imagesTopBanner = "assets/images/top-banner.png";
+
+  /// Assets for imagesTopBannerCardAtm
+  /// assets/images/top-banner-card-atm.png
+  static const String imagesTopBannerCardAtm = "assets/images/top-banner-card-atm.png";
+
   /// Assets for imagesTpipayWithLogo
   /// assets/images/tpipay-with-logo.png
   static const String imagesTpipayWithLogo = "assets/images/tpipay-with-logo.png";

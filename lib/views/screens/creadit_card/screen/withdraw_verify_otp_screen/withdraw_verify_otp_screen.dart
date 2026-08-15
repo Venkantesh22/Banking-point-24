@@ -9,8 +9,7 @@ import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/common_button.dart';
 import 'package:lekra/views/screens/creadit_card/screen/transaction_success_screen/transaction_success_screen.dart';
 
-class WithdrawVerifyOtpScreen
-    extends StatelessWidget {
+class WithdrawVerifyOtpScreen extends StatelessWidget {
   const WithdrawVerifyOtpScreen({
     super.key,
   });
@@ -21,7 +20,6 @@ class WithdrawVerifyOtpScreen
       builder: (controller) {
         return Scaffold(
           backgroundColor: white,
-
           appBar: AppBar(
             backgroundColor: white,
             elevation: 0,
@@ -32,8 +30,7 @@ class WithdrawVerifyOtpScreen
               },
               icon: Icon(
                 Icons.arrow_back_ios_new_rounded,
-                color:
-                    const Color(0xFF101B5C),
+                color: const Color(0xFF101B5C),
                 size: 20.r,
               ),
             ),
@@ -41,18 +38,14 @@ class WithdrawVerifyOtpScreen
               'Verify OTP',
               style: TextStyle(
                 fontSize: 20.sp,
-                fontWeight:
-                    FontWeight.w700,
-                color:
-                    const Color(0xFF101B5C),
+                fontWeight: FontWeight.w700,
+                color: const Color(0xFF101B5C),
               ),
             ),
           ),
-
           body: SafeArea(
             child: SingleChildScrollView(
-              padding:
-                  EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 20.w,
                 vertical: 15.h,
               ),
@@ -76,10 +69,8 @@ class WithdrawVerifyOtpScreen
                     'Enter OTP',
                     style: TextStyle(
                       fontSize: 18.sp,
-                      fontWeight:
-                          FontWeight.w700,
-                      color:
-                          const Color(0xFF101B5C),
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF101B5C),
                     ),
                   ),
 
@@ -104,8 +95,7 @@ class WithdrawVerifyOtpScreen
                     '+91 98765 43210',
                     style: TextStyle(
                       fontSize: 14.sp,
-                      fontWeight:
-                          FontWeight.w700,
+                      fontWeight: FontWeight.w700,
                       color: primaryColor,
                     ),
                   ),
@@ -119,8 +109,7 @@ class WithdrawVerifyOtpScreen
                   // ==================================================
 
                   Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: List.generate(
                       6,
                       (index) {
@@ -128,34 +117,23 @@ class WithdrawVerifyOtpScreen
                           width: 42.w,
                           height: 48.h,
                           child: TextField(
-                            controller: controller
-                                .otpControllers[
-                                    index],
-                            keyboardType:
-                                TextInputType.number,
+                            controller: controller.otpControllers[index],
+                            keyboardType: TextInputType.number,
                             maxLength: 1,
-                            textAlign:
-                                TextAlign.center,
+                            textAlign: TextAlign.center,
                             onChanged: (value) {
-                              controller
-                                  .updateOtp();
+                              controller.updateOtp();
 
-                              if (value
-                                      .isNotEmpty &&
-                                  index < 5) {
+                              if (value.isNotEmpty && index < 5) {
                                 FocusScope.of(
                                   context,
                                 ).nextFocus();
                               }
                             },
-                            decoration:
-                                InputDecoration(
+                            decoration: InputDecoration(
                               counterText: '',
-                              border:
-                                  OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius
-                                        .circular(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
                                   8.r,
                                 ),
                               ),
@@ -184,18 +162,17 @@ class WithdrawVerifyOtpScreen
 
                   CustomButton(
                     title: 'Verify OTP',
-                    height: 50.h,
-                    radius: 10.r,
-                    gradient:
-                        const LinearGradient(
+                    height: 48.h,
+                    radius: 8.r,
+                    gradient: LinearGradient(
                       colors: [
                         primaryColor,
-                        Color(0xFF1747B8),
+                        secondaryColor,
                       ],
                     ),
                     onTap: () {
-
-                      navigate(context: context, page: TransactionSuccessScreen());
+                      navigate(
+                          context: context, page: TransactionSuccessScreen());
                       // controller.verifyOtp();
 
                       // if (!controller
@@ -233,8 +210,7 @@ class _SecurityIcon extends StatelessWidget {
       width: 110.w,
       height: 110.w,
       decoration: BoxDecoration(
-        color:
-            primaryColor.withValues(
+        color: primaryColor.withValues(
           alpha: 0.05,
         ),
         shape: BoxShape.circle,
@@ -244,10 +220,8 @@ class _SecurityIcon extends StatelessWidget {
           width: 80.w,
           height: 80.w,
           decoration: BoxDecoration(
-            color:
-                const Color(0xFF0D48C8),
-            borderRadius:
-                BorderRadius.circular(
+            color: const Color(0xFF0D48C8),
+            borderRadius: BorderRadius.circular(
               20.r,
             ),
           ),

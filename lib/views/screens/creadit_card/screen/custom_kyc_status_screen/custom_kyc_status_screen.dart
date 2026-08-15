@@ -5,7 +5,7 @@ import 'package:lekra/controllers/card_money_controller/custom_kyc_controller.da
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
-import 'package:lekra/views/base/base/custom_button.dart';
+import 'package:lekra/views/base/common_button.dart';
 import 'package:lekra/views/screens/creadit_card/screen/custom_kyc_status_screen/widget/kyc_status_card.dart';
 import 'package:lekra/views/screens/creadit_card/screen/custom_kyc_status_screen/widget/kyc_status_timeline.dart';
 import 'package:lekra/views/screens/creadit_card/screen/custom_kyc_status_screen/widget/kyc_withdraw_info_card.dart';
@@ -55,6 +55,14 @@ class CustomKycStatusScreen extends StatelessWidget {
                   KycWithdrawInfoCard(),
                   sizedBoxHeight(height: 20),
                   CustomButton(
+                    height: 48.h,
+                    radius: 8.r,
+                    gradient: LinearGradient(
+                      colors: [
+                        primaryColor,
+                        secondaryColor,
+                      ],
+                    ),
                     onTap: () {
                       navigate(context: context, page: WithdrawMoneyScreen());
                     },

@@ -105,12 +105,12 @@ class WithdrawMoneyScreen extends StatelessWidget {
 
                     CustomButton(
                       title: 'Withdraw Money (Send OTP)',
-                      height: 50.h,
-                      radius: 10.r,
-                      gradient: const LinearGradient(
+  height: 48.h,
+                      radius: 8.r,
+                      gradient: LinearGradient(
                         colors: [
                           primaryColor,
-                          Color(0xFF1747B8),
+                          secondaryColor,
                         ],
                       ),
                       onTap: () {

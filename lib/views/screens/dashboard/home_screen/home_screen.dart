@@ -15,6 +15,7 @@ import 'package:lekra/views/screens/dashboard/home_screen/components/banner_imag
 import 'package:lekra/views/screens/dashboard/home_screen/components/kyc_pending_card.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/merchant_profile_card.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/quick_acitons_section/quick_actions_section.dart';
+import 'package:lekra/views/screens/dashboard/home_screen/components/top_banner_section.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/transaction_history_section.dart';
 import 'package:lekra/views/screens/kyc_form/kyc_form_screen.dart';
 
@@ -97,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
             ),
             CustomText(
-              "UPI Merchant",
+              "Credit Card Cash Withdrawal",
               style: Helper(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w400,
@@ -130,8 +131,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 // ==================================================
                 // MERCHANT PROFILE
                 // ==================================================
+                TopBannerSection(),
 
-                const MerchantProfileCard(),
+                // const MerchantProfileCard(),
 
                 SizedBox(height: 16.h),
 

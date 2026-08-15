@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lekra/services/date_formatters_and_converters.dart';
-import 'package:lekra/views/screens/dashboard/card/form_for_apply_card/form_for_apply_card_screen.dart';
-import 'package:lekra/views/screens/creadit_card/screen/check_custom_kyc/check_custom_kyc_screen.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/home_screen.dart';
 import 'package:lekra/views/screens/transcation_history/transaction_history_screen.dart';
 import 'package:lekra/views/screens/drawer_screen/drawer_screen.dart';

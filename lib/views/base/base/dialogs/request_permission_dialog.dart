@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lekra/generated/assets.dart';
 import 'package:lekra/services/extensions.dart';
+import 'package:lekra/views/base/common_button.dart';
 
-import '../custom_button.dart';
 import '../custom_image.dart';
 
 class RequestPermissionDialog extends StatelessWidget {
