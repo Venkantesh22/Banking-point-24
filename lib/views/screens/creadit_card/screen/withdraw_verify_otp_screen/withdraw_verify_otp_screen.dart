@@ -7,6 +7,7 @@ import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/common_button.dart';
+import 'package:lekra/views/screens/creadit_card/screen/transaction_success_screen/transaction_success_screen.dart';
 
 class WithdrawVerifyOtpScreen
     extends StatelessWidget {
@@ -193,12 +194,14 @@ class WithdrawVerifyOtpScreen
                       ],
                     ),
                     onTap: () {
-                      controller.verifyOtp();
 
-                      if (!controller
-                          .isOtpVerified) {
-                        return;
-                      }
+                      navigate(context: context, page: TransactionSuccessScreen());
+                      // controller.verifyOtp();
+
+                      // if (!controller
+                      //     .isOtpVerified) {
+                      //   return;
+                      // }
 
                       // API later.
                       //
