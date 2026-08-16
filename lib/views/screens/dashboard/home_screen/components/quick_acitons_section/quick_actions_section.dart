@@ -7,8 +7,6 @@ import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/date_formatters_and_converters.dart';
 import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/screens/creadit_card/screen/check_custom_kyc/check_custom_kyc_screen.dart';
-import 'package:lekra/views/screens/drawer_screen/screen/payment_sound_notficantion/payment_sound_notification_screen.dart';
-import 'package:lekra/views/screens/kyc_form/kyc_form_screen.dart';
 import 'package:lekra/views/screens/transcation_history/transaction_history_screen.dart';
 
 class QuickActionsSection extends StatelessWidget {
@@ -51,8 +49,8 @@ class QuickActionsSection extends StatelessWidget {
         },
       ),
       _QuickActionItem(
-        title: 'Bank',
-        icon: Icons.account_balance_outlined,
+        title: 'Pos machine',
+        svgIcon: Assets.svgsPosMachine,
         iconColor: const Color(0xFFF59E0B),
         backgroundColor: const Color(0xFFFFF7E8),
         onTap: () {},

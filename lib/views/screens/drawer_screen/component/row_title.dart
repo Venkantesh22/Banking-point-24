@@ -13,7 +13,6 @@ import 'package:lekra/views/screens/drawer_screen/screen/change_password/change_
 import 'package:lekra/views/screens/drawer_screen/screen/contact_us/contact_us_screen.dart';
 import 'package:lekra/views/screens/drawer_screen/screen/dispute/dispute_screen/dispute_screen.dart';
 import 'package:lekra/views/screens/drawer_screen/screen/download_qr/download_qr_screen.dart';
-import 'package:lekra/views/screens/drawer_screen/screen/payment_sound_notficantion/payment_sound_notification_screen.dart';
 import 'package:lekra/views/screens/drawer_screen/screen/profile/my_profile_screen.dart';
 import 'package:lekra/views/screens/drawer_screen/screen/referral/referral_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -137,16 +136,16 @@ List<DrawerTitleRowModel> drawerTitleList = [
       icon: Assets.svgsHome, title: "Home", page: const DashboardScreen()),
   DrawerTitleRowModel(
       icon: Assets.svgsPerson, title: "Profile", page: const MyProfileScreen()),
-  DrawerTitleRowModel(
-      icon: Assets.svgsImage,
-      title: "Set QR as Wallpaper",
-      page: const DownloadQrScreen(
-        setAsWellPaper: true,
-      )),
-  DrawerTitleRowModel(
-      icon: Assets.svgsVolumeUp,
-      title: "Payment Sound Setting",
-      page: PaymentSoundNotificationScreen()),
+  // DrawerTitleRowModel(
+  //     icon: Assets.svgsImage,
+  //     title: "Set QR as Wallpaper",
+  //     page: const DownloadQrScreen(
+  //       setAsWellPaper: true,
+  //     )),
+  // DrawerTitleRowModel(
+  //     icon: Assets.svgsVolumeUp,
+  //     title: "Payment Sound Setting",
+  //     page: PaymentSoundNotificationScreen()),
   DrawerTitleRowModel(
       icon: Assets.svgsReferralCode,
       title: "Referral Code",

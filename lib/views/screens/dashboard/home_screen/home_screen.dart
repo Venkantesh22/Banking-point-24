@@ -10,6 +10,7 @@ import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/date_formatters_and_converters.dart';
 import 'package:lekra/services/theme.dart';
+import 'package:lekra/views/base/custom_image.dart';
 import 'package:lekra/views/screens/auth_screens/login_screen.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/banner_image_section.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/kyc_pending_card.dart';
@@ -17,7 +18,6 @@ import 'package:lekra/views/screens/dashboard/home_screen/components/quick_acito
 import 'package:lekra/views/screens/dashboard/home_screen/components/top_banner_section.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/transaction_history_section.dart';
 import 'package:lekra/views/screens/kyc_form/kyc_form_screen.dart';
-
 
 class HomeScreen extends StatefulWidget {
   final bool isReload;
@@ -87,22 +87,32 @@ class _HomeScreenState extends State<HomeScreen> {
               Icons.menu,
               color: primaryColor,
             )),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        title: Row(
           children: [
-            CustomText(
-              AppConstants.appName,
-              style: Helper(context).textTheme.bodyLarge?.copyWith(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
+            CustomImage(
+              path: Assets.imagesLogoIcon,
+              height: 60.h,
+              width: 60.w,
+              fit: BoxFit.cover,
             ),
-            CustomText(
-              "Credit Card Cash Withdrawal",
-              style: Helper(context).textTheme.bodyMedium?.copyWith(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText(
+                  AppConstants.appName,
+                  style: Helper(context).textTheme.bodyLarge?.copyWith(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
+                CustomText(
+                  "Credit Card Cash Withdrawal",
+                  style: Helper(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                ),
+              ],
             ),
           ],
         ),

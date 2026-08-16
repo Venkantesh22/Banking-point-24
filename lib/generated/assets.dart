@@ -6,6 +6,10 @@ class Assets {
   /// assets/images/add-money-widget.png
   static const String imagesAddMoneyWidget = "assets/images/add-money-widget.png";
 
+  /// Assets for imagesAppLogo
+  /// assets/images/app-logo.png
+  static const String imagesAppLogo = "assets/images/app-logo.png";
+
   /// Assets for imagesBankLogo
   /// assets/images/bank-logo.png
   static const String imagesBankLogo = "assets/images/bank-logo.png";
@@ -61,6 +65,10 @@ class Assets {
   /// Assets for imagesLogo
   /// assets/images/logo.png
   static const String imagesLogo = "assets/images/logo.png";
+
+  /// Assets for imagesLogoIcon
+  /// assets/images/logo-icon.png
+  static const String imagesLogoIcon = "assets/images/logo-icon.png";
 
   /// Assets for imagesLogoWithBg
   /// assets/images/logo-with-bg.png
@@ -317,6 +325,10 @@ class Assets {
   /// Assets for svgsPlusCircle
   /// assets/svgs/plus-circle.svg
   static const String svgsPlusCircle = "assets/svgs/plus-circle.svg";
+
+  /// Assets for svgsPosMachine
+  /// assets/svgs/pos-machine.svg
+  static const String svgsPosMachine = "assets/svgs/pos-machine.svg";
 
   /// Assets for svgsQr
   /// assets/svgs/qr.svg
