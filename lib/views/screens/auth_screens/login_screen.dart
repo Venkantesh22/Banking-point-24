@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         alignment:
                             Alignment.center, // 🔹 This centers it horizontally
                         child: CustomImage(
-                          path: Assets.imagesLogo,
+                          path: Assets.imagesFullLogo,
                           // width: 106,
                           height: 114.h,
                           fit: BoxFit.cover,

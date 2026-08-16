@@ -163,7 +163,7 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             const Spacer(),
             CustomImage(
-              path: Assets.imagesLogo,
+              path: Assets.imagesFullLogo,
               height: size.height * .3,
               width: size.height * .3,
             ),
