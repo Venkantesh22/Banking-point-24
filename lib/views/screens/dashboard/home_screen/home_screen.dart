@@ -13,11 +13,11 @@ import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/screens/auth_screens/login_screen.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/banner_image_section.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/kyc_pending_card.dart';
-import 'package:lekra/views/screens/dashboard/home_screen/components/merchant_profile_card.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/quick_acitons_section/quick_actions_section.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/top_banner_section.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/transaction_history_section.dart';
 import 'package:lekra/views/screens/kyc_form/kyc_form_screen.dart';
+
 
 class HomeScreen extends StatefulWidget {
   final bool isReload;
