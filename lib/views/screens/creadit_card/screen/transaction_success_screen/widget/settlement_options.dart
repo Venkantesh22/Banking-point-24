@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
+import 'package:lekra/views/screens/creadit_card/screen/choose_settlement_method_screen/choose_settlement_method_screen.dart';
 
 class SettlementOptions extends StatelessWidget {
   const SettlementOptions({
@@ -40,20 +41,19 @@ class SettlementOptions extends StatelessWidget {
               },
             ),
           ),
-
           Container(
             width: 1,
             height: 70.h,
             color: greyBorder,
           ),
-
           Expanded(
             child: SettlementOptionItem(
               icon: Icons.account_balance_outlined,
               iconColor: primaryColor,
               title: 'Settlement to Customer',
               onTap: () {
-                debugPrint('Settlement to Customer');
+                navigate(
+                    context: context, page: ChooseSettlementMethodScreen());
               },
             ),
           ),
@@ -97,9 +97,7 @@ class SettlementOptionItem extends StatelessWidget {
                 size: 32.sp,
                 color: iconColor,
               ),
-
               sizedBoxHeight(height: 8),
-
               CustomText(
                 title,
                 maxLines: 2,

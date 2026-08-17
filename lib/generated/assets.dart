@@ -10,6 +10,10 @@ class Assets {
   /// assets/images/bank-logo.png
   static const String imagesBankLogo = "assets/images/bank-logo.png";
 
+  /// Assets for imagesBankUpi
+  /// assets/images/bank-upi.png
+  static const String imagesBankUpi = "assets/images/bank-upi.png";
+
   /// Assets for imagesBanner
   /// assets/images/banner.png
   static const String imagesBanner = "assets/images/banner.png";
@@ -369,6 +373,10 @@ class Assets {
   /// Assets for svgsStar
   /// assets/svgs/star.svg
   static const String svgsStar = "assets/svgs/star.svg";
+
+  /// Assets for svgsUpi
+  /// assets/svgs/upi.svg
+  static const String svgsUpi = "assets/svgs/upi.svg";
 
   /// Assets for svgsUpperCrossArrow
   /// assets/svgs/upper-cross-arrow.svg
