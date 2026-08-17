@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/common_button.dart';
+import 'package:lekra/views/screens/creadit_card/screen/bank_flow/account_verified_screen/account_verified_screen.dart';
 import 'package:lekra/views/screens/creadit_card/screen/bank_flow/enter_account_details_screen/widget/account_details_header.dart';
 import 'package:lekra/views/screens/creadit_card/screen/bank_flow/enter_account_details_screen/widget/med_section_account.dart';
 
@@ -39,7 +40,9 @@ class _EnterAccountDetailsScreenState extends State<EnterAccountDetailsScreen> {
                 radius: 14.r,
                 borderWidth: 0,
                 fontSize: 14.sp,
-                onTap: () {},
+                onTap: () {
+                  navigate(context: context, page: AccountVerifiedScreen());
+                },
               ),
               sizedBoxHeight(height: 18),
               const _SecurityMessage(),
@@ -47,36 +50,6 @@ class _EnterAccountDetailsScreenState extends State<EnterAccountDetailsScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-// ============================================================
-// IFSC AUTO VERIFY MESSAGE
-// ============================================================
-
-class _IfscAutoVerifyMessage extends StatelessWidget {
-  const _IfscAutoVerifyMessage();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(
-          Icons.check_circle_outline_rounded,
-          size: 16.sp,
-          color: const Color(0xFF20A865),
-        ),
-        SizedBox(width: 6.w),
-        Text(
-          'IFSC will be auto-verified',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontSize: 11.sp,
-                fontWeight: FontWeight.w500,
-                color: const Color(0xFF20A865),
-              ),
-        ),
-      ],
     );
   }
 }
