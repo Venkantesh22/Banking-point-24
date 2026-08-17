@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
-
+import 'package:lekra/views/screens/pos_machine/connect_pos_device/connect_pos_device_screen/popup/pairing_request_dialog.dart';
 
 class AvailablePosDevices extends StatelessWidget {
   const AvailablePosDevices({
@@ -42,17 +42,19 @@ class AvailablePosDevices extends StatelessWidget {
                 color: textPrimary,
               ),
         ),
-
         sizedBoxHeight(height: 12),
-
         ...devices.map(
           (device) => Padding(
             padding: EdgeInsets.only(bottom: 12.h),
             child: PosDeviceCard(
               device: device,
               onTap: () {
-                debugPrint(
-                  'Selected device: ${device.name}',
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return const PairingRequestDialog();
+                  },
                 );
               },
             ),
@@ -101,9 +103,7 @@ class PosDeviceCard extends StatelessWidget {
             color: white,
             borderRadius: BorderRadius.circular(16.r),
             border: Border.all(
-              color: device.isRecommended
-                  ? primaryColor
-                  : greyBorder,
+              color: device.isRecommended ? primaryColor : greyBorder,
               width: device.isRecommended ? 1.3 : 1,
             ),
             boxShadow: [
@@ -129,9 +129,7 @@ class PosDeviceCard extends StatelessWidget {
                   color: primaryColor,
                 ),
               ),
-
               sizedBoxWidth(width: 14),
-
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,10 +149,8 @@ class PosDeviceCard extends StatelessWidget {
                                 ),
                           ),
                         ),
-
                         if (device.isRecommended) ...[
                           sizedBoxWidth(width: 6),
-
                           Container(
                             padding: EdgeInsets.symmetric(
                               horizontal: 7.w,
@@ -179,15 +175,10 @@ class PosDeviceCard extends StatelessWidget {
                         ],
                       ],
                     ),
-
                     sizedBoxHeight(height: 5),
-
                     CustomText(
                       device.address,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             fontSize: 11.sp,
                             color: greyText2,
                           ),
@@ -195,9 +186,7 @@ class PosDeviceCard extends StatelessWidget {
                   ],
                 ),
               ),
-
               sizedBoxWidth(width: 8),
-
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -206,15 +195,10 @@ class PosDeviceCard extends StatelessWidget {
                     size: 20.sp,
                     color: primaryColor,
                   ),
-
                   sizedBoxHeight(height: 4),
-
                   CustomText(
                     device.signal,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontSize: 10.sp,
                           color: greyText2,
                         ),
