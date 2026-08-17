@@ -4,6 +4,7 @@ import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/common_button.dart';
+import 'package:lekra/views/screens/pos_machine/connect_pos_device/connect_pos_device_screen/connect_pos_device_screen.dart';
 import 'package:lekra/views/screens/pos_machine/connect_pos_device/connection_success_pos_device/widget/connected_device_card.dart';
 import 'package:lekra/views/screens/pos_machine/connect_pos_device/connection_success_pos_device/widget/connection_success_header.dart';
 import 'package:lekra/views/screens/pos_machine/connect_pos_device/connection_success_pos_device/widget/device_status_card.dart';
@@ -35,7 +36,10 @@ class ConnectionSuccessPosDeviceScreen extends StatelessWidget {
               sizedBoxHeight(height: 60),
               CustomButton(
                 onTap: () {
-                  debugPrint('Disconnect POS device');
+                  navigate(
+                      context: context,
+                      isReplace: true,
+                      page: ConnectPosDeviceScreen());
                 },
                 type: ButtonType.secondary,
                 borderColor: red,
