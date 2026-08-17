@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
+import 'package:lekra/views/base/custom_image.dart';
 import 'package:lekra/views/screens/pos_machine/connect_pos_device/connect_pos_device_screen/popup/pairing_request_dialog.dart';
 
 class AvailablePosDevices extends StatelessWidget {
@@ -117,18 +119,22 @@ class PosDeviceCard extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 48.w,
-                height: 48.h,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: primaryColorLight,
-                ),
-                child: Icon(
-                  Icons.point_of_sale_rounded,
-                  size: 24.sp,
-                  color: primaryColor,
-                ),
-              ),
+                  width: 48.w,
+                  height: 48.h,
+                  padding: EdgeInsets.all(12.w),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: primaryColorLight,
+                  ),
+                  child: SvgPicture.asset(
+                    Assets.svgsPosMachine,
+
+                    fit: BoxFit.contain,
+                    colorFilter:
+                        ColorFilter.mode(primaryColor, BlendMode.srcIn),
+                  )
+                  
+                  ),
               sizedBoxWidth(width: 14),
               Expanded(
                 child: Column(

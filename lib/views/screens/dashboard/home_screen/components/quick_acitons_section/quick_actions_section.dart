@@ -50,7 +50,7 @@ class QuickActionsSection extends StatelessWidget {
         },
       ),
       _QuickActionItem(
-        title: 'Pos machine',
+        title: 'Pos Devices',
         svgIcon: Assets.svgsPosMachine,
         iconColor: const Color(0xFFF59E0B),
         backgroundColor: const Color(0xFFFFF7E8),
