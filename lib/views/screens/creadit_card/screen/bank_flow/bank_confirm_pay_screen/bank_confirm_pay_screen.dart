@@ -7,6 +7,7 @@ import 'package:lekra/views/screens/creadit_card/screen/bank_flow/bank_confirm_p
 import 'package:lekra/views/screens/creadit_card/screen/bank_flow/bank_confirm_pay_screen/widget/bank_customer_details.dart';
 import 'package:lekra/views/screens/creadit_card/screen/bank_flow/bank_confirm_pay_screen/widget/bank_payment_details.dart';
 import 'package:lekra/views/screens/creadit_card/screen/bank_flow/bank_confirm_pay_screen/widget/bank_secure_message.dart';
+import 'package:lekra/views/screens/creadit_card/screen/bank_flow/bank_payment_result_screen/bank_payment_result_screen.dart';
 
 class BankConfirmPayScreen extends StatelessWidget {
   const BankConfirmPayScreen({
@@ -46,6 +47,9 @@ class BankConfirmPayScreen extends StatelessWidget {
                 type: ButtonType.primary,
                 onTap: () {
                   debugPrint('Bank settlement - Send Money');
+                  navigate(context: context, page: BankPaymentResultScreen(
+                    status: BankPaymentStatus.pending,
+                  ));
                 },
                 height: 52.h,
                 radius: 14.r,
