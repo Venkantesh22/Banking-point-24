@@ -3,8 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
+import 'package:lekra/views/base/common_button.dart';
 import 'package:lekra/views/screens/pos_machine/connect_pos_device/connect_pos_device_screen/popup/pairing_device_info.dart';
-
+import 'package:lekra/views/screens/pos_machine/connect_pos_device/connection_success_pos_device/connection_success_pos_device.dart';
 
 class PairingRequestDialog extends StatelessWidget {
   const PairingRequestDialog({
@@ -49,9 +50,7 @@ class PairingRequestDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             _PairingIcon(),
-
             sizedBoxHeight(height: 18),
-
             CustomText(
               'Pair with POS Device?',
               textAlign: TextAlign.center,
@@ -61,9 +60,7 @@ class PairingRequestDialog extends StatelessWidget {
                     color: textPrimary,
                   ),
             ),
-
             sizedBoxHeight(height: 8),
-
             CustomText(
               'A Bluetooth pairing request was received',
               textAlign: TextAlign.center,
@@ -72,16 +69,12 @@ class PairingRequestDialog extends StatelessWidget {
                     color: textSecondary,
                   ),
             ),
-
             sizedBoxHeight(height: 20),
-
             const PairingDeviceInfo(
               deviceName: deviceName,
               deviceAddress: deviceAddress,
             ),
-
             sizedBoxHeight(height: 20),
-
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(12.w),
@@ -97,17 +90,12 @@ class PairingRequestDialog extends StatelessWidget {
                     size: 19.sp,
                     color: primaryColor,
                   ),
-
                   sizedBoxWidth(width: 8),
-
                   Expanded(
                     child: CustomText(
                       'Make sure you are pairing with your '
                       'authorized TPIPAY POS machine.',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             fontSize: 11.sp,
                             height: 1.45,
                             color: textPrimary,
@@ -117,68 +105,46 @@ class PairingRequestDialog extends StatelessWidget {
                 ],
               ),
             ),
-
             sizedBoxHeight(height: 22),
-
             Row(
               children: [
                 Expanded(
-                  child: SizedBox(
+                  child: CustomButton(
                     height: 48.h,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        pop(context);
-                      },
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: greyBorder,
-                          width: 1.2,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                      ),
-                      child: CustomText(
-                        'Cancel',
-                        style:
-                            Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: textSecondary,
-                                ),
-                      ),
+                    borderWidth: 1.2,
+                    onTap: () {
+                      pop(context);
+                    },
+                    type: ButtonType.secondary,
+                    borderColor: greyBorder,
+                    radius: 12.r,
+                    child: CustomText(
+                      'Cancel',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                            color: textSecondary,
+                          ),
                     ),
                   ),
                 ),
-
                 sizedBoxWidth(width: 12),
-
                 Expanded(
-                  child: SizedBox(
+                  child: CustomButton(
                     height: 48.h,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        debugPrint(
-                          'Pairing with $deviceName',
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        backgroundColor: primaryColor,
-                        foregroundColor: white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                      ),
-                      child: CustomText(
-                        'Pair',
-                        style:
-                            Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w700,
-                                  color: white,
-                                ),
-                      ),
+                    radius: 12.r,
+                    onTap: () {
+                      navigate(
+                          context: context,
+                          page: ConnectionSuccessPosDeviceScreen());
+                    },
+                    child: CustomText(
+                      'Pair',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w700,
+                            color: white,
+                          ),
                     ),
                   ),
                 ),

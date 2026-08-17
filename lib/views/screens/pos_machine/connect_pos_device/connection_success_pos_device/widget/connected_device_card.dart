@@ -1,51 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:lekra/generated/assets.dart';
+import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
 
-class PairingDeviceInfo extends StatelessWidget {
-  const PairingDeviceInfo({
+class ConnectedDeviceCard extends StatelessWidget {
+  const ConnectedDeviceCard({
     super.key,
-    required this.deviceName,
-    required this.deviceAddress,
   });
 
-  final String deviceName;
-  final String deviceAddress;
+  // Demo values
+  static const String deviceName = 'TPIPAY POS 1234';
+  static const String deviceAddress = '00:1A:7D:DA:7D:13';
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(14.w),
+      padding: EdgeInsets.all(18.w),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.circular(16.r),
+        color: white,
+        borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: greyBorder,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
       child: Row(
         children: [
           Container(
-              width: 50.w,
-              height: 50.h,
-              padding: EdgeInsets.all(10.r),
-              decoration: BoxDecoration(
-                color: primaryColorLight,
-                borderRadius: BorderRadius.circular(14.r),
-              ),
-              child: SvgPicture.asset(
-                Assets.svgsPosMachine,
-                fit: BoxFit.contain,
-                colorFilter: ColorFilter.mode(primaryColor, BlendMode.srcIn),
-              )
+            width: 62.w,
+            height: 62.h,
+            decoration: BoxDecoration(
+              color: primaryColorLight,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: Icon(
+              Icons.point_of_sale_rounded,
+              size: 32.sp,
+              color: primaryColor,
+            ),
+          ),
 
+          sizedBoxWidth(width: 14),
 
-              ),
-          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,13 +57,15 @@ class PairingDeviceInfo extends StatelessWidget {
                 CustomText(
                   deviceName,
                   maxLines: 1,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: 14.sp,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w700,
                         color: textPrimary,
                       ),
                 ),
-                SizedBox(height: 5.h),
+
+                sizedBoxHeight(height: 6),
+
                 CustomText(
                   deviceAddress,
                   maxLines: 1,
@@ -68,22 +74,26 @@ class PairingDeviceInfo extends StatelessWidget {
                         color: textSecondary,
                       ),
                 ),
-                SizedBox(height: 7.h),
+
+                sizedBoxHeight(height: 8),
+
                 Row(
                   children: [
                     Container(
-                      width: 7.w,
-                      height: 7.h,
+                      width: 8.w,
+                      height: 8.h,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Color(0xFF20A865),
+                        color: Color(0xFF20B978),
                       ),
                     ),
-                    SizedBox(width: 5.w),
+
+                    sizedBoxWidth(width: 6),
+
                     CustomText(
-                      'Ready to pair',
+                      'Connected',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontSize: 10.sp,
+                            fontSize: 11.sp,
                             fontWeight: FontWeight.w600,
                             color: const Color(0xFF20A865),
                           ),
@@ -93,9 +103,10 @@ class PairingDeviceInfo extends StatelessWidget {
               ],
             ),
           ),
+
           Icon(
             Icons.bluetooth_connected_rounded,
-            size: 21.sp,
+            size: 24.sp,
             color: primaryColor,
           ),
         ],

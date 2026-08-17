@@ -25,6 +25,7 @@ class CustomButton extends StatelessWidget {
     this.fontSize = 16,
     this.textStyle,
     this.borderColor,
+    this.borderWidth,
 
     // Gradient
     this.gradient,
@@ -51,6 +52,7 @@ class CustomButton extends StatelessWidget {
     this.fontSize,
     this.textStyle,
     this.borderColor,
+    this.borderWidth,
 
     // Gradient
     this.gradient,
@@ -62,57 +64,24 @@ class CustomButton extends StatelessWidget {
         ),
         super(key: key);
 
-  /// Button title
   final String? title;
-
-  /// Custom button child
   final Widget? child;
-
-  /// Button type
   final ButtonType type;
-
-  /// Loading state
   final bool isLoading;
-
-  /// Disabled color
   final Color? disabledColor;
-
-  /// Solid button color
   final Color? color;
-
-  /// Border color
   final Color? borderColor;
-
-  /// Button height
+  final double? borderWidth;
   final double? height;
-
-  /// Border radius
   final double radius;
-
-  /// Button callback
   final Function()? onTap;
-
-  /// Elevation
   final double elevation;
-
-  /// Font size
   final double? fontSize;
-
-  /// Custom text style
   final TextStyle? textStyle;
 
-  /// Optional gradient
   final Gradient? gradient;
-
-  /// Gradient start
   final AlignmentGeometry gradientBegin;
-
-  /// Gradient end
   final AlignmentGeometry gradientEnd;
-
-  // ============================================================
-  // BUILD
-  // ============================================================
 
   @override
   Widget build(BuildContext context) {
@@ -127,10 +96,6 @@ class CustomButton extends StatelessWidget {
         return _buildTertiaryButton(context);
     }
   }
-
-  // ============================================================
-  // PRIMARY BUTTON
-  // ============================================================
 
   Widget _buildPrimaryButton(BuildContext context) {
     final bool hasGradient = gradient != null;
@@ -159,18 +124,12 @@ class CustomButton extends StatelessWidget {
               : hasGradient
                   ? null
                   : color ?? Theme.of(context).primaryColor,
-
           gradient: buttonGradient,
-
           borderRadius: BorderRadius.circular(radius),
-
-          // Only use borderColor when gradient is NOT provided
-          border: hasGradient
-              ? null
-              : Border.all(
-                  color: borderColor ?? primaryColor,
-                  width: 1,
-                ),
+          border: Border.all(
+            color: borderColor ?? primaryColor,
+            width: borderWidth ?? 1,
+          ),
         ),
         child: InkWell(
           onTap: isLoading ? null : onTap,
@@ -187,14 +146,10 @@ class CustomButton extends StatelessWidget {
     );
   }
 
-  // ============================================================
-  // SECONDARY BUTTON
-  // ============================================================
-
   Widget _buildSecondaryButton(BuildContext context) {
     final BorderSide borderSide = BorderSide(
       color: borderColor ?? primaryColor,
-      width: 1,
+      width: borderWidth ?? 1,
     );
 
     return Material(
@@ -223,10 +178,6 @@ class CustomButton extends StatelessWidget {
     );
   }
 
-  // ============================================================
-  // TERTIARY BUTTON
-  // ============================================================
-
   Widget _buildTertiaryButton(BuildContext context) {
     return TextButton(
       onPressed: isLoading ? null : onTap,
@@ -237,10 +188,6 @@ class CustomButton extends StatelessWidget {
       ),
     );
   }
-
-  // ============================================================
-  // CONTENT
-  // ============================================================
 
   Widget _buildButtonContent(
     BuildContext context, {
