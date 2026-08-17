@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -97,16 +94,18 @@ class CustomTheme {
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: primaryColor,
-      actionsIconTheme: const IconThemeData(
-        color: white,
+      actionsIconTheme: IconThemeData(
+        color: backgroundLight,
       ),
-      iconTheme: const IconThemeData(
-        color: white,
+      iconTheme: IconThemeData(
+        color: black,
       ),
-      systemOverlayStyle: const SystemUiOverlayStyle(
+      systemOverlayStyle: SystemUiOverlayStyle(
+        // Status bar color
         statusBarColor: primaryColor,
+        // Status bar brightness (optional)
         statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
       ),
     ),
     typography: Typography.material2021(),
@@ -179,7 +178,7 @@ class CustomTheme {
       actionsIconTheme: IconThemeData(
         color: backgroundLight,
       ),
-      iconTheme:  IconThemeData(
+      iconTheme: IconThemeData(
         color: backgroundLight,
       ),
       systemOverlayStyle: const SystemUiOverlayStyle(
