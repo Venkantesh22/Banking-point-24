@@ -4,6 +4,7 @@ import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/common_button.dart';
+import 'package:lekra/views/screens/creadit_card/screen/upi_flow/confirm_pay_screen/confirm_pay_screen.dart';
 import 'package:lekra/views/screens/creadit_card/screen/upi_flow/enter_upi_id_screen/widget/upi_id_header.dart';
 import 'package:lekra/views/screens/creadit_card/screen/upi_flow/enter_upi_id_screen/widget/upi_id_input.dart';
 
@@ -76,8 +77,8 @@ class _EnterUpiIdScreenState extends State<EnterUpiIdScreen> {
                   debugPrint(
                     'Validate UPI ID: $upiId',
                   );
+                  navigate(context: context, page: ConfirmPayScreen());
                 },
-              
               ),
               sizedBoxHeight(height: 30),
               const _UpiSecurityInfo(),
