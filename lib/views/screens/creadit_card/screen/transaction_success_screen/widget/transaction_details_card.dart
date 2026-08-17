@@ -4,142 +4,123 @@ import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
 
-
-class TransactionSummaryCard extends StatelessWidget {
-  const TransactionSummaryCard({
+class TransactionDetailsCard extends StatelessWidget {
+  const TransactionDetailsCard({
     super.key,
   });
 
-  // Demo transaction values
-  static const double amount = 25000.00;
-  static const double processingFee = 0.00;
-  static const double gst = 0.00;
+  // Demo data
+  static const String amount = '₹25,000.00';
+  static const String processingFee = '₹0.00';
+  static const String gst = '₹0.00';
+  static const String totalDebit = '₹25,000.00';
 
   static const String bankName = 'HDFC Bank';
   static const String accountNumber = 'XXXX XXXX 4567';
   static const String transactionId = 'TXN51234567890';
   static const String dateTime = '12 May 2025 • 11:45 AM';
-
   static const String status = 'Successful';
-
-  static const double totalDebit =
-      amount + processingFee + gst;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.fromLTRB(
-        20.w,
+        18.w,
         18.h,
-        20.w,
+        18.w,
         8.h,
       ),
       decoration: BoxDecoration(
         color: white,
-        borderRadius: BorderRadius.circular(22.r),
+        borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: greyBorder,
         ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
+            blurRadius: 14,
+            offset: const Offset(0, 5),
           ),
         ],
       ),
       child: Column(
         children: [
-          _TransactionRow(
+          const TransactionDetailRow(
             label: 'Amount',
-            value: PriceConverter.convertToNumberFormat(amount),
+            value: amount,
           ),
-
-          _TransactionRow(
+          const TransactionDetailRow(
             label: 'Processing Fee',
-            value: PriceConverter.convertToNumberFormat(
-              processingFee,
-            ),
+            value: processingFee,
           ),
-
-          _TransactionRow(
+          const TransactionDetailRow(
             label: 'GST',
-            value: PriceConverter.convertToNumberFormat(gst),
+            value: gst,
           ),
-
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 12.h),
+            padding: EdgeInsets.symmetric(vertical: 10.h),
             child: Divider(
               color: greyBorder,
               height: 1,
             ),
           ),
-
-          _TransactionRow(
+          TransactionDetailRow(
             label: 'Total Debit',
-            value: PriceConverter.convertToNumberFormat(
-              totalDebit,
-            ),
+            value: totalDebit,
             valueColor: red,
             valueFontWeight: FontWeight.w700,
           ),
-
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 12.h),
+            padding: EdgeInsets.symmetric(vertical: 10.h),
             child: Divider(
               color: greyBorder,
               height: 1,
             ),
           ),
-
-          _TransactionRow(
+          const TransactionDetailRow(
             label: 'To',
             value: bankName,
           ),
-
-          _TransactionRow(
+          const TransactionDetailRow(
             label: 'A/c No.',
             value: accountNumber,
           ),
-
-          _TransactionRow(
+          const TransactionDetailRow(
             label: 'Transaction ID',
             value: transactionId,
           ),
-
-          _TransactionRow(
+          const TransactionDetailRow(
             label: 'Date & Time',
             value: dateTime,
           ),
-
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 12.h),
+            padding: EdgeInsets.symmetric(vertical: 10.h),
             child: Row(
               children: [
                 Expanded(
                   child: CustomText(
                     'Status',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontSize: 14.sp,
+                          fontSize: 13.sp,
                           color: textSecondary,
                         ),
                   ),
                 ),
-
                 Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: 14.w,
-                    vertical: 7.h,
+                    horizontal: 12.w,
+                    vertical: 6.h,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE8F7EF),
+                    color: const Color(0xFFE7F8EF),
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: CustomText(
                     status,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontSize: 13.sp,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.w600,
                           color: const Color(0xFF20A865),
                         ),
@@ -154,8 +135,9 @@ class TransactionSummaryCard extends StatelessWidget {
   }
 }
 
-class _TransactionRow extends StatelessWidget {
-  const _TransactionRow({
+class TransactionDetailRow extends StatelessWidget {
+  const TransactionDetailRow({
+    super.key,
     required this.label,
     required this.value,
     this.valueColor,
@@ -170,7 +152,7 @@ class _TransactionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
+      padding: EdgeInsets.symmetric(vertical: 7.h),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -178,22 +160,20 @@ class _TransactionRow extends StatelessWidget {
             child: CustomText(
               label,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontSize: 14.sp,
+                    fontSize: 13.sp,
                     color: textSecondary,
                   ),
             ),
           ),
-
           sizedBoxWidth(width: 12),
-
-          Flexible(
+          Expanded(
             child: CustomText(
               value,
-              textAlign: TextAlign.right,
+              textAlign: TextAlign.end,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontSize: 14.sp,
-                    color: valueColor ?? textPrimary,
+                    fontSize: 13.sp,
                     fontWeight: valueFontWeight,
+                    color: valueColor ?? textPrimary,
                   ),
             ),
           ),

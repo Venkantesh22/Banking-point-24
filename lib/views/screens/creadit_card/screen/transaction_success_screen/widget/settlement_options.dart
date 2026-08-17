@@ -1,60 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
 
-class SettlementOptionWidget extends StatelessWidget {
-  const SettlementOptionWidget({
+class SettlementOptions extends StatelessWidget {
+  const SettlementOptions({
     super.key,
-    required this.onWantMoneyCash,
-    required this.onSettlementToCustomer,
   });
-
-  final VoidCallback onWantMoneyCash;
-  final VoidCallback onSettlementToCustomer;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 118.h,
+      height: 112.h,
       decoration: BoxDecoration(
         color: white,
-        borderRadius: BorderRadius.circular(22.r),
+        borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: greyBorder,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 14,
-            offset: const Offset(0, 5),
+            color: Colors.black.withValues(alpha: 0.035),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Row(
         children: [
           Expanded(
-            child: _SettlementOption(
+            child: SettlementOptionItem(
               icon: Icons.payments_outlined,
               iconColor: const Color(0xFF20A865),
               title: 'Want Money Cash',
-              onTap: onWantMoneyCash,
+              onTap: () {
+                debugPrint('Want Money Cash');
+              },
             ),
           ),
 
           Container(
             width: 1,
-            height: 72.h,
+            height: 70.h,
             color: greyBorder,
           ),
 
           Expanded(
-            child: _SettlementOption(
+            child: SettlementOptionItem(
               icon: Icons.account_balance_outlined,
               iconColor: primaryColor,
               title: 'Settlement to Customer',
-              onTap: onSettlementToCustomer,
+              onTap: () {
+                debugPrint('Settlement to Customer');
+              },
             ),
           ),
         ],
@@ -63,8 +63,9 @@ class SettlementOptionWidget extends StatelessWidget {
   }
 }
 
-class _SettlementOption extends StatelessWidget {
-  const _SettlementOption({
+class SettlementOptionItem extends StatelessWidget {
+  const SettlementOptionItem({
+    super.key,
     required this.icon,
     required this.iconColor,
     required this.title,
@@ -82,11 +83,11 @@ class _SettlementOption extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(22.r),
+        borderRadius: BorderRadius.circular(20.r),
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: 10.w,
-            vertical: 14.h,
+            horizontal: 8.w,
+            vertical: 10.h,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -97,14 +98,14 @@ class _SettlementOption extends StatelessWidget {
                 color: iconColor,
               ),
 
-              SizedBox(height: 8.h),
+              sizedBoxHeight(height: 8),
 
               CustomText(
                 title,
                 maxLines: 2,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: 13.sp,
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
                       color: textPrimary,
                     ),

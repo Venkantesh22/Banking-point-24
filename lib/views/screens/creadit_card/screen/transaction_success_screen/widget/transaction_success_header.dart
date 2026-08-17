@@ -13,47 +13,53 @@ class TransactionSuccessHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        sizedBoxHeight(height: 34),
+
+        sizedBoxHeight(height: 24),
+
         Container(
-          width: 124.w,
-          height: 124.h,
+          width: 110.w,
+          height: 110.h,
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            color: Color(0xFFE8F7EF),
+            color: Color(0xFFE7F8EF),
           ),
           child: Center(
             child: Container(
-              width: 96.w,
-              height: 96.h,
+              width: 82.w,
+              height: 82.h,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Color(0xFF20B978),
               ),
               child: Icon(
                 Icons.check_rounded,
-                size: 58.sp,
+                size: 50.sp,
                 color: white,
               ),
             ),
           ),
         ),
-        sizedBoxHeight(height: 28),
+
+        sizedBoxHeight(height: 20),
+
         CustomText(
           'Transaction Successful!',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontSize: 26.sp,
+                fontSize: 24.sp,
                 fontWeight: FontWeight.w700,
                 color: textPrimary,
               ),
         ),
-        sizedBoxHeight(height: 10),
+
+        sizedBoxHeight(height: 8),
+
         CustomText(
           'Your money withdrawal request has\n'
           'been placed successfully.',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontSize: 16.sp,
+                fontSize: 14.sp,
                 height: 1.5,
                 color: textSecondary,
               ),

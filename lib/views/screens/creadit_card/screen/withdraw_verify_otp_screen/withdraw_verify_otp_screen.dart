@@ -24,16 +24,6 @@ class WithdrawVerifyOtpScreen extends StatelessWidget {
             backgroundColor: white,
             elevation: 0,
             centerTitle: true,
-            leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: const Color(0xFF101B5C),
-                size: 20.r,
-              ),
-            ),
             title: CustomText(
               'Verify OTP',
               style: TextStyle(

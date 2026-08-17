@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/theme.dart';
-import 'package:lekra/views/screens/creadit_card/screen/transaction_success_screen/widget/settlement_option_widget.dart';
+import 'package:lekra/views/screens/creadit_card/screen/transaction_success_screen/widget/settlement_options.dart';
+import 'package:lekra/views/screens/creadit_card/screen/transaction_success_screen/widget/transaction_details_card.dart';
 import 'package:lekra/views/screens/creadit_card/screen/transaction_success_screen/widget/transaction_success_header.dart';
-import 'package:lekra/views/screens/creadit_card/screen/transaction_success_screen/widget/transaction_summary_card.dart';
-
 
 class TransactionSuccessScreen extends StatelessWidget {
   const TransactionSuccessScreen({
@@ -14,9 +13,10 @@ class TransactionSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       backgroundColor: backgroundLight,
-
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -24,23 +24,10 @@ class TransactionSuccessScreen extends StatelessWidget {
           child: Column(
             children: [
               const TransactionSuccessHeader(),
-
-              sizedBoxHeight(height: 28),
-
-              const TransactionSummaryCard(),
-
+              sizedBoxHeight(height: 24),
+              const TransactionDetailsCard(),
               sizedBoxHeight(height: 20),
-
-              SettlementOptionWidget(
-                onWantMoneyCash: () {
-                  // Demo action
-                  debugPrint('Want Money Cash clicked');
-                },
-                onSettlementToCustomer: () {
-                  // Demo action
-                  debugPrint('Settlement to Customer clicked');
-                },
-              ),
+              const SettlementOptions(),
             ],
           ),
         ),
