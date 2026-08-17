@@ -43,7 +43,7 @@ List<Color> loginBgColor = [
 ];
 
 const Color textPrimary = Color(0xFF0F172A);
-const Color textSecondary = Color(0xFF64748B);
+const Color textSecondary = Color.fromARGB(255, 66, 75, 87);
 
 Map<int, Color> color = const {
   50: Color.fromRGBO(232, 241, 255, 0.1),

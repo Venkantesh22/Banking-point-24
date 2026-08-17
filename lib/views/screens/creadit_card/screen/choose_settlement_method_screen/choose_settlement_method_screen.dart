@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/theme.dart';
+import 'package:lekra/views/base/common_button.dart';
 import 'package:lekra/views/base/custom_image.dart';
 import 'package:lekra/views/screens/creadit_card/screen/choose_settlement_method_screen/widget/settlement_method_card.dart';
 import 'package:lekra/views/screens/creadit_card/screen/choose_settlement_method_screen/widget/settlement_method_header.dart';
-import 'package:lekra/views/screens/creadit_card/screen/choose_settlement_method_screen/widget/settlement_method_illustration.dart';
+import 'package:lekra/views/screens/creadit_card/screen/upi_flow/enter_upi_id_screen/enter_upi_id_screen.dart';
 
 class ChooseSettlementMethodScreen extends StatefulWidget {
   const ChooseSettlementMethodScreen({
@@ -81,7 +82,13 @@ class _ChooseSettlementMethodScreenState
               path: Assets.imagesBankUpi,
               fit: BoxFit.contain,
             ),
-            sizedBoxHeight(height: 60)
+            sizedBoxHeight(height: 60),
+            CustomButton(
+              onTap: () {
+                navigate(context: context, page: EnterUpiIdScreen());
+              },
+              title: "Container..",
+            )
           ],
         ),
       ),
