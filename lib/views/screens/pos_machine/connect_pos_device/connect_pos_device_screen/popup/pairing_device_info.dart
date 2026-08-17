@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:lekra/generated/assets.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
 
@@ -28,21 +30,26 @@ class PairingDeviceInfo extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 50.w,
-            height: 50.h,
-            decoration: BoxDecoration(
-              color: primaryColorLight,
-              borderRadius: BorderRadius.circular(14.r),
-            ),
-            child: Icon(
-              Icons.point_of_sale_rounded,
-              size: 26.sp,
-              color: primaryColor,
-            ),
-          ),
+              width: 50.w,
+              height: 50.h,
+              padding: EdgeInsets.all(10.r),
+              decoration: BoxDecoration(
+                color: primaryColorLight,
+                borderRadius: BorderRadius.circular(14.r),
+              ),
+              child: SvgPicture.asset(
+                Assets.svgsPosMachine,
+                fit: BoxFit.contain,
+                colorFilter: ColorFilter.mode(primaryColor, BlendMode.srcIn),
+              )
 
+              // Icon(
+              //   Icons.point_of_sale_rounded,
+              //   size: 26.sp,
+              //   color: primaryColor,
+              // ),
+              ),
           SizedBox(width: 12.w),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,9 +63,7 @@ class PairingDeviceInfo extends StatelessWidget {
                         color: textPrimary,
                       ),
                 ),
-
                 SizedBox(height: 5.h),
-
                 CustomText(
                   deviceAddress,
                   maxLines: 1,
@@ -67,9 +72,7 @@ class PairingDeviceInfo extends StatelessWidget {
                         color: textSecondary,
                       ),
                 ),
-
                 SizedBox(height: 7.h),
-
                 Row(
                   children: [
                     Container(
@@ -80,9 +83,7 @@ class PairingDeviceInfo extends StatelessWidget {
                         color: Color(0xFF20A865),
                       ),
                     ),
-
                     SizedBox(width: 5.w),
-
                     CustomText(
                       'Ready to pair',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -96,7 +97,6 @@ class PairingDeviceInfo extends StatelessWidget {
               ],
             ),
           ),
-
           Icon(
             Icons.bluetooth_connected_rounded,
             size: 21.sp,
