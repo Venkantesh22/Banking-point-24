@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/theme.dart';
+import 'package:lekra/views/screens/creadit_card/screen/payment_result_screen/payment_result_screen.dart';
 import 'package:lekra/views/screens/creadit_card/screen/upi_flow/confirm_pay_screen/widget/confirm_pay_header.dart';
 import 'package:lekra/views/screens/creadit_card/screen/upi_flow/confirm_pay_screen/widget/customer_upi_card.dart';
 import 'package:lekra/views/screens/creadit_card/screen/upi_flow/confirm_pay_screen/widget/payment_amount_card.dart';
@@ -42,6 +43,9 @@ class ConfirmPayScreen extends StatelessWidget {
               sizedBoxHeight(height: 18),
               SendMoneyButton(
                 onTap: () {
+                  navigate(context: context, page: PaymentResultScreen(
+                    status: PaymentStatus.cancelled,
+                  ));
                   debugPrint('Send Money');
                 },
               ),
