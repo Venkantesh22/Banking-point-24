@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lekra/services/constants.dart';
+import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/custom_image.dart';
 import 'package:lekra/views/screens/demo/screen/screen_mode.dart';
@@ -11,53 +13,44 @@ class DemoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
-          height: 80,
+          height: 80.h,
         ),
-        demoScreenModel.title,
-        SizedBox(height: 9),
-        Text(
-          demoScreenModel.subTitle,
-          overflow: TextOverflow.clip,
-          style: Helper(context).textTheme.bodyMedium?.copyWith(
-              fontSize: 12, fontWeight: FontWeight.w400, color: greyText),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: CustomImage(
-              path: demoScreenModel.image,
-              width: double.infinity,
-              height: double.infinity, // Force it to fill the Expanded area
-              fit: BoxFit
-                  .contain, // Use contain to avoid cropping important demo graphics
-            ),
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 20),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: primaryColor,
-              width: 2,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Center(
-            child: Text(
-              demoScreenModel.descr,
-              overflow: TextOverflow.clip,
-              textAlign: TextAlign.center,
-              style: Helper(context).textTheme.bodyMedium?.copyWith(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: primaryColor,
+        demoScreenModel.titleImage != null
+            ? Padding(
+                padding: EdgeInsets.only(bottom: 40.h),
+                child: Center(
+                  child: CustomImage(
+                    path: demoScreenModel.titleImage ?? "",
+                    height: 120.h,
+                    width: double.infinity,
+                    fit: BoxFit.contain,
                   ),
-            ),
+                ),
+              )
+            : SizedBox(),
+        demoScreenModel.title,
+        demoScreenModel.secondTitle,
+        SizedBox(height: 9),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: CustomText(
+            demoScreenModel.subTitle,
+            overflow: TextOverflow.clip,
+            textAlign: TextAlign.center,
+            style: Helper(context).textTheme.bodyLarge?.copyWith(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                  color: greyText,
+                ),
           ),
-        )
+        ),
+        demoScreenModel.image,
+        demoScreenModel.descr != null
+            ? demoScreenModel.descr ?? SizedBox()
+            : SizedBox(),
       ],
     );
   }

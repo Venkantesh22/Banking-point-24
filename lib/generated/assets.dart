@@ -126,6 +126,18 @@ class Assets {
   /// assets/images/shimmer.gif
   static const String imagesShimmer = "assets/images/shimmer.gif";
 
+  /// Assets for imagesSlider1
+  /// assets/images/slider-1.png
+  static const String imagesSlider1 = "assets/images/slider-1.png";
+
+  /// Assets for imagesSlider2
+  /// assets/images/slider-2.png
+  static const String imagesSlider2 = "assets/images/slider-2.png";
+
+  /// Assets for imagesSlider3
+  /// assets/images/slider-3.png
+  static const String imagesSlider3 = "assets/images/slider-3.png";
+
   /// Assets for imagesTopBanner
   /// assets/images/top-banner.png
   static const String imagesTopBanner = "assets/images/top-banner.png";
@@ -238,9 +250,17 @@ class Assets {
   /// assets/svgs/check-mark-in-cross-cirlce2.svg
   static const String svgsCheckMarkInCrossCirlce2 = "assets/svgs/check-mark-in-cross-cirlce2.svg";
 
+  /// Assets for svgsClock
+  /// assets/svgs/clock.svg
+  static const String svgsClock = "assets/svgs/clock.svg";
+
   /// Assets for svgsContactUs
   /// assets/svgs/contact-us.svg
   static const String svgsContactUs = "assets/svgs/contact-us.svg";
+
+  /// Assets for svgsCurrent
+  /// assets/svgs/current.svg
+  static const String svgsCurrent = "assets/svgs/current.svg";
 
   /// Assets for svgsDispute
   /// assets/svgs/dispute.svg

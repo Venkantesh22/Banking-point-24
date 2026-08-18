@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const Color primaryColor = Color(0xFF0052D9);
-Color secondaryColor = const Color(0xFFE53935);
+const Color primaryColor = Color(0xFF0A3A8F);
+Color secondaryColor = const Color(0xFF58A13C);
 const Color thiryaryColor = Color(0xFF2F80ED);
 Color backgroundDark = const Color(0xFF0F172A);
 Color backgroundLight = const Color(0xFFF8FAFC);
@@ -36,6 +36,8 @@ Color origin = const Color(0xFFEA580C);
 Color cyanDark = const Color(0xFF355355);
 Color primaryColorLight = const Color(0xFFE8F1FF);
 Color yellow = const Color(0xFFFACC15);
+
+Color textDartLight = const Color(0xFF334155);
 
 List<Color> loginBgColor = [
   const Color(0xFF003B9A),
@@ -121,7 +123,10 @@ class CustomTheme {
       displayLarge: GoogleFonts.publicSans(),
       displayMedium: GoogleFonts.robotoMono(),
       displaySmall: GoogleFonts.openSans(),
-      titleLarge: GoogleFonts.openSans(),
+      titleLarge: GoogleFonts.openSans(
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0,
+      ),
       titleMedium: GoogleFonts.openSans(
         color: textPrimary,
       ),
@@ -135,7 +140,7 @@ class CustomTheme {
       ),
       bodyMedium: GoogleFonts.inter(
         fontSize: 16,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w600,
         color: textPrimary,
       ),
       bodySmall: GoogleFonts.inter(
