@@ -36,17 +36,17 @@ class _SplashScreenState extends State<SplashScreen> {
       Get.find<BasicController>().checkDevice();
       bool hasInternet = await _isInternetAvailable();
 
-      /// Only check Firestore if internet exists
-      if (hasInternet) {
-        await _checkBlockStatus().timeout(
-          const Duration(seconds: 3),
-          onTimeout: () {
-            log("Block check skipped (slow network)");
-          },
-        );
-      } else {
-        log("No internet - skipping block check");
-      }
+      // /// Only check Firestore if internet exists
+      // if (hasInternet) {
+      //   await _checkBlockStatus().timeout(
+      //     const Duration(seconds: 3),
+      //     onTimeout: () {
+      //       log("Block check skipped (slow network)");
+      //     },
+      //   );
+      // } else {
+      //   log("No internet - skipping block check");
+      // }
 
       await Future.delayed(const Duration(seconds: 1));
 
@@ -67,32 +67,32 @@ class _SplashScreenState extends State<SplashScreen> {
   /// -------------------------------
   /// CHECK BLOCK STATUS
   /// -------------------------------
-  Future<void> _checkBlockStatus() async {
-    final basicController = Get.find<BasicController>();
+  // Future<void> _checkBlockStatus() async {
+  //   final basicController = Get.find<BasicController>();
 
-    try {
-      await basicController.isCheckApp();
-    } catch (e) {
-      log("Firestore Error: $e");
+  //   try {
+  //     await basicController.isCheckApp();
+  //   } catch (e) {
+  //     log("Firestore Error: $e");
 
-      // If Firestore fails, allow app to continue
-      return;
-    }
+  //     // If Firestore fails, allow app to continue
+  //     return;
+  //   }
 
-    bool isBlock = basicController.blockModel?.isBlock ?? false;
-    bool isTimeBlock = basicController.blockModel?.timeBlock ?? false;
+  //   bool isBlock = basicController.blockModel?.isBlock ?? false;
+  //   bool isTimeBlock = basicController.blockModel?.timeBlock ?? false;
 
-    log("isBlock: $isBlock | isTimeBlock: $isTimeBlock");
+  //   log("isBlock: $isBlock | isTimeBlock: $isTimeBlock");
 
-    if (isBlock) {
-      _navigateToBlockScreen();
-      return;
-    }
+  //   if (isBlock) {
+  //     _navigateToBlockScreen();
+  //     return;
+  //   }
 
-    if (isTimeBlock) {
-      basicController.startRandomCloseTimer();
-    }
-  }
+  //   if (isTimeBlock) {
+  //     basicController.startRandomCloseTimer();
+  //   }
+  // }
 
   /// -------------------------------
   /// NAVIGATION LOGIC

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "47514061845",
-    "project_id": "tpipay-5650e",
-    "storage_bucket": "tpipay-5650e.firebasestorage.app"
+    "project_number": "865109817668",
+    "project_id": "bank-point-24",
+    "storage_bucket": "bank-point-24.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:47514061845:android:7808eb3145eb8fa0a7521c",
+        "mobilesdk_app_id": "1:865109817668:android:cba79945f7c2b32e24bf11",
         "android_client_info": {
-          "package_name": "com.myfoozzybusiness"
+          "package_name": "com.app.bankingpoint24.com"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDPy3qEM6gi5l16mIqA50dPvJ8BR82hGeI"
+          "current_key": "AIzaSyBfHAN9V9XW9yct7ptSRF1wPlInci7nRdc"
         }
       ],
       "services": {
