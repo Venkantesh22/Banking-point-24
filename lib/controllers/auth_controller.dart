@@ -32,9 +32,9 @@ class AuthController extends GetxController implements GetxService {
 
   bool get acceptTerms => _acceptTerms;
 
-  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController(text: "9030909966");
   final TextEditingController oldPasswordController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController(text: "12345678");
   final TextEditingController confirmPasswordController =
       TextEditingController();
 

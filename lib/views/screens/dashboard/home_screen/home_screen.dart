@@ -65,8 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 todate: dateFormat.format(getDateTime()),
                 isShowOnly10: true);
           } else {
-            auth.logout(context);
-            navigate(context: context, page: LoginScreen());
+            // auth.logout(context);
+            // navigate(context: context, page: LoginScreen());
           }
         });
       }
