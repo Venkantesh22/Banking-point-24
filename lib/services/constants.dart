@@ -249,6 +249,11 @@ class AppConstants {
   static const String postPrepaidCardMiniStatement =
       'api/prepaid-card/v1/mini-statement';
 
+  //* Credit card withdrawal api
+
+    static const String postSubmitCustomKyc = 'api/credit-card-cash-withdrawal/v1/kyc';
+
+
   // helper
   static const double horizontalPadding = 16;
   static const double verticalPadding = 20;

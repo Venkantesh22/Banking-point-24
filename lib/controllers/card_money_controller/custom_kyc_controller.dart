@@ -1,8 +1,11 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lekra/data/models/response/response_model.dart';
+import 'package:lekra/data/repositories/card_withdrawal_repo/custom_kyc_repo.dart';
 
 enum KycStatus {
   pending,
@@ -10,23 +13,24 @@ enum KycStatus {
   rejected,
 }
 
-class CustomKycController extends GetxController
-    implements GetxService {
+class CustomKycController extends GetxController implements GetxService {
+  final CustomKycRepo customKycRepo;
+
+  CustomKycController({required this.customKycRepo});
+
+  bool isLoading = false;
+
   // ============================================================
   // CONTROLLERS
   // ============================================================
 
-  final TextEditingController fullNameController =
-      TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
 
-  final TextEditingController mobileNumberController =
-      TextEditingController();
+  final TextEditingController mobileNumberController = TextEditingController();
 
-  final TextEditingController emailController =
-      TextEditingController();
+  final TextEditingController emailController = TextEditingController();
 
-  final List<TextEditingController> otpControllers =
-      List.generate(
+  final List<TextEditingController> otpControllers = List.generate(
     6,
     (index) => TextEditingController(),
   );
@@ -52,9 +56,7 @@ class CustomKycController extends GetxController
   String otp = '';
 
   void updateOtp() {
-    otp = otpControllers
-        .map((controller) => controller.text)
-        .join();
+    otp = otpControllers.map((controller) => controller.text).join();
 
     update();
   }
@@ -113,9 +115,7 @@ class CustomKycController extends GetxController
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-
                 const SizedBox(height: 20),
-
                 ListTile(
                   leading: const Icon(
                     Icons.camera_alt_outlined,
@@ -128,7 +128,6 @@ class CustomKycController extends GetxController
                     );
                   },
                 ),
-
                 ListTile(
                   leading: const Icon(
                     Icons.photo_library_outlined,
@@ -141,7 +140,6 @@ class CustomKycController extends GetxController
                     );
                   },
                 ),
-
                 const SizedBox(height: 10),
               ],
             ),
@@ -159,8 +157,7 @@ class CustomKycController extends GetxController
     BuildContext context, {
     required ImageSource source,
   }) async {
-    final XFile? image =
-        await imagePicker.pickImage(
+    final XFile? image = await imagePicker.pickImage(
       source: source,
       imageQuality: 80,
     );
@@ -179,8 +176,7 @@ class CustomKycController extends GetxController
   Future<void> pickPanCardImage(
     BuildContext context,
   ) async {
-    final ImageSource? source =
-        await _selectImageSource(context);
+    final ImageSource? source = await _selectImageSource(context);
 
     if (source == null) {
       return;
@@ -211,8 +207,7 @@ class CustomKycController extends GetxController
   Future<void> pickAadhaarFrontImage(
     BuildContext context,
   ) async {
-    final ImageSource? source =
-        await _selectImageSource(context);
+    final ImageSource? source = await _selectImageSource(context);
 
     if (source == null) {
       return;
@@ -243,8 +238,7 @@ class CustomKycController extends GetxController
   Future<void> pickAadhaarBackImage(
     BuildContext context,
   ) async {
-    final ImageSource? source =
-        await _selectImageSource(context);
+    final ImageSource? source = await _selectImageSource(context);
 
     if (source == null) {
       return;
@@ -275,12 +269,10 @@ class CustomKycController extends GetxController
   Future<void> captureLivePhoto(
     BuildContext context,
   ) async {
-    final XFile? image =
-        await imagePicker.pickImage(
+    final XFile? image = await imagePicker.pickImage(
       source: ImageSource.camera,
       imageQuality: 80,
-      preferredCameraDevice:
-          CameraDevice.front,
+      preferredCameraDevice: CameraDevice.front,
     );
 
     if (image == null) {
@@ -296,38 +288,45 @@ class CustomKycController extends GetxController
     update();
   }
 
-  // ============================================================
-  // SUBMIT
-  // ============================================================
+  //* Call Submit custom Kyc Api submitCustomKyc()
 
-  void submitKyc() {
-    isSubmitting = true;
+  Future<ResponseModel> submitCustomKyc({
+    required String? number,
+  }) async {
+    log('----------- submitCustomKyc Called ----------');
+
+    ResponseModel responseModel;
+    isLoading = true;
     update();
 
-    debugPrint('KYC form submitted');
+    try {
+      Map<String, dynamic> data = {
+        "full_name" : fullNameController.text.trim(),
+        "mobile_number" : mobileNumberController.text.trim(),
+        "email" : emailController.text.trim(),
+        "dob" : "",
+      };
+      Response response =
+          await customKycRepo.submitCustomKyc(data: FormData(data));
 
-    debugPrint(
-      'PAN: ${panCardImage?.path}',
-    );
+      if (response.statusCode == 200 && response.body['status'] == "success") {
+        responseModel = ResponseModel(true,
+            response.body['message'] ?? " generateOTPForPrepaidCard success");
+      } else {
+        responseModel = ResponseModel(
+            false,
+            response.body['message'] ??
+                "Error while generateOTPForPrepaidCard");
+      }
+    } catch (e) {
+      log('ERROR AT generateOTPForPrepaidCard(): $e');
+      responseModel =
+          ResponseModel(false, "Error while generateOTPForPrepaidCard user $e");
+    }
 
-    debugPrint(
-      'Aadhaar Front: '
-      '${aadhaarFrontImage?.path}',
-    );
-
-    debugPrint(
-      'Aadhaar Back: '
-      '${aadhaarBackImage?.path}',
-    );
-
-    debugPrint(
-      'Live Photo: ${livePhoto?.path}',
-    );
-
-    // API will be added later.
-
-    isSubmitting = false;
+    isLoading = false;
     update();
+    return responseModel;
   }
 
   // ============================================================
@@ -357,14 +356,11 @@ class CustomKycController extends GetxController
     update();
   }
 
-
-   // ============================================================
+  // ============================================================
   // STATE
   // ============================================================
 
   KycStatus status = KycStatus.pending;
-
-  bool isLoading = false;
 
   // ============================================================
   // STATUS
@@ -417,5 +413,4 @@ class CustomKycController extends GetxController
 
     super.onClose();
   }
-
 }

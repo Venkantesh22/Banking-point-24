@@ -25,6 +25,7 @@ import 'package:lekra/controllers/report_contoller.dart';
 import 'package:lekra/controllers/voice_service_controller.dart';
 import 'package:lekra/controllers/wallet_controller.dart';
 import 'package:lekra/data/repositories/card_repo.dart';
+import 'package:lekra/data/repositories/card_withdrawal_repo/custom_kyc_repo.dart';
 import 'package:lekra/data/repositories/dispute_repo.dart';
 import 'package:lekra/data/repositories/form_repo.dart';
 import 'package:lekra/data/repositories/kyc_repo.dart';
@@ -83,7 +84,10 @@ class Init {
             prepaidClient: Get.find<ApiClient>(tag: "prepaid"),
           ));
 
-      // Get Controller's...
+      //* Custom KYC controller
+      Get.lazyPut(() => CustomKycRepo(apiClient: Get.find()));
+
+      //! Get Controller's...
       Get.lazyPut(() => DashBoardController());
       Get.lazyPut(() => AuthController(
           authRepo: Get.find(), sharedPreferences: sharedPreferences));
@@ -121,7 +125,9 @@ class Init {
 
       //* Custom KYC controller
 
-      Get.lazyPut(() => CustomKycController());
+      Get.lazyPut(() => CustomKycController(
+            customKycRepo: Get.find(),
+          ));
 
       //* cried card controller
 
