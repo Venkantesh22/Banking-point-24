@@ -289,7 +289,6 @@ class CustomKycController extends GetxController implements GetxService {
   }
 
   //* Call Submit custom Kyc Api submitCustomKyc()
-
   Future<ResponseModel> submitCustomKyc({
     required String? number,
   }) async {
@@ -301,10 +300,10 @@ class CustomKycController extends GetxController implements GetxService {
 
     try {
       Map<String, dynamic> data = {
-        "full_name" : fullNameController.text.trim(),
-        "mobile_number" : mobileNumberController.text.trim(),
-        "email" : emailController.text.trim(),
-        "dob" : "",
+        "full_name": fullNameController.text.trim(),
+        "mobile_number": mobileNumberController.text.trim(),
+        "email": emailController.text.trim(),
+        "dob": "",
       };
       Response response =
           await customKycRepo.submitCustomKyc(data: FormData(data));
@@ -322,6 +321,41 @@ class CustomKycController extends GetxController implements GetxService {
       log('ERROR AT generateOTPForPrepaidCard(): $e');
       responseModel =
           ResponseModel(false, "Error while generateOTPForPrepaidCard user $e");
+    }
+
+    isLoading = false;
+    update();
+    return responseModel;
+  }
+
+  //* Call Submit custom Kyc Live photo Api submitCustomKycLivePhoto()
+  Future<ResponseModel> submitCustomKycLivePhoto({
+    required String? number,
+  }) async {
+    log('----------- submitCustomKycLivePhoto Called ----------');
+
+    ResponseModel responseModel;
+    isLoading = true;
+    update();
+
+    try {
+      Map<String, dynamic> data = {
+        "selfie": livePhoto,
+      };
+      Response response =
+          await customKycRepo.submitCustomKycLivePhoto(data: FormData(data));
+
+      if (response.statusCode == 200 && response.body['status'] == "success") {
+        responseModel = ResponseModel(true,
+            response.body['message'] ?? " submitCustomKycLivePhoto success");
+      } else {
+        responseModel = ResponseModel(false,
+            response.body['message'] ?? "Error while submitCustomKycLivePhoto");
+      }
+    } catch (e) {
+      log('ERROR AT submitCustomKycLivePhoto(): $e');
+      responseModel =
+          ResponseModel(false, "Error while submitCustomKycLivePhoto user $e");
     }
 
     isLoading = false;

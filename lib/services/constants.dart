@@ -252,6 +252,12 @@ class AppConstants {
   //* Credit card withdrawal api
 
     static const String postSubmitCustomKyc = 'api/credit-card-cash-withdrawal/v1/kyc';
+    static const String postSubmitCustomKycLivePhoto = 'api/credit-card-cash-withdrawal/v1/live-photo';
+
+  //* Credit card withdrawal api
+
+      static const String postValidateCreditCared = "api/credit-card-cash-withdrawal/v1/cards";
+
 
 
   // helper

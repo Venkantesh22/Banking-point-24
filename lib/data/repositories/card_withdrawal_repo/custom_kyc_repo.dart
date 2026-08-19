@@ -14,4 +14,11 @@ class CustomKycRepo {
         "submitCustomKyc",
         data,
       );
+
+  Future<Response> submitCustomKycLivePhoto({required FormData data}) async =>
+      await apiClient.postData(
+        AppConstants.postSubmitCustomKycLivePhoto,
+        "submitCustomKycLivePhoto",
+        data,
+      );
 }
