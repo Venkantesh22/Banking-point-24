@@ -231,6 +231,74 @@ class CreditCardController extends GetxController implements GetxService {
     return responseModel;
   }
 
+  //* Call request and resend opt credit card sendCreditCardOTP()
+  Future<ResponseModel> sendCreditCardOTP({
+    required String? number,
+  }) async {
+    log('----------- sendCreditCardOTP Called ----------');
+
+    ResponseModel responseModel;
+    isLoading = true;
+    update();
+
+    try {
+      Map<String, dynamic> data = {};
+      Response response =
+          await creditCardRepo.sendCreditCardOTP(data: FormData(data));
+
+      if (response.statusCode == 200 && response.body['status'] == "success") {
+        responseModel = ResponseModel(
+            true, response.body['message'] ?? " sendCreditCardOTP success");
+      } else {
+        responseModel = ResponseModel(
+            false, response.body['message'] ?? "Error while sendCreditCardOTP");
+      }
+    } catch (e) {
+      log('ERROR AT sendCreditCardOTP(): $e');
+      responseModel =
+          ResponseModel(false, "Error while submitCreditCardInfo user $e");
+    }
+
+    isLoading = false;
+    update();
+    return responseModel;
+  }
+
+  //* Call verify opt credit card creditCardOTPVerify()
+  Future<ResponseModel> creditCardOTPVerify({
+    required String? number,
+  }) async {
+    log('----------- creditCardOTPVerify Called ----------');
+
+    ResponseModel responseModel;
+    isLoading = true;
+    update();
+
+    try {
+      Map<String, dynamic> data = {
+        "otp" : otp,
+      };
+      Response response =
+          await creditCardRepo.creditCardOTPVerify(data: FormData(data));
+
+      if (response.statusCode == 200 && response.body['status'] == "success") {
+        responseModel = ResponseModel(
+            true, response.body['message'] ?? " creditCardOTPVerify success");
+      } else {
+        responseModel = ResponseModel(false,
+            response.body['message'] ?? "Error while creditCardOTPVerify");
+      }
+    } catch (e) {
+      log('ERROR AT creditCardOTPVerify(): $e');
+      responseModel =
+          ResponseModel(false, "Error while creditCardOTPVerify user $e");
+    }
+
+    isLoading = false;
+    update();
+    return responseModel;
+  }
+
   // ============================================================
   // CLEAR
   // ============================================================

@@ -22,4 +22,18 @@ class CreditCardRepo {
         "submitCreditCardWithdrawalAmount",
         data,
       );
+
+  Future<Response> sendCreditCardOTP({required FormData data}) async =>
+      await apiClient.postData(
+        AppConstants.postSendCreditCardOTP,
+        "sendCreditCardOTP",
+        data,
+      );
+      
+  Future<Response> creditCardOTPVerify({required FormData data}) async =>
+      await apiClient.postData(
+        AppConstants.postCreditCardOTPVerify,
+        "creditCardOTPVerify",
+        data,
+      );
 }

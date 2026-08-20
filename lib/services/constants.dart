@@ -262,6 +262,10 @@ class AppConstants {
       "api/credit-card-cash-withdrawal/v1/cards";
   static const String postSubmitCreditCardWithdrawalAmount =
       "api/credit-card-cash-withdrawal/v1/amount";
+  static const String postSendCreditCardOTP =
+      "api/credit-card-cash-withdrawal/v1/send-otp";
+  static const String postCreditCardOTPVerify =
+      "api/credit-card-cash-withdrawal/v1/verify-otp";
 
   // helper
   static const double horizontalPadding = 16;
