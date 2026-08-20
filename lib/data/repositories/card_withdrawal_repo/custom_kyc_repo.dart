@@ -28,4 +28,12 @@ class CustomKycRepo {
         "confirmAndTransaction",
         data,
       );
+
+  Future<Response> creditCardCashWithdrawalTransactionStatus(
+          {required String transactionId}) async =>
+      await apiClient.getData(
+        AppConstants.getCreditCardCashWithdrawalTransactionStatus(
+            transactionId: transactionId),
+        "creditCardCashWithdrawalTransactionStatus",
+      );
 }

@@ -269,6 +269,10 @@ class AppConstants {
   static const String postConfirmAndTransaction =
       "api/credit-card-cash-withdrawal/v1/confirm";
 
+  static String getCreditCardCashWithdrawalTransactionStatus(
+          {required String transactionId}) =>
+      "api/credit-card-cash-withdrawal/v1/:$transactionId/status";
+
   // helper
   static const double horizontalPadding = 16;
   static const double verticalPadding = 20;
