@@ -102,6 +102,7 @@ class BasicController extends GetxController implements GetxService {
     update();
   }
 
+ 
   List<DistrictModel> districtList = [];
   Future<ResponseModel> fetchDistrictByState() async {
     log('----------- fetchDistrictByState Called ----------');

@@ -10,6 +10,7 @@ import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/custom_dropdown.dart';
 import 'package:lekra/views/base/common_button.dart';
+import 'package:lekra/views/base/shimmer.dart';
 import 'package:lekra/views/screens/widget/text_box/app_text_box.dart';
 
 class RegistrationDetailForm extends StatefulWidget {
@@ -27,6 +28,14 @@ class RegistrationDetailForm extends StatefulWidget {
 }
 
 class _RegistrationDetailFormState extends State<RegistrationDetailForm> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<BasicController>().fetchStatusList();
+    });
+  }
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   List<String> _uniqueNames(List<String> items) {
@@ -278,6 +287,92 @@ class _RegistrationDetailFormState extends State<RegistrationDetailForm> {
                   SizedBox(height: 20.h),
 
                   // ==================================================
+                  // STATE
+                  // ==================================================
+
+                  GetBuilder<BasicController>(builder: (basicController) {
+                    return CustomShimmer(
+                      isLoading: basicController.isLoading,
+                      child: Column(
+                        children: [
+                          CustomDropDownList<String>(
+                            value: selectedStateName,
+                            items: stateNames,
+                            heading: 'State',
+                            hintText: 'Select state',
+                            isRequired: true,
+                            borderColor: primaryColor,
+                            bgColor: primaryColorLight,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please select state';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              if (value == null || value.isEmpty) {
+                                return;
+                              }
+
+                              final selectedState =
+                                  basicController.statusList.firstWhere(
+                                (state) => state.stateName == value,
+                              );
+
+                              registrationController.setState(
+                                selectedState,
+                              );
+
+                              basicController.setSelectStateModel(
+                                stateName: value,
+                              );
+
+                              basicController.fetchDistrictByState();
+                            },
+                          ),
+
+                          SizedBox(height: 20.h),
+
+                          // ==================================================
+                          // DISTRICT
+                          // ==================================================
+
+                          CustomDropDownList<String>(
+                            value: selectedDistrictName,
+                            items: districtNames,
+                            heading: 'District',
+                            hintText: 'Select district',
+                            isRequired: true,
+                            borderColor: primaryColor,
+                            bgColor: primaryColorLight,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please select district';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              if (value == null || value.isEmpty) {
+                                return;
+                              }
+
+                              final selectedDistrict =
+                                  basicController.districtList.firstWhere(
+                                (district) => district.districtName == value,
+                              );
+
+                              registrationController.setDistrict(
+                                selectedDistrict,
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+
+                  SizedBox(height: 28.h),
+                  // ==================================================
                   // PIN CODE
                   // ==================================================
 
@@ -331,82 +426,6 @@ class _RegistrationDetailFormState extends State<RegistrationDetailForm> {
                   ),
 
                   SizedBox(height: 20.h),
-
-                  // ==================================================
-                  // STATE
-                  // ==================================================
-
-                  CustomDropDownList<String>(
-                    value: selectedStateName,
-                    items: stateNames,
-                    heading: 'State',
-                    hintText: 'Select state',
-                    isRequired: true,
-                    borderColor: primaryColor,
-                    bgColor: primaryColorLight,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please select state';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      if (value == null || value.isEmpty) {
-                        return;
-                      }
-
-                      final selectedState =
-                          basicController.statusList.firstWhere(
-                        (state) => state.stateName == value,
-                      );
-
-                      registrationController.setState(
-                        selectedState,
-                      );
-
-                      basicController.setSelectStateModel(
-                        stateName: value,
-                      );
-                    },
-                  ),
-
-                  SizedBox(height: 20.h),
-
-                  // ==================================================
-                  // DISTRICT
-                  // ==================================================
-
-                  CustomDropDownList<String>(
-                    value: selectedDistrictName,
-                    items: districtNames,
-                    heading: 'District',
-                    hintText: 'Select district',
-                    isRequired: true,
-                    borderColor: primaryColor,
-                    bgColor: primaryColorLight,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please select district';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      if (value == null || value.isEmpty) {
-                        return;
-                      }
-
-                      final selectedDistrict =
-                          basicController.districtList.firstWhere(
-                        (district) => district.districtName == value,
-                      );
-
-                      registrationController.setDistrict(
-                        selectedDistrict,
-                      );
-                    },
-                  ),
-
-                  SizedBox(height: 28.h),
 
                   // ==================================================
                   // CONTINUE
