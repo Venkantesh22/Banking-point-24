@@ -33,6 +33,7 @@ class _RegistrationDetailFormState extends State<RegistrationDetailForm> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Get.find<BasicController>().fetchStatusList();
+      Get.find<RegistrationKycFromController>().venderKycBasicStatus();
     });
   }
 
@@ -82,9 +83,9 @@ class _RegistrationDetailFormState extends State<RegistrationDetailForm> {
                 : null;
 
             final String? selectedDistrictName = districtNames.contains(
-              registrationController.selectDistrict?.districtName,
+              registrationController.selectCity?.districtName,
             )
-                ? registrationController.selectDistrict?.districtName
+                ? registrationController.selectCity?.districtName
                 : null;
 
             return Form(
@@ -224,11 +225,7 @@ class _RegistrationDetailFormState extends State<RegistrationDetailForm> {
                         return 'Please enter email address';
                       }
 
-                      final emailRegex = RegExp(
-                        r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
-                      );
-
-                      if (!emailRegex.hasMatch(value.trim())) {
+                      if (!value.isNotEmpty) {
                         return 'Please enter valid email address';
                       }
 
@@ -340,14 +337,14 @@ class _RegistrationDetailFormState extends State<RegistrationDetailForm> {
                           CustomDropDownList<String>(
                             value: selectedDistrictName,
                             items: districtNames,
-                            heading: 'District',
-                            hintText: 'Select district',
+                            heading: 'City',
+                            hintText: 'Select city',
                             isRequired: true,
                             borderColor: primaryColor,
                             bgColor: primaryColorLight,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please select district';
+                                return 'Please select city';
                               }
                               return null;
                             },
@@ -404,26 +401,27 @@ class _RegistrationDetailFormState extends State<RegistrationDetailForm> {
 
                   SizedBox(height: 20.h),
 
-                  // ==================================================
-                  // CITY
-                  // ==================================================
+                  // // ==================================================
 
-                  AppTextFieldWithHeading(
-                    controller: registrationController.cityController,
-                    heading: 'City',
-                    hindText: 'Enter city',
-                    isRequired: true,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    borderColor: primaryColor,
-                    bgColor: primaryColorLight,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please enter city';
-                      }
-                      return null;
-                    },
-                  ),
+                  // // CITY
+                  // // ==================================================
+
+                  // AppTextFieldWithHeading(
+                  //   controller: registrationController.cityController,
+                  //   heading: 'City',
+                  //   hindText: 'Enter city',
+                  //   isRequired: true,
+                  //   keyboardType: TextInputType.text,
+                  //   textInputAction: TextInputAction.next,
+                  //   borderColor: primaryColor,
+                  //   bgColor: primaryColorLight,
+                  //   validator: (value) {
+                  //     if (value == null || value.trim().isEmpty) {
+                  //       return 'Please enter city';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
 
                   SizedBox(height: 20.h),
 
@@ -432,6 +430,7 @@ class _RegistrationDetailFormState extends State<RegistrationDetailForm> {
                   // ==================================================
 
                   CustomButton(
+                    isLoading: registrationController.isLoading,
                     radius: 24.r,
                     gradient: LinearGradient(
                       begin: Alignment.centerLeft,
@@ -448,24 +447,22 @@ class _RegistrationDetailFormState extends State<RegistrationDetailForm> {
                     onTap: () {
                       FocusScope.of(context).unfocus();
 
-                      final bool valid =
-                          formKey.currentState?.validate() ?? false;
-
-                      if (!valid) {
-                        return;
+                      if (formKey.currentState?.validate() ?? false) {
+                        registrationController
+                            .venderKycBasicDetails()
+                            .then((value) {
+                          if (value.isSuccess) {
+                            showToast(
+                                message: value.message,
+                                typeCheck: value.isSuccess);
+                            widget.onCompleteChanged(true);
+                          } else {
+                            showToast(
+                                message: value.message,
+                                typeCheck: value.isSuccess);
+                          }
+                        });
                       }
-
-                      if (!registrationController.validateRegistration()) {
-                        showToast(
-                          message: 'Please complete all registration details',
-                          typeCheck: false,
-                        );
-                        return;
-                      }
-
-                      // This only tells FormController
-                      // to move to the next KYC screen.
-                      widget.onCompleteChanged(true);
                     },
                     child: CustomText(
                       'Continue',

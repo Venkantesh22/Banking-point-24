@@ -273,15 +273,19 @@ class AppConstants {
           {required String transactionId}) =>
       "api/credit-card-cash-withdrawal/v1/:$transactionId/status";
 
-
-  //* Vender KYC API    
-  static const String postVenderKycBasic =
+  //* Vender KYC API
+  static const String postVenderKycBasicDetails =
       "api/application/v1/merchant-kyc/save-section";
 
+  static const String getVenderKycDetails = "api/application/v1/merchant-kyc";
+
+  static const String getVenderKycStatus =
+      "api/application/v1/merchant-kyc/status";
+
   // helper
-  static  double horizontalPadding = 16.w;
-  static  double verticalPadding = 20.h;
-  static  EdgeInsets screenPadding = EdgeInsets.symmetric(
+  static double horizontalPadding = 16.w;
+  static double verticalPadding = 20.h;
+  static EdgeInsets screenPadding = EdgeInsets.symmetric(
       horizontal: AppConstants.horizontalPadding,
       vertical: AppConstants.verticalPadding);
 

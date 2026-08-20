@@ -27,6 +27,7 @@ import 'package:lekra/controllers/wallet_controller.dart';
 import 'package:lekra/data/repositories/card_repo.dart';
 import 'package:lekra/data/repositories/card_withdrawal_repo/credit_card_repo.dart';
 import 'package:lekra/data/repositories/card_withdrawal_repo/custom_kyc_repo.dart';
+import 'package:lekra/data/repositories/card_withdrawal_repo/vender_kyc_repo.dart';
 import 'package:lekra/data/repositories/dispute_repo.dart';
 import 'package:lekra/data/repositories/form_repo.dart';
 import 'package:lekra/data/repositories/kyc_repo.dart';
@@ -89,6 +90,14 @@ class Init {
       Get.lazyPut(() => CustomKycRepo(apiClient: Get.find()));
       Get.lazyPut(() => CreditCardRepo(apiClient: Get.find()));
 
+      //* Vender kYC
+      Get.lazyPut(
+        () => VenderKycRepo(
+          apiClient: Get.find(),
+          sharedPreferences: Get.find(),
+        ),
+      );
+
       //! Get Controller's...
       Get.lazyPut(() => DashBoardController());
       Get.lazyPut(() => AuthController(
@@ -115,7 +124,8 @@ class Init {
       Get.lazyPut(() => VoiceServiceController());
 
       //*KYC controller list
-      Get.lazyPut(() => RegistrationKycFromController());
+      Get.lazyPut(
+          () => RegistrationKycFromController(venderKycRepo: Get.find()));
       Get.lazyPut(() => KycDocumentUploadController());
       Get.lazyPut(() => DocumentDetailsController());
       Get.lazyPut(() => BusinessInformationController());

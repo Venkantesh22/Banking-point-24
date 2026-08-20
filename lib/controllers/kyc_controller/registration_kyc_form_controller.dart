@@ -1,43 +1,51 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lekra/data/models/district_model.dart';
+import 'package:lekra/data/models/response/response_model.dart';
 import 'package:lekra/data/models/status_model.dart';
+import 'package:lekra/data/repositories/card_withdrawal_repo/vender_kyc_repo.dart';
 
 class RegistrationKycFromController extends GetxController
     implements GetxService {
+  final VenderKycRepo venderKycRepo;
+  RegistrationKycFromController({required this.venderKycRepo});
+
   // ============================================================
   // REGISTRATION & BASIC DETAILS
   // ============================================================
 
+  bool isLoading = false;
+
   final TextEditingController firstNameController =
-      TextEditingController();
+      TextEditingController(text: "Test");
 
   final TextEditingController lastNameController =
-      TextEditingController();
+      TextEditingController(text: "Test");
 
   final TextEditingController businessNameController =
-      TextEditingController();
+      TextEditingController(text: "TestName");
 
   final TextEditingController businessNumberController =
-      TextEditingController();
+      TextEditingController(text: "1234567890");
 
   final TextEditingController businessEmailController =
-      TextEditingController();
+      TextEditingController(text: "t@gmail.com");
 
   final TextEditingController sellerIdentifierController =
       TextEditingController();
 
-  final TextEditingController businessMCCController =
-      TextEditingController();
+  final TextEditingController businessMCCController = TextEditingController();
 
   final TextEditingController shopAddressController =
-      TextEditingController();
+      TextEditingController(text: "Test address");
 
   final TextEditingController pincodeController =
-      TextEditingController();
+      TextEditingController(text: "123456");
 
-  final TextEditingController cityController =
-      TextEditingController();
+  // final TextEditingController cityController =
+  //     TextEditingController();
 
   final TextEditingController dateOfIncorporationController =
       TextEditingController();
@@ -48,150 +56,144 @@ class RegistrationKycFromController extends GetxController
 
   StateModel? selectState;
 
-  DistrictModel? selectDistrict;
-
-  // ============================================================
-  // DROPDOWNS
-  // ============================================================
-
-  String? turnoverType;
-  String? acceptanceType;
-  String? ownershipType;
-
-  final List<String> turnoverTypeList = [
-    'SMALL',
-    'LARGE',
-  ];
-
-  final List<String> acceptanceTypeList = [
-    'ONLINE',
-    'OFFLINE',
-  ];
-
-  final List<String> ownershipTypeList = [
-    'PROPRIETARY',
-    'PARTNERSHIP',
-    'PRIVATE',
-    'LLP',
-    'SOCIETY',
-    'TRUST',
-    'GOVT',
-    'HUF',
-    'BOI',
-    'AOP',
-    'AJP',
-  ];
-
-  // ============================================================
-  // SETTERS
-  // ============================================================
-
-  void setTurnoverType(String? value) {
-    turnoverType = value;
-    update();
-  }
-
-  void setAcceptanceType(String? value) {
-    acceptanceType = value;
-    update();
-  }
-
-  void setOwnershipType(String? value) {
-    ownershipType = value;
-    update();
-  }
+  DistrictModel? selectCity;
 
   void setState(StateModel? state) {
     selectState = state;
 
     // Reset district whenever state changes.
-    selectDistrict = null;
+    selectCity = null;
 
     update();
   }
 
   void setDistrict(DistrictModel? district) {
-    selectDistrict = district;
+    selectCity = district;
     update();
   }
 
   // ============================================================
-  // VALIDATION
+  // Call Api
   // ============================================================
 
-  bool validateRegistration() {
-    if (firstNameController.text.trim().isEmpty) {
-      return false;
-    }
+  //* submit Vender kyc   venderKycBasicDetails()
+  Future<ResponseModel> venderKycBasicDetails() async {
+    log('----------- venderKycBasicDetails Called ----------');
 
-    if (lastNameController.text.trim().isEmpty) {
-      return false;
-    }
+    isLoading = true;
+    update();
 
-    if (businessNumberController.text.trim().length != 10) {
-      return false;
-    }
+    try {
+      final Map<String, dynamic> data = {
+        "section": "basic_details",
+        "first_name": firstNameController.text.trim(),
+        "last_name": lastNameController.text.trim(),
+        "mobile_number": businessNumberController.text.trim(),
+        "email": businessEmailController.text.trim(),
+        "shop_name": businessNameController.text.trim(),
+        "shop_address": shopAddressController.text.trim(),
+        "pin_code": pincodeController.text.trim(),
+        "city": selectCity?.districtName ?? "",
+        "state": selectState?.stateName ?? "",
+      };
 
-    if (businessEmailController.text.trim().isEmpty) {
-      return false;
-    }
+      final response = await venderKycRepo.venderKycBasicDetails(
+        data: data,
+      );
 
-    if (businessNameController.text.trim().isEmpty) {
-      return false;
-    }
+      log('STATUS CODE: ${response.statusCode}');
+      log('RESPONSE BODY: ${response.body}');
+      log('RESPONSE TYPE: ${response.body.runtimeType}');
 
-    if (shopAddressController.text.trim().isEmpty) {
-      return false;
-    }
+      final body = response.body;
 
-    if (pincodeController.text.trim().length != 6) {
-      return false;
-    }
+      if (response.statusCode == 200 &&
+          body is Map &&
+          body['status']?.toString().toLowerCase() == 'success') {
+        return ResponseModel(
+          true,
+          body['message']?.toString() ??
+              'Registration details submitted successfully',
+        );
+      }
 
-    if (cityController.text.trim().isEmpty) {
-      return false;
-    }
+      String message = 'Something went wrong';
 
-    if (selectState == null) {
-      return false;
-    }
+      if (body is Map && body['message'] != null) {
+        message = body['message'].toString();
+      } else if (response.statusText != null &&
+          response.statusText!.isNotEmpty) {
+        message = response.statusText!;
+      }
 
-    if (selectDistrict == null) {
-      return false;
-    }
+      return ResponseModel(false, message);
+    } catch (e, stackTrace) {
+      log(
+        'ERROR AT venderKycBasicDetails(): $e',
+        stackTrace: stackTrace,
+      );
 
-    return true;
+      return ResponseModel(
+        false,
+        'Error while submitting registration details: $e',
+      );
+    } finally {
+      isLoading = false;
+      update();
+    }
   }
 
-  // ============================================================
-  // FORM DATA
-  // ============================================================
+  //* submit Vender kyc   venderKycBasicStatus()
+  Future<ResponseModel> venderKycBasicStatus() async {
+    log('----------- venderKycBasicStatus Called ----------');
 
-  Map<String, dynamic> toMap() {
-    return {
-      'first_name': firstNameController.text.trim(),
-      'last_name': lastNameController.text.trim(),
-      'seller_identifier': sellerIdentifierController.text.trim(),
-      'business_name': businessNameController.text.trim(),
-      'mobile_number': businessNumberController.text.trim(),
-      'email': businessEmailController.text.trim(),
-      'mcc': businessMCCController.text.trim(),
+    isLoading = true;
+    update();
 
-      'turnover_type': turnoverType,
-      'acceptance_type': acceptanceType,
-      'ownership_type': ownershipType,
+    try {
+      final response = await venderKycRepo.venderKycBasicStatus();
 
-      'state_id': selectState?.stateId,
-      'district_id': selectDistrict?.districtId,
+      log('STATUS CODE: ${response.statusCode}');
+      log('RESPONSE BODY: ${response.body}');
+      log('RESPONSE TYPE: ${response.body.runtimeType}');
 
-      'city': cityController.text.trim(),
-      'pincode': pincodeController.text.trim(),
-      'shop_address': shopAddressController.text.trim(),
+      final body = response.body;
 
-      'doi': dateOfIncorporationController.text.trim(),
-    };
+      if (response.statusCode == 200 &&
+          body is Map &&
+          body['status']?.toString().toLowerCase() == 'success') {
+        return ResponseModel(
+          true,
+          body['message']?.toString() ??
+              'venderKycBasicStatus details submitted successfully',
+        );
+      }
+
+      String message = 'Something went wrong';
+
+      if (body is Map && body['message'] != null) {
+        message = body['message'].toString();
+      } else if (response.statusText != null &&
+          response.statusText!.isNotEmpty) {
+        message = response.statusText!;
+      }
+
+      return ResponseModel(false, message);
+    } catch (e, stackTrace) {
+      log(
+        'ERROR AT venderKycBasicStatus(): $e',
+        stackTrace: stackTrace,
+      );
+
+      return ResponseModel(
+        false,
+        'Error while submitting venderKycBasicStatus details: $e',
+      );
+    } finally {
+      isLoading = false;
+      update();
+    }
   }
-
   // ============================================================
   // CLEAR
   // ============================================================
@@ -206,15 +208,11 @@ class RegistrationKycFromController extends GetxController
     businessMCCController.clear();
     shopAddressController.clear();
     pincodeController.clear();
-    cityController.clear();
+    // cityController.clear();
     dateOfIncorporationController.clear();
 
-    turnoverType = null;
-    acceptanceType = null;
-    ownershipType = null;
-
     selectState = null;
-    selectDistrict = null;
+    selectCity = null;
 
     update();
   }
@@ -234,7 +232,7 @@ class RegistrationKycFromController extends GetxController
     businessMCCController.dispose();
     shopAddressController.dispose();
     pincodeController.dispose();
-    cityController.dispose();
+    // cityController.dispose();
     dateOfIncorporationController.dispose();
 
     super.onClose();

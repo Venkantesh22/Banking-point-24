@@ -119,10 +119,10 @@ class KycReviewScreen extends StatelessWidget {
                   label: 'Business Name',
                   value: registrationController.businessNameController.text,
                 ),
-                ReviewItem(
-                  label: 'City',
-                  value: registrationController.cityController.text,
-                ),
+                // ReviewItem(
+                //   label: 'City',
+                //   value: registrationController.cityController.text,
+                // ),
                 ReviewItem(
                   label: 'PIN Code',
                   value: registrationController.pincodeController.text,
