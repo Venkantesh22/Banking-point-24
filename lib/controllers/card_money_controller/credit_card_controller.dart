@@ -276,7 +276,7 @@ class CreditCardController extends GetxController implements GetxService {
 
     try {
       Map<String, dynamic> data = {
-        "otp" : otp,
+        "otp": otp,
       };
       Response response =
           await creditCardRepo.creditCardOTPVerify(data: FormData(data));
@@ -285,8 +285,11 @@ class CreditCardController extends GetxController implements GetxService {
         responseModel = ResponseModel(
             true, response.body['message'] ?? " creditCardOTPVerify success");
       } else {
-        responseModel = ResponseModel(false,
-            response.body['message'] ?? "Error while creditCardOTPVerify");
+        responseModel = ResponseModel(
+            false,
+            response.body?['message'] ??
+                response.statusText ??
+                "Error while creditCardOTPVerify");
       }
     } catch (e) {
       log('ERROR AT creditCardOTPVerify(): $e');

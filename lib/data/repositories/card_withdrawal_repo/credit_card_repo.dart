@@ -29,11 +29,13 @@ class CreditCardRepo {
         "sendCreditCardOTP",
         data,
       );
-      
+
   Future<Response> creditCardOTPVerify({required FormData data}) async =>
       await apiClient.postData(
         AppConstants.postCreditCardOTPVerify,
         "creditCardOTPVerify",
         data,
       );
+
+  
 }

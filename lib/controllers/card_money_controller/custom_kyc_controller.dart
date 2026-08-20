@@ -363,6 +363,41 @@ class CustomKycController extends GetxController implements GetxService {
     return responseModel;
   }
 
+  //* Call confirm and Transaction credit card confirmAndTransaction()
+  Future<ResponseModel> confirmAndTransaction({
+    required String? number,
+  }) async {
+    log('----------- confirmAndTransaction Called ----------');
+
+    ResponseModel responseModel;
+    isLoading = true;
+    update();
+
+    try {
+      Map<String, dynamic> data = {
+        "idempotency_key": "",
+      };
+      Response response =
+          await customKycRepo.confirmAndTransaction(data: FormData(data));
+
+      if (response.statusCode == 200 && response.body['status'] == "success") {
+        responseModel = ResponseModel(
+            true, response.body['message'] ?? " confirmAndTransaction success");
+      } else {
+        responseModel = ResponseModel(false,
+            response.body['message'] ?? "Error while confirmAndTransaction");
+      }
+    } catch (e) {
+      log('ERROR AT confirmAndTransaction(): $e');
+      responseModel =
+          ResponseModel(false, "Error while confirmAndTransaction user $e");
+    }
+
+    isLoading = false;
+    update();
+    return responseModel;
+  }
+
   // ============================================================
   // CLEAR
   // ============================================================
