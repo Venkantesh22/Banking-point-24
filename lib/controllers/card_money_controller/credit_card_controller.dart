@@ -1,29 +1,30 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lekra/data/models/response/response_model.dart';
+import 'package:lekra/data/repositories/card_withdrawal_repo/credit_card_repo.dart';
 
-class CreditCardController extends GetxController
-    implements GetxService {
+class CreditCardController extends GetxController implements GetxService {
+  final CreditCardRepo creditCardRepo;
+  CreditCardController({required this.creditCardRepo});
+
   // ============================================================
   // CONTROLLERS
   // ============================================================
 
-  final TextEditingController amountController =
-      TextEditingController();
+  final TextEditingController amountController = TextEditingController();
 
-  final TextEditingController cardNumberController =
-      TextEditingController();
+  final TextEditingController cardNumberController = TextEditingController();
 
-  final TextEditingController expiryDateController =
-      TextEditingController();
+  final TextEditingController expiryDateController = TextEditingController();
 
-  final TextEditingController cvvController =
-      TextEditingController();
+  final TextEditingController cvvController = TextEditingController();
 
   final TextEditingController cardHolderNameController =
       TextEditingController();
 
-  final List<TextEditingController> otpControllers =
-      List.generate(
+  final List<TextEditingController> otpControllers = List.generate(
     6,
     (index) => TextEditingController(),
   );
@@ -31,6 +32,8 @@ class CreditCardController extends GetxController
   // ============================================================
   // WITHDRAWAL DATA
   // ============================================================
+
+  bool isLoading = false;
 
   double minimumAmount = 1000;
   double maximumAmount = 100000;
@@ -60,9 +63,7 @@ class CreditCardController extends GetxController
   String otp = '';
 
   void updateOtp() {
-    otp = otpControllers
-        .map((controller) => controller.text)
-        .join();
+    otp = otpControllers.map((controller) => controller.text).join();
 
     isOtpVerified = otp.length == 6;
 
@@ -83,8 +84,7 @@ class CreditCardController extends GetxController
   // ============================================================
 
   void calculateAmount() {
-    final String value =
-        amountController.text.trim();
+    final String value = amountController.text.trim();
 
     if (value.isEmpty) {
       processingFee = 0;
@@ -97,8 +97,7 @@ class CreditCardController extends GetxController
       return;
     }
 
-    final double? amount =
-        double.tryParse(value);
+    final double? amount = double.tryParse(value);
 
     if (amount == null) {
       isAmountValid = false;
@@ -106,19 +105,15 @@ class CreditCardController extends GetxController
       return;
     }
 
-    isAmountValid =
-        amount >= minimumAmount &&
+    isAmountValid = amount >= minimumAmount &&
         amount <= maximumAmount &&
         amount <= availableLimit;
 
-    processingFee =
-        amount * processingFeePercentage / 100;
+    processingFee = amount * processingFeePercentage / 100;
 
-    gst =
-        processingFee * gstPercentage / 100;
+    gst = processingFee * gstPercentage / 100;
 
-    totalDebit =
-        amount + processingFee + gst;
+    totalDebit = amount + processingFee + gst;
 
     willGet = amount;
 
@@ -131,19 +126,13 @@ class CreditCardController extends GetxController
 
   bool validateCard() {
     final String cardNumber =
-        cardNumberController.text
-            .replaceAll(' ', '')
-            .trim();
+        cardNumberController.text.replaceAll(' ', '').trim();
 
-    final String expiry =
-        expiryDateController.text.trim();
+    final String expiry = expiryDateController.text.trim();
 
-    final String cvv =
-        cvvController.text.trim();
+    final String cvv = cvvController.text.trim();
 
-    final String holder =
-        cardHolderNameController.text
-            .trim();
+    final String holder = cardHolderNameController.text.trim();
 
     if (cardNumber.length != 16) {
       return false;
@@ -168,59 +157,78 @@ class CreditCardController extends GetxController
   // SUBMIT WITHDRAWAL
   // ============================================================
 
-  void submitWithdrawal() {
-    if (!isAmountValid) {
-      return;
-    }
+  //* Call Submit credit card withdrawal amount submitCreditCardWithdrawalAmount()
+  Future<ResponseModel> submitCreditCardWithdrawalAmount({
+    required String? number,
+  }) async {
+    log('----------- submitCreditCardWithdrawalAmount Called ----------');
 
-    if (!validateCard()) {
-      return;
-    }
-
-    isCardValid = true;
-
-    debugPrint(
-      'Withdrawal amount: ${amountController.text}',
-    );
-
-    debugPrint(
-      'Card number: ${cardNumberController.text}',
-    );
-
-    debugPrint(
-      'Expiry date: ${expiryDateController.text}',
-    );
-
-    debugPrint(
-      'CVV: ${cvvController.text}',
-    );
-
-    debugPrint(
-      'Card holder: '
-      '${cardHolderNameController.text}',
-    );
-
-    // API will be added later.
-
+    ResponseModel responseModel;
+    isLoading = true;
     update();
+
+    try {
+      Map<String, dynamic> data = {
+        "withdrawal_amount": amountController.text.trim(),
+      };
+      Response response = await creditCardRepo.submitCreditCardWithdrawalAmount(
+          data: FormData(data));
+
+      if (response.statusCode == 200 && response.body['status'] == "success") {
+        responseModel = ResponseModel(
+            true,
+            response.body['message'] ??
+                " submitCreditCardWithdrawalAmount success");
+      } else {
+        responseModel = ResponseModel(
+            false,
+            response.body['message'] ??
+                "Error while submitCreditCardWithdrawalAmount");
+      }
+    } catch (e) {
+      log('ERROR AT submitCreditCardWithdrawalAmount(): $e');
+      responseModel = ResponseModel(
+          false, "Error while submitCreditCardWithdrawalAmount user $e");
+    }
+
+    isLoading = false;
+    update();
+    return responseModel;
   }
 
-  // ============================================================
-  // TRANSACTION
-  // ============================================================
+  //* Call Submit credit card info Api submitCreditCardInfo()
+  Future<ResponseModel> submitCreditCardInfo({
+    required String? number,
+  }) async {
+    log('----------- submitCreditCardInfo Called ----------');
 
-  void completeTransaction() {
-    isProcessing = true;
+    ResponseModel responseModel;
+    isLoading = true;
     update();
 
-    debugPrint(
-      'Transaction completed locally',
-    );
+    try {
+      Map<String, dynamic> data = {
+        // "selfie": livePhoto,
+      };
+      Response response =
+          await creditCardRepo.submitCreditCardInfo(data: FormData(data));
 
-    // API will be added later.
+      if (response.statusCode == 200 && response.body['status'] == "success") {
+        responseModel = ResponseModel(
+            true, response.body['message'] ?? " submitCreditCardInfo success");
+      } else {
+        responseModel = ResponseModel(false,
+            response.body['message'] ?? "Error while submitCreditCardInfo");
+      }
+    } catch (e) {
+      log('ERROR AT submitCreditCardInfo(): $e');
+      responseModel =
+          ResponseModel(false, "Error while submitCreditCardInfo user $e");
+    }
 
-    isProcessing = false;
+    isLoading = false;
     update();
+    return responseModel;
   }
 
   // ============================================================

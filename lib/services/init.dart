@@ -25,6 +25,7 @@ import 'package:lekra/controllers/report_contoller.dart';
 import 'package:lekra/controllers/voice_service_controller.dart';
 import 'package:lekra/controllers/wallet_controller.dart';
 import 'package:lekra/data/repositories/card_repo.dart';
+import 'package:lekra/data/repositories/card_withdrawal_repo/credit_card_repo.dart';
 import 'package:lekra/data/repositories/card_withdrawal_repo/custom_kyc_repo.dart';
 import 'package:lekra/data/repositories/dispute_repo.dart';
 import 'package:lekra/data/repositories/form_repo.dart';
@@ -86,6 +87,7 @@ class Init {
 
       //* Custom KYC controller
       Get.lazyPut(() => CustomKycRepo(apiClient: Get.find()));
+      Get.lazyPut(() => CreditCardRepo(apiClient: Get.find()));
 
       //! Get Controller's...
       Get.lazyPut(() => DashBoardController());
@@ -131,7 +133,9 @@ class Init {
 
       //* cried card controller
 
-      Get.lazyPut(() => CreditCardController());
+      Get.lazyPut(() => CreditCardController(
+            creditCardRepo: Get.find(),
+          ));
       Get.lazyPut(() => BankController());
     } catch (e) {
       log('---- ${e.toString()} ----', name: "ERROR AT initialize()");

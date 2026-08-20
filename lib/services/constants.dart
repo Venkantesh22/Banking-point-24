@@ -251,14 +251,17 @@ class AppConstants {
 
   //* Credit card withdrawal api
 
-    static const String postSubmitCustomKyc = 'api/credit-card-cash-withdrawal/v1/kyc';
-    static const String postSubmitCustomKycLivePhoto = 'api/credit-card-cash-withdrawal/v1/live-photo';
+  static const String postSubmitCustomKyc =
+      'api/credit-card-cash-withdrawal/v1/kyc';
+  static const String postSubmitCustomKycLivePhoto =
+      'api/credit-card-cash-withdrawal/v1/live-photo';
 
   //* Credit card withdrawal api
 
-      static const String postValidateCreditCared = "api/credit-card-cash-withdrawal/v1/cards";
-
-
+  static const String postSubmitCreditCardInfo =
+      "api/credit-card-cash-withdrawal/v1/cards";
+  static const String postSubmitCreditCardWithdrawalAmount =
+      "api/credit-card-cash-withdrawal/v1/amount";
 
   // helper
   static const double horizontalPadding = 16;
@@ -284,7 +287,6 @@ class AppConstants {
   static const String fcmToken = 'fcm_token';
   static const String soundNotificationIsOn = 'sound_notification_on';
   static const String soundNotificationLanguage = 'sound_notification_language';
-
 
   static String azureSpeechKey = dotenv.env['AZURE_SPEECH_KEY'] ?? '';
 }
