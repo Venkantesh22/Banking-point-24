@@ -36,39 +36,40 @@ class FormsContent extends StatelessWidget {
               },
             ),
 
-            KycDocumentUploadScreen(
+            // DocuentDetailsScreen(
+            DocumentDetailsScreen(
               isComplete: formController.completed[1],
               onCompleteChanged: (value) {
                 _completeStep(
                   formController,
-                  0,
-                  value,
-                );
-              },
-            ),
-            // DocuentDetailsScreen(
-            DocumentDetailsScreen(
-              isComplete: formController.completed[2],
-              onCompleteChanged: (value) {
-                _completeStep(
-                  formController,
-                  0,
+                  1,
                   value,
                 );
               },
             ),
             BusinessInformationScreen(
-              isComplete: formController.completed[3],
+              isComplete: formController.completed[2],
               onCompleteChanged: (value) {
                 _completeStep(
                   formController,
-                  0,
+                  2,
                   value,
                 );
               },
             ),
 
             LiveShopVerificationScreen(
+              isComplete: formController.completed[3],
+              onCompleteChanged: (value) {
+                _completeStep(
+                  formController,
+                  3,
+                  value,
+                );
+              },
+            ),
+
+            SelfLiveVerificationScreen(
               isComplete: formController.completed[4],
               onCompleteChanged: (value) {
                 _completeStep(
@@ -79,7 +80,7 @@ class FormsContent extends StatelessWidget {
               },
             ),
 
-            SelfLiveVerificationScreen(
+            BankDetailsScreen(
               isComplete: formController.completed[5],
               onCompleteChanged: (value) {
                 _completeStep(
@@ -89,8 +90,7 @@ class FormsContent extends StatelessWidget {
                 );
               },
             ),
-
-            BankDetailsScreen(
+            KycDocumentUploadScreen(
               isComplete: formController.completed[6],
               onCompleteChanged: (value) {
                 _completeStep(

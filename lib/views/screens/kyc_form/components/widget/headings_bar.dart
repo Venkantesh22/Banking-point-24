@@ -10,12 +10,12 @@ class HeadingsBar extends StatelessWidget {
 
   static const List<String> headings = [
     'Basic',
-    'Documents',
     'KYC Info',
     'Business',
     'Shop',
     'Selfie',
     'Bank',
+    'KYC Doc',
     'Bank Doc',
     'Review',
   ];

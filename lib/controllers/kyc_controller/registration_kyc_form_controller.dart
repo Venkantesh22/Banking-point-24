@@ -18,17 +18,17 @@ class RegistrationKycFromController extends GetxController
 
   bool isLoading = false;
 
-  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController(text: "Test");
 
-  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController(text: "Test");
 
-  final TextEditingController businessNameController = TextEditingController();
+  final TextEditingController businessNameController = TextEditingController(text: "Test");
 
   final TextEditingController businessNumberController =
-      TextEditingController();
+      TextEditingController(text: "1234567890");
 
   final TextEditingController businessEmailController =
-      TextEditingController();
+      TextEditingController(text: "test@gmail.com");
 
   final TextEditingController sellerIdentifierController =
       TextEditingController();
@@ -36,10 +36,10 @@ class RegistrationKycFromController extends GetxController
   final TextEditingController businessMCCController = TextEditingController();
 
   final TextEditingController shopAddressController =
-      TextEditingController();
+      TextEditingController(text: "Test");
 
   final TextEditingController pincodeController =
-      TextEditingController();
+      TextEditingController(text: "123456");
 
   // final TextEditingController cityController =
   //     TextEditingController();

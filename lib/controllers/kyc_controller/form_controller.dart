@@ -31,17 +31,17 @@ class FormController extends GetxController implements GetxService {
   // STEP NAMES
   // ============================================================
 
-  static const List<String> stepNames = [
-    'Basic',
-    'Documents',
-    'KYC Info',
-    'Business',
-    'Shop',
-    'Selfie',
-    'Bank',
-    'Bank Doc',
-    'Review',
-  ];
+  // static const List<String> stepNames = [
+  //   'Basic',
+  //   'KYC Info',
+  //   'Business',
+  //   'Shop',
+  //   'Selfie',
+  //   'Bank',
+  //   'KYC Doc',
+  //   'Bank Doc',
+  //   'Review',
+  // ];
 
   // ============================================================
   // NAVIGATION

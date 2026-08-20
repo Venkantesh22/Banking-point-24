@@ -3,12 +3,20 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
+import 'package:lekra/data/models/response/response_model.dart';
+import 'package:lekra/data/repositories/card_withdrawal_repo/vender_kyc_repo.dart';
 
 class KycDocumentUploadController extends GetxController
     implements GetxService {
+  final VenderKycRepo venderKycRepo;
+
+  KycDocumentUploadController({required this.venderKycRepo});
+
   // ============================================================
   // DOCUMENT CONFIGURATION
   // ============================================================
+
+  bool isLoading = false;
 
   final List<String> kycDocumentNames = [
     'Aadhaar Front',
@@ -45,8 +53,7 @@ class KycDocumentUploadController extends GetxController
 
   int? uploadingDocumentIndex;
 
-  bool get isUploadingDocument =>
-      uploadingDocumentIndex != null;
+  bool get isUploadingDocument => uploadingDocumentIndex != null;
 
   // ============================================================
   // PICK DOCUMENT
@@ -67,8 +74,7 @@ class KycDocumentUploadController extends GetxController
 
       final bool isPassportPhoto = index == 3;
 
-      final FilePickerResult? result =
-          await FilePicker.platform.pickFiles(
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowMultiple: false,
         allowedExtensions: isPassportPhoto
@@ -141,8 +147,7 @@ class KycDocumentUploadController extends GetxController
   // ============================================================
 
   void removeKycDocument(int index) {
-    if (index < 0 ||
-        index >= kycDocuments.length) {
+    if (index < 0 || index >= kycDocuments.length) {
       return;
     }
 
@@ -156,8 +161,7 @@ class KycDocumentUploadController extends GetxController
   // ============================================================
 
   bool isDocumentUploaded(int index) {
-    if (index < 0 ||
-        index >= kycDocuments.length) {
+    if (index < 0 || index >= kycDocuments.length) {
       return false;
     }
 
@@ -169,8 +173,7 @@ class KycDocumentUploadController extends GetxController
   // ============================================================
 
   String getDocumentFileName(int index) {
-    if (index < 0 ||
-        index >= kycDocuments.length) {
+    if (index < 0 || index >= kycDocuments.length) {
       return '';
     }
 
@@ -180,9 +183,11 @@ class KycDocumentUploadController extends GetxController
       return '';
     }
 
-    return file.path.split(
-      Platform.pathSeparator,
-    ).last;
+    return file.path
+        .split(
+          Platform.pathSeparator,
+        )
+        .last;
   }
 
   // ============================================================
@@ -190,9 +195,7 @@ class KycDocumentUploadController extends GetxController
   // ============================================================
 
   int get uploadedDocumentCount {
-    return kycDocuments
-        .where((file) => file != null)
-        .length;
+    return kycDocuments.where((file) => file != null).length;
   }
 
   int get totalDocuments {
@@ -214,8 +217,7 @@ class KycDocumentUploadController extends GetxController
 
   bool get allRequiredDocumentsUploaded {
     for (int i = 0; i < kycDocuments.length; i++) {
-      if (isDocumentRequired(i) &&
-          kycDocuments[i] == null) {
+      if (isDocumentRequired(i) && kycDocuments[i] == null) {
         return false;
       }
     }
@@ -246,14 +248,84 @@ class KycDocumentUploadController extends GetxController
   // ============================================================
 
   void clearForm() {
-    for (int i = 0;
-        i < kycDocuments.length;
-        i++) {
+    for (int i = 0; i < kycDocuments.length; i++) {
       kycDocuments[i] = null;
     }
 
     uploadingDocumentIndex = null;
 
     update();
+  }
+
+  // ============================================================
+  // Call Api
+  // ============================================================
+
+  //* submit Vender kyc Document upload  venderKycKYCDocUpload()
+  Future<ResponseModel> venderKycKYCDocUpload() async {
+    log('----------- venderKycKYCDocUpload Called ----------');
+
+    isLoading = true;
+    update();
+
+    try {
+      final Map<String, dynamic> data = {
+        "aadhaar_front": "",
+        "aadhaar_back": "",
+        "pan_card": "",
+        "passport_photo": "",
+        "gst_certificate": "",
+        "trade_licence": "",
+        "msme_certificate": "",
+        "cancelled_cheque": "",
+        "bank_statement": "",
+        "shop_live_photo": "",
+        "self_live_photo": "",
+      };
+
+      final response = await venderKycRepo.venderKycKYCDocUpload(
+        data: data,
+      );
+
+      log('STATUS CODE: ${response.statusCode}');
+      log('RESPONSE BODY: ${response.body}');
+      log('RESPONSE TYPE: ${response.body.runtimeType}');
+
+      final body = response.body;
+
+      if (response.statusCode == 200 &&
+          body is Map &&
+          body['status']?.toString().toLowerCase() == 'success') {
+        return ResponseModel(
+          true,
+          body['message']?.toString() ??
+              'venderKycKYCDocUpload submitted successfully',
+        );
+      }
+
+      String message = 'Something went wrong';
+
+      if (body is Map && body['message'] != null) {
+        message = body['message'].toString();
+      } else if (response.statusText != null &&
+          response.statusText!.isNotEmpty) {
+        message = response.statusText!;
+      }
+
+      return ResponseModel(false, message);
+    } catch (e, stackTrace) {
+      log(
+        'ERROR AT venderKycKYCDocUpload(): $e',
+        stackTrace: stackTrace,
+      );
+
+      return ResponseModel(
+        false,
+        'Error while submitting venderKycKYCDocUpload(): $e',
+      );
+    } finally {
+      isLoading = false;
+      update();
+    }
   }
 }

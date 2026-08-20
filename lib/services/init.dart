@@ -126,8 +126,8 @@ class Init {
       //*KYC controller list
       Get.lazyPut(
           () => RegistrationKycFromController(venderKycRepo: Get.find()));
-      Get.lazyPut(() => KycDocumentUploadController());
-      Get.lazyPut(() => DocumentDetailsController());
+      Get.lazyPut(() => KycDocumentUploadController(venderKycRepo: Get.find()));
+      Get.lazyPut(() => DocumentDetailsController(venderKycRepo: Get.find()));
       Get.lazyPut(() => BusinessInformationController());
       Get.lazyPut(() => LiveShopVerificationController());
       Get.lazyPut(() => SelfLiveVerificationController());

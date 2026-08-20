@@ -5,7 +5,7 @@ import 'package:get/state_manager.dart';
 import 'package:lekra/controllers/card_money_controller/bank_controller.dart';
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/theme.dart';
-import 'package:lekra/views/screens/kyc_form/components/screen/document_details_screen/document_details_screen.dart';
+import 'package:lekra/views/screens/kyc_form/components/widget/uppper_case_text_formatter.dart';
 import 'package:lekra/views/screens/widget/text_box/app_text_box.dart';
 
 class MedSectionOfAccount extends StatelessWidget {

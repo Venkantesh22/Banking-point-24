@@ -15,8 +15,7 @@ class VenderKycRepo {
   Future<Response> venderKycBasicDetails({
     required Map<String, dynamic> data,
   }) async {
-    final apiToken =
-        sharedPreferences.getString(AppConstants.apiToken) ?? '';
+    final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
 
     return await apiClient.postData(
       AppConstants.postVenderKycBasicDetails,
@@ -31,6 +30,41 @@ class VenderKycRepo {
     );
   }
 
+  Future<Response> venderKycKYCDocUpload({
+    required Map<String, dynamic> data,
+  }) async {
+    final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
+
+    return await apiClient.postData(
+      AppConstants.postVenderKycKYCDocUpload,
+      "venderKycKYCDocUpload",
+      data,
+      contentType: 'application/json',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $apiToken',
+      },
+    );
+  }
+
+  Future<Response> venderKycDocumentDetails({
+    required Map<String, dynamic> data,
+  }) async {
+    final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
+
+    return await apiClient.postData(
+      AppConstants.postVenderKycDocumentDetails,
+      "venderKycDocumentDetails",
+      data,
+      contentType: 'application/json',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $apiToken',
+      },
+    );
+  }
 
   Future<Response> venderKycBasicStatus() async {
     final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
