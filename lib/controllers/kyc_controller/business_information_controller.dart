@@ -18,8 +18,6 @@ class BusinessInformationController extends GetxController
 
   String? businessCategory;
 
-  String? natureOfBusiness;
-
   String? expectedMonthlyTransactionVolume;
 
   String? businessOwnershipType;
@@ -29,31 +27,40 @@ class BusinessInformationController extends GetxController
   // ============================================================
 
   final TextEditingController businessDescriptionController =
-      TextEditingController();
+      TextEditingController(text: "Test");
 
   final TextEditingController businessStartDateController =
-      TextEditingController();
+      TextEditingController(text: "2026-01-09");
+  TextEditingController natureOfBusinessController =
+      TextEditingController(text: "Test");
 
   // ============================================================
   // DROPDOWN LISTS
   // ============================================================
 
-  final List<String> businessCategoryList = [];
-
-  final List<String> natureOfBusinessList = [];
+  final List<String> businessCategoryList = [
+    "Retails",
+    "Grocery / Kirana",
+    "Electronic & Mobile",
+    "Service & Consulting",
+    "Food & Restaurants",
+    "Apparel & Fashion",
+    "Healthcare & Pharmacy",
+    "Travel & Tourism",
+    "Other",
+  ];
 
   final List<String> transactionVolumeList = [
-    'Below ₹50,000',
-    '₹50,000 - ₹1 Lakh',
+    'under ₹1 Lakh',
     '₹1 Lakh - ₹5 Lakh',
-    '₹5 Lakh - ₹10 Lakh',
-    'Above ₹10 Lakh',
+    '₹5 Lakh - ₹20 Lakh',
+    'Above ₹20 Lakh',
   ];
 
   final List<String> businessOwnershipTypeList = [
     'Owned',
     'Rented',
-    'Other',
+    'Leased',
   ];
 
   // ============================================================
@@ -62,11 +69,6 @@ class BusinessInformationController extends GetxController
 
   void setBusinessCategory(String? value) {
     businessCategory = value;
-    update();
-  }
-
-  void setNatureOfBusiness(String? value) {
-    natureOfBusiness = value;
     update();
   }
 
@@ -80,67 +82,6 @@ class BusinessInformationController extends GetxController
     update();
   }
 
-  // ============================================================
-  // BUSINESS START DATE
-  // ============================================================
-
-  void setBusinessStartDate(DateTime date) {
-    final String day = date.day.toString().padLeft(2, '0');
-
-    final String month = date.month.toString().padLeft(2, '0');
-
-    final String year = date.year.toString();
-
-    businessStartDateController.text = '$day/$month/$year';
-
-    update();
-  }
-
-  // ============================================================
-  // VALIDATION
-  // ============================================================
-
-  bool validateBusinessInformation() {
-    if (businessCategory == null || businessCategory!.trim().isEmpty) {
-      return false;
-    }
-
-    if (natureOfBusiness == null || natureOfBusiness!.trim().isEmpty) {
-      return false;
-    }
-
-    if (expectedMonthlyTransactionVolume == null ||
-        expectedMonthlyTransactionVolume!.trim().isEmpty) {
-      return false;
-    }
-
-    if (businessOwnershipType == null ||
-        businessOwnershipType!.trim().isEmpty) {
-      return false;
-    }
-
-    if (businessStartDateController.text.trim().isEmpty) {
-      return false;
-    }
-
-    return true;
-  }
-
-  // ============================================================
-  // FORM DATA
-  // ============================================================
-
-  Map<String, dynamic> toMap() {
-    return {
-      'business_category': businessCategory,
-      'nature_of_business': natureOfBusiness,
-      'expected_monthly_transaction_volume': expectedMonthlyTransactionVolume,
-      'business_ownership_type': businessOwnershipType,
-      'business_description': businessDescriptionController.text.trim(),
-      'business_start_date': businessStartDateController.text.trim(),
-    };
-  }
-
   //* submit Vender kyc Business information  venderKycBusinessInfo()
   Future<ResponseModel> venderKycBusinessInfo() async {
     log('----------- venderKycBusinessInfo Called ----------');
@@ -152,7 +93,7 @@ class BusinessInformationController extends GetxController
       final Map<String, dynamic> data = {
         "section": "business_info",
         "business_category": businessCategory,
-        "nature_of_business": natureOfBusiness,
+        "nature_of_business": natureOfBusinessController.text.trim(),
         "business_description": businessDescriptionController.text.trim(),
         "business_start_date": businessStartDateController.text.trim(),
         "expected_monthly_volume": expectedMonthlyTransactionVolume,
@@ -211,7 +152,7 @@ class BusinessInformationController extends GetxController
 
   void clearForm() {
     businessCategory = null;
-    natureOfBusiness = null;
+    natureOfBusinessController.clear();
     expectedMonthlyTransactionVolume = null;
     businessOwnershipType = null;
 
@@ -229,6 +170,7 @@ class BusinessInformationController extends GetxController
   void onClose() {
     businessDescriptionController.dispose();
     businessStartDateController.dispose();
+    natureOfBusinessController.dispose();
 
     super.onClose();
   }
