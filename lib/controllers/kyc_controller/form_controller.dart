@@ -19,7 +19,7 @@ class FormController extends GetxController implements GetxService {
   static const int totalSteps = 9;
   int selectedIndex = 0;
 
-  final List<String> headings = [
+   final List<String> headings = [
     'Basic',
     'KYC Info',
     'Business',
@@ -29,6 +29,18 @@ class FormController extends GetxController implements GetxService {
     'Bank Doc',
     'Selfie',
     'Review',
+  ];
+
+  final List<String> sectionKeys = [
+    'basic_details',
+    'document_numbers',
+    'business_info',
+    'shop_live',
+    'bank_details',
+    'kyc_documents',
+    'bank_documents',
+    'self_live',
+    'review',
   ];
 
   /// Completion status for each step.
@@ -134,6 +146,32 @@ class FormController extends GetxController implements GetxService {
     update();
   }
 
+  void applyKycStatus() {
+    final verifiedSections =
+        venderKycStatusModel?.correctionRemarks?.verifiedSections ?? [];
+
+    for (int i = 0; i < completed.length; i++) {
+      completed[i] = verifiedSections.contains(sectionKeys[i]);
+    }
+
+    selectedIndex = getNextIncompleteStep();
+
+    update();
+  }
+
+  int getNextIncompleteStep() {
+    final verifiedSections =
+        venderKycStatusModel?.correctionRemarks?.verifiedSections ?? [];
+
+    for (int i = 0; i < sectionKeys.length; i++) {
+      if (!verifiedSections.contains(sectionKeys[i])) {
+        return i;
+      }
+    }
+
+    return sectionKeys.length - 1;
+  }
+
   // ============================================================
   //! Api Call
   // ============================================================
@@ -160,6 +198,8 @@ class FormController extends GetxController implements GetxService {
         venderKycStatusModel = VenderKycStatusModel.fromJson(
           Map<String, dynamic>.from(body),
         );
+
+        applyKycStatus();
 
         return ResponseModel(
           true,
