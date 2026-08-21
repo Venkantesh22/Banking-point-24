@@ -394,10 +394,6 @@ class _LiveShopVerificationScreenState
       message = 'Please complete shop verification.';
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
+    showToast(message: message, toastType: ToastType.warning);
   }
 }

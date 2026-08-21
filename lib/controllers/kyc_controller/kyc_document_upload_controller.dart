@@ -230,17 +230,7 @@ class KycDocumentUploadController extends GetxController
   // ============================================================
 
   bool validateAndComplete() {
-    if (!allRequiredDocumentsUploaded) {
-      Get.snackbar(
-        'Documents Required',
-        'Please upload all required documents.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-
-      return false;
-    }
-
-    return true;
+    return allRequiredDocumentsUploaded;
   }
 
   // ============================================================
@@ -262,29 +252,146 @@ class KycDocumentUploadController extends GetxController
   // ============================================================
 
   //* submit Vender kyc Document upload  venderKycKYCDocUpload()
-  Future<ResponseModel> venderKycKYCDocUpload() async {
+  Future<ResponseModel> venderKycKYCDocUpload({
+    required File? cancelledChequeImage,
+    required File? bankStatementImage,
+    required File? liveSelfieImage,
+  }) async {
     log('----------- venderKycKYCDocUpload Called ----------');
 
     isLoading = true;
     update();
 
     try {
-      final Map<String, dynamic> data = {
-        "aadhaar_front": "",
-        "aadhaar_back": "",
-        "pan_card": "",
-        "passport_photo": "",
-        "gst_certificate": "",
-        "trade_licence": "",
-        "msme_certificate": "",
-        "cancelled_cheque": "",
-        "bank_statement": "",
-        "shop_live_photo": "",
-        "self_live_photo": "",
-      };
+      // ----------------------------------------------------------
+      // CHECK REQUIRED DOCUMENTS
+      // ----------------------------------------------------------
+
+      if (!allRequiredDocumentsUploaded) {
+        return ResponseModel(
+          false,
+          'Please upload all required documents.',
+        );
+      }
+
+      // ----------------------------------------------------------
+      // LOG SELECTED FILES
+      // ----------------------------------------------------------
+
+      for (int i = 0; i < kycDocuments.length; i++) {
+        final file = kycDocuments[i];
+
+        log(
+          'Document[$i] ${kycDocumentNames[i]} = '
+          '${file?.path ?? 'NOT SELECTED'}',
+        );
+      }
+
+      log('Cancelled Cheque: ${cancelledChequeImage?.path ?? ""}');
+      log('Bank Statement: ${bankStatementImage?.path}');
+      log('Live Selfie: ${liveSelfieImage?.path}');
+
+      // ----------------------------------------------------------
+      // BUILD MULTIPART DATA
+      // ----------------------------------------------------------
+
+      final Map<String, dynamic> data = {};
+
+      // 0 - Aadhaar Front
+      if (kycDocuments[0] != null) {
+        data['aadhaar_front'] = MultipartFile(
+          kycDocuments[0]!.path,
+          filename: _getFileName(kycDocuments[0]!),
+        );
+      }
+
+      // 1 - Aadhaar Back
+      if (kycDocuments[1] != null) {
+        data['aadhaar_back'] = MultipartFile(
+          kycDocuments[1]!.path,
+          filename: _getFileName(kycDocuments[1]!),
+        );
+      }
+
+      // 2 - PAN Card
+      if (kycDocuments[2] != null) {
+        data['pan_card'] = MultipartFile(
+          kycDocuments[2]!.path,
+          filename: _getFileName(kycDocuments[2]!),
+        );
+      }
+
+      // 3 - Passport Photo
+      if (kycDocuments[3] != null) {
+        data['passport_photo'] = MultipartFile(
+          kycDocuments[3]!.path,
+          filename: _getFileName(kycDocuments[3]!),
+        );
+      }
+
+      // 4 - GST Certificate
+      if (kycDocuments[4] != null) {
+        data['gst_certificate'] = MultipartFile(
+          kycDocuments[4]!.path,
+          filename: _getFileName(kycDocuments[4]!),
+        );
+      }
+
+      // 5 - Trade Licence
+      if (kycDocuments[5] != null) {
+        data['trade_licence'] = MultipartFile(
+          kycDocuments[5]!.path,
+          filename: _getFileName(kycDocuments[5]!),
+        );
+      }
+
+      // 6 - MSME / Udyam Certificate
+      if (kycDocuments[6] != null) {
+        data['msme_certificate'] = MultipartFile(
+          kycDocuments[6]!.path,
+          filename: _getFileName(kycDocuments[6]!),
+        );
+      }
+
+      // ----------------------------------------------------------
+      // EXTRA REQUIRED FILES
+      // ----------------------------------------------------------
+
+      // Cancelled Cheque
+      data['cancelled_cheque'] = MultipartFile(
+        cancelledChequeImage?.path,
+        filename: _getFileName(cancelledChequeImage),
+      );
+
+      // Bank Statement
+      data['bank_statement'] = MultipartFile(
+        bankStatementImage?.path,
+        filename: _getFileName(bankStatementImage),
+      );
+
+      // Live Selfie
+      data['self_live_photo'] = MultipartFile(
+        liveSelfieImage?.path,
+        filename: _getFileName(liveSelfieImage),
+      );
+
+      // ----------------------------------------------------------
+      // CREATE FORM DATA
+      // ----------------------------------------------------------
+
+      final FormData formData = FormData(data);
+
+      log(
+        'KYC multipart fields: '
+        '${formData.fields.map((e) => '${e.key}=${e.value}').toList()}',
+      );
+
+      // ----------------------------------------------------------
+      // API CALL
+      // ----------------------------------------------------------
 
       final response = await venderKycRepo.venderKycKYCDocUpload(
-        data: data,
+        data: formData,
       );
 
       log('STATUS CODE: ${response.statusCode}');
@@ -298,8 +405,7 @@ class KycDocumentUploadController extends GetxController
           body['status']?.toString().toLowerCase() == 'success') {
         return ResponseModel(
           true,
-          body['message']?.toString() ??
-              'venderKycKYCDocUpload submitted successfully',
+          body['message']?.toString() ?? 'KYC documents uploaded successfully',
         );
       }
 
@@ -321,11 +427,15 @@ class KycDocumentUploadController extends GetxController
 
       return ResponseModel(
         false,
-        'Error while submitting venderKycKYCDocUpload(): $e',
+        'Error while uploading KYC documents: $e',
       );
     } finally {
       isLoading = false;
       update();
     }
+  }
+
+  String _getFileName(File? file) {
+    return file?.path.split(Platform.pathSeparator).last ?? "";
   }
 }

@@ -78,8 +78,7 @@ class VenderKycRepo {
     required String longitude,
     required String documentFilePath,
   }) async {
-    final apiToken =
-        sharedPreferences.getString(AppConstants.apiToken) ?? '';
+    final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
 
     final formData = FormData({
       'document_type': documentType,
@@ -120,19 +119,21 @@ class VenderKycRepo {
     );
   }
 
+  // ============================================================
+  // KYC DOCUMENT UPLOAD
+  // ============================================================
+
   Future<Response> venderKycKYCDocUpload({
-    required Map<String, dynamic> data,
+    required FormData data,
   }) async {
     final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
 
     return await apiClient.postData(
-      AppConstants.postVenderKycKYCDocUpload,
-      "venderKycKYCDocUpload",
+      AppConstants.postVenderKycBasicDetails,
+      'venderKycKYCDocUpload',
       data,
-      contentType: 'application/json',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
         'Authorization': 'Bearer $apiToken',
       },
     );
