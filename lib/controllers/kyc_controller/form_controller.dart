@@ -23,16 +23,15 @@ class FormController extends GetxController implements GetxService {
     'KYC Info',
     'Business',
     'Shop',
-    'Selfie',
     'Bank',
     'KYC Doc',
     'Bank Doc',
+    'Selfie',
     'Review',
   ];
 
   /// Completion status for each step.
   final List<bool> completed = List<bool>.filled(totalSteps, false);
-
 
   // ============================================================
   // NAVIGATION
@@ -147,8 +146,6 @@ class FormController extends GetxController implements GetxService {
 
     try {
       final response = await venderKycRepo.venderKycStatus();
-
-
 
       final body = response.body;
 

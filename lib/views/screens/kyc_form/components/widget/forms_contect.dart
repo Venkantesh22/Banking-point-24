@@ -69,7 +69,9 @@ class FormsContent extends StatelessWidget {
               },
             ),
 
-            SelfLiveVerificationScreen(
+            
+
+            BankDetailsScreen(
               isComplete: formController.completed[4],
               onCompleteChanged: (value) {
                 _completeStep(
@@ -79,8 +81,7 @@ class FormsContent extends StatelessWidget {
                 );
               },
             ),
-
-            BankDetailsScreen(
+            KycDocumentUploadScreen(
               isComplete: formController.completed[5],
               onCompleteChanged: (value) {
                 _completeStep(
@@ -90,7 +91,7 @@ class FormsContent extends StatelessWidget {
                 );
               },
             ),
-            KycDocumentUploadScreen(
+            BankDocumentUploadScreen(
               isComplete: formController.completed[6],
               onCompleteChanged: (value) {
                 _completeStep(
@@ -100,7 +101,8 @@ class FormsContent extends StatelessWidget {
                 );
               },
             ),
-            BankDocumentUploadScreen(
+
+            SelfLiveVerificationScreen(
               isComplete: formController.completed[7],
               onCompleteChanged: (value) {
                 _completeStep(
