@@ -102,6 +102,24 @@ class VenderKycRepo {
     );
   }
 
+  Future<Response> venderKycBankDetails({
+    required Map<String, dynamic> data,
+  }) async {
+    final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
+
+    return await apiClient.postData(
+      AppConstants.postVenderKycBankDetails,
+      "venderKycBankDetails",
+      data,
+      contentType: 'application/json',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $apiToken',
+      },
+    );
+  }
+
   Future<Response> venderKycKYCDocUpload({
     required Map<String, dynamic> data,
   }) async {

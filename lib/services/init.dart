@@ -128,9 +128,10 @@ class Init {
       Get.lazyPut(() => DocumentDetailsController(venderKycRepo: Get.find()));
       Get.lazyPut(
           () => BusinessInformationController(venderKycRepo: Get.find()));
-      Get.lazyPut(() => LiveShopVerificationController(venderKycRepo: Get.find()));
+      Get.lazyPut(
+          () => LiveShopVerificationController(venderKycRepo: Get.find()));
       Get.lazyPut(() => SelfLiveVerificationController());
-      Get.lazyPut(() => BankDetailsController());
+      Get.lazyPut(() => BankDetailsController(venderKycRepo: Get.find()));
       Get.lazyPut(() => BankDocumentUploadController());
       Get.lazyPut(() => KycReviewController());
 
