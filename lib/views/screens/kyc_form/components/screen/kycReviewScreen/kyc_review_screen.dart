@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:lekra/controllers/dashboard_controller.dart';
 
 import 'package:lekra/controllers/kyc_controller/bank_details_controller.dart';
+import 'package:lekra/controllers/kyc_controller/bank_document_upload_controller.dart';
 import 'package:lekra/controllers/kyc_controller/business_information_controller.dart';
 import 'package:lekra/controllers/kyc_controller/document_details_controller.dart';
 import 'package:lekra/controllers/kyc_controller/kyc_review_controller.dart';
@@ -23,16 +24,7 @@ class KycReviewScreen extends StatelessWidget {
   final bool isComplete;
   final ValueChanged<bool> onCompleteChanged;
 
-  /// Callback used when the user taps Edit.
-  ///
-  /// 0 = Registration
-  /// 1 = Documents
-  /// 2 = Document Details
-  /// 3 = Business
-  /// 4 = Shop
-  /// 5 = Selfie
-  /// 6 = Bank
-  /// 7 = Bank Document
+  
   final ValueChanged<int> onEdit;
 
   const KycReviewScreen({
@@ -61,6 +53,9 @@ class KycReviewScreen extends StatelessWidget {
         final selfieController = Get.find<SelfLiveVerificationController>();
 
         final bankController = Get.find<BankDetailsController>();
+
+        final bankDocUploadController =
+            Get.find<BankDocumentUploadController>();
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,39 +126,13 @@ class KycReviewScreen extends StatelessWidget {
             ),
 
             // ==================================================
-            // KYC DOCUMENTS
-            // ==================================================
-
-            ReviewSectionCard(
-              title: 'KYC Documents',
-              icon: Icons.description_outlined,
-              onEdit: () => onEdit(1),
-              items: [
-                ReviewItem(
-                  label: 'Documents Uploaded',
-                  value: '${documentUploadController.uploadedDocumentCount}',
-                ),
-                ReviewItem(
-                  label: 'Total Documents',
-                  value: '${documentUploadController.totalDocuments}',
-                ),
-                ReviewItem(
-                  label: 'Status',
-                  value: documentUploadController.allRequiredDocumentsUploaded
-                      ? 'Completed'
-                      : 'Incomplete',
-                ),
-              ],
-            ),
-
-            // ==================================================
             // DOCUMENT DETAILS
             // ==================================================
 
             ReviewSectionCard(
               title: 'Document Details',
               icon: Icons.badge_outlined,
-              onEdit: () => onEdit(2),
+              onEdit: () => onEdit(1),
               items: [
                 ReviewItem(
                   label: 'Aadhaar',
@@ -198,7 +167,7 @@ class KycReviewScreen extends StatelessWidget {
             ReviewSectionCard(
               title: 'Business Information',
               icon: Icons.business_outlined,
-              onEdit: () => onEdit(3),
+              onEdit: () => onEdit(2),
               items: [
                 ReviewItem(
                   label: 'Category',
@@ -206,7 +175,8 @@ class KycReviewScreen extends StatelessWidget {
                 ),
                 ReviewItem(
                   label: 'Nature',
-                  value: businessController.natureOfBusinessController.text ?? '',
+                  value:
+                      businessController.natureOfBusinessController.text ?? '',
                 ),
                 ReviewItem(
                   label: 'Description',
@@ -235,7 +205,7 @@ class KycReviewScreen extends StatelessWidget {
             ReviewSectionCard(
               title: 'Shop Verification',
               icon: Icons.storefront_outlined,
-              onEdit: () => onEdit(4),
+              onEdit: () => onEdit(3),
               items: [
                 ReviewItem(
                   label: 'Shop Photo',
@@ -265,43 +235,13 @@ class KycReviewScreen extends StatelessWidget {
             ),
 
             // ==================================================
-            // SELFIE
-            // ==================================================
-
-            ReviewSectionCard(
-              title: 'Self Verification',
-              icon: Icons.face_outlined,
-              onEdit: () => onEdit(5),
-              items: [
-                ReviewItem(
-                  label: 'Selfie',
-                  value: selfieController.selfLivePhoto != null
-                      ? 'Captured'
-                      : 'Not captured',
-                ),
-                ReviewItem(
-                  label: 'Liveness',
-                  value: selfieController.livenessCompleted
-                      ? 'Completed'
-                      : 'Pending',
-                ),
-                ReviewItem(
-                  label: 'KYC Match',
-                  value: selfieController.photoToKycMatched
-                      ? 'Matched'
-                      : 'Pending',
-                ),
-              ],
-            ),
-
-            // ==================================================
             // BANK DETAILS
             // ==================================================
 
             ReviewSectionCard(
               title: 'Bank Details',
               icon: Icons.account_balance_outlined,
-              onEdit: () => onEdit(6),
+              onEdit: () => onEdit(4),
               items: [
                 ReviewItem(
                   label: 'Account Holder',
@@ -324,6 +264,81 @@ class KycReviewScreen extends StatelessWidget {
                 ReviewItem(
                   label: 'Account Type',
                   value: bankController.accountType,
+                ),
+              ],
+            ),
+
+            // ==================================================
+            // KYC DOCUMENTS
+            // ==================================================
+
+            ReviewSectionCard(
+              title: 'KYC Documents',
+              icon: Icons.description_outlined,
+              onEdit: () => onEdit(6),
+              items: [
+                ReviewItem(
+                  label: 'Documents Uploaded',
+                  value: '${documentUploadController.uploadedDocumentCount}',
+                ),
+                ReviewItem(
+                  label: 'Total Documents',
+                  value: '${documentUploadController.totalDocuments}',
+                ),
+                ReviewItem(
+                  label: 'Status',
+                  value: documentUploadController.allRequiredDocumentsUploaded
+                      ? 'Completed'
+                      : 'Incomplete',
+                ),
+              ],
+            ),
+            // ==================================================
+            // Bank DOCUMENTS
+            // ==================================================
+
+            ReviewSectionCard(
+              title: 'Bank Documents',
+              icon: Icons.account_balance_outlined,
+              onEdit: () => onEdit(6),
+              items: [
+                ReviewItem(
+                  label: 'Cancelled Cheque',
+                  value: '${bankDocUploadController.cancelledCheque}',
+                ),
+                ReviewItem(
+                  label: 'Bank Statement',
+                  value: '${bankDocUploadController.bankStatement}',
+                ),
+              ],
+            ),
+
+            // ==================================================
+            // SELFIE
+            // ==================================================
+
+            ReviewSectionCard(
+              title: 'Self Verification',
+              icon: Icons.face_outlined,
+              onEdit: () => onEdit(7),
+              items: [
+                ReviewItem(
+                  label: 'Selfie',
+                  value: selfieController.selfLivePhoto != null
+                      ? 'Captured'
+                      : 'Not captured',
+                ),
+                ReviewItem(
+                  label: 'Liveness',
+                  value: selfieController.livenessCompleted
+                      ? 'Completed'
+                      : 'Pending',
+                ),
+                ReviewItem(
+                  label: 'KYC Match',
+                  value: selfieController.photoToKycMatched
+                      ? 'Matched'
+                      : 'Pending',
                 ),
               ],
             ),
