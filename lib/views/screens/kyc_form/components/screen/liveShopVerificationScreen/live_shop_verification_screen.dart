@@ -334,6 +334,7 @@ class _LiveShopVerificationScreenState
             // ==================================================
 
             CustomButton(
+              isLoading: controller.isLoading,
               title: 'Continue',
               height: 48.h,
               radius: 8.r,
