@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:lekra/data/models/response/response_model.dart';
+import 'package:lekra/data/models/vender_kyc/vender_kyc_status_model.dart';
 import 'package:lekra/data/repositories/card_withdrawal_repo/vender_kyc_repo.dart';
 
 class FormController extends GetxController implements GetxService {
@@ -136,8 +137,8 @@ class FormController extends GetxController implements GetxService {
   // ============================================================
   //! Api Call
   // ============================================================
+  VenderKycStatusModel? venderKycStatusModel;
 
-  //* submit Vender kyc Status  venderKycStatus()
   Future<ResponseModel> venderKycStatus() async {
     log('----------- venderKycStatus Called ----------');
 
@@ -147,15 +148,22 @@ class FormController extends GetxController implements GetxService {
     try {
       final response = await venderKycRepo.venderKycStatus();
 
+      log('STATUS CODE: ${response.statusCode}');
+      log('RESPONSE BODY: ${response.body}');
+      log('RESPONSE TYPE: ${response.body.runtimeType}');
+
       final body = response.body;
 
       if (response.statusCode == 200 &&
           body is Map &&
           body['status']?.toString().toLowerCase() == 'success') {
+        venderKycStatusModel = VenderKycStatusModel.fromJson(
+          Map<String, dynamic>.from(body),
+        );
+
         return ResponseModel(
           true,
-          body['message']?.toString() ??
-              'venderKycStatus details submitted successfully',
+          body['message']?.toString() ?? 'KYC status fetched successfully',
         );
       }
 
@@ -177,7 +185,7 @@ class FormController extends GetxController implements GetxService {
 
       return ResponseModel(
         false,
-        'Error while submitting venderKycStatus details: $e',
+        'Error while fetching KYC status: $e',
       );
     } finally {
       isLoading = false;
