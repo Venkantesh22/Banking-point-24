@@ -1,8 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lekra/data/models/response/response_model.dart';
+import 'package:lekra/data/repositories/card_withdrawal_repo/vender_kyc_repo.dart';
 
 class BusinessInformationController extends GetxController
     implements GetxService {
+  final VenderKycRepo venderKycRepo;
+
+  BusinessInformationController({required this.venderKycRepo});
+
+  bool isLoading = false;
   // ============================================================
   // BUSINESS INFORMATION
   // ============================================================
@@ -76,17 +85,13 @@ class BusinessInformationController extends GetxController
   // ============================================================
 
   void setBusinessStartDate(DateTime date) {
-    final String day =
-        date.day.toString().padLeft(2, '0');
+    final String day = date.day.toString().padLeft(2, '0');
 
-    final String month =
-        date.month.toString().padLeft(2, '0');
+    final String month = date.month.toString().padLeft(2, '0');
 
-    final String year =
-        date.year.toString();
+    final String year = date.year.toString();
 
-    businessStartDateController.text =
-        '$day/$month/$year';
+    businessStartDateController.text = '$day/$month/$year';
 
     update();
   }
@@ -96,13 +101,11 @@ class BusinessInformationController extends GetxController
   // ============================================================
 
   bool validateBusinessInformation() {
-    if (businessCategory == null ||
-        businessCategory!.trim().isEmpty) {
+    if (businessCategory == null || businessCategory!.trim().isEmpty) {
       return false;
     }
 
-    if (natureOfBusiness == null ||
-        natureOfBusiness!.trim().isEmpty) {
+    if (natureOfBusiness == null || natureOfBusiness!.trim().isEmpty) {
       return false;
     }
 
@@ -116,9 +119,7 @@ class BusinessInformationController extends GetxController
       return false;
     }
 
-    if (businessStartDateController.text
-        .trim()
-        .isEmpty) {
+    if (businessStartDateController.text.trim().isEmpty) {
       return false;
     }
 
@@ -133,15 +134,75 @@ class BusinessInformationController extends GetxController
     return {
       'business_category': businessCategory,
       'nature_of_business': natureOfBusiness,
-      'expected_monthly_transaction_volume':
-          expectedMonthlyTransactionVolume,
-      'business_ownership_type':
-          businessOwnershipType,
-      'business_description':
-          businessDescriptionController.text.trim(),
-      'business_start_date':
-          businessStartDateController.text.trim(),
+      'expected_monthly_transaction_volume': expectedMonthlyTransactionVolume,
+      'business_ownership_type': businessOwnershipType,
+      'business_description': businessDescriptionController.text.trim(),
+      'business_start_date': businessStartDateController.text.trim(),
     };
+  }
+
+  //* submit Vender kyc Business information  venderKycBusinessInfo()
+  Future<ResponseModel> venderKycBusinessInfo() async {
+    log('----------- venderKycBusinessInfo Called ----------');
+
+    isLoading = true;
+    update();
+
+    try {
+      final Map<String, dynamic> data = {
+        "section": "business_info",
+        "business_category": businessCategory,
+        "nature_of_business": natureOfBusiness,
+        "business_description": businessDescriptionController.text.trim(),
+        "business_start_date": businessStartDateController.text.trim(),
+        "expected_monthly_volume": expectedMonthlyTransactionVolume,
+        "ownership_type": businessOwnershipType,
+      };
+
+      final response = await venderKycRepo.venderKycBusinessInfo(
+        data: data,
+      );
+
+      log('STATUS CODE: ${response.statusCode}');
+      log('RESPONSE BODY: ${response.body}');
+      log('RESPONSE TYPE: ${response.body.runtimeType}');
+
+      final body = response.body;
+
+      if (response.statusCode == 200 &&
+          body is Map &&
+          body['status']?.toString().toLowerCase() == 'success') {
+        return ResponseModel(
+          true,
+          body['message']?.toString() ??
+              'venderKycBusinessInfo details submitted successfully',
+        );
+      }
+
+      String message = 'Something went wrong';
+
+      if (body is Map && body['message'] != null) {
+        message = body['message'].toString();
+      } else if (response.statusText != null &&
+          response.statusText!.isNotEmpty) {
+        message = response.statusText!;
+      }
+
+      return ResponseModel(false, message);
+    } catch (e, stackTrace) {
+      log(
+        'ERROR AT venderKycBusinessInfo(): $e',
+        stackTrace: stackTrace,
+      );
+
+      return ResponseModel(
+        false,
+        'Error while submitting venderKycBusinessInfo() : $e',
+      );
+    } finally {
+      isLoading = false;
+      update();
+    }
   }
 
   // ============================================================

@@ -280,6 +280,9 @@ class AppConstants {
   static const String postVenderKycDocumentDetails =
       "api/application/v1/merchant-kyc/save-section";
 
+  static const String postVenderKycBusinessInfo =
+      "api/application/v1/merchant-kyc/save-section";
+
   static const String postVenderKycKYCDocUpload =
       "api/application/v1/merchant-kyc/upload-document";
 
@@ -287,6 +290,7 @@ class AppConstants {
 
   static const String getVenderKycStatus =
       "api/application/v1/merchant-kyc/status";
+
 
   // helper
   static double horizontalPadding = 16.w;

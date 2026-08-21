@@ -33,7 +33,6 @@ class _RegistrationDetailFormState extends State<RegistrationDetailForm> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Get.find<BasicController>().fetchStatusList();
-      Get.find<RegistrationKycFromController>().venderKycBasicStatus();
     });
   }
 

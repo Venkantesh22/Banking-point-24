@@ -12,17 +12,19 @@ class RegistrationKycFromController extends GetxController
   final VenderKycRepo venderKycRepo;
   RegistrationKycFromController({required this.venderKycRepo});
 
+  bool isLoading = false;
   // ============================================================
   // REGISTRATION & BASIC DETAILS
   // ============================================================
 
-  bool isLoading = false;
+  final TextEditingController firstNameController =
+      TextEditingController(text: "Test");
 
-  final TextEditingController firstNameController = TextEditingController(text: "Test");
+  final TextEditingController lastNameController =
+      TextEditingController(text: "Test");
 
-  final TextEditingController lastNameController = TextEditingController(text: "Test");
-
-  final TextEditingController businessNameController = TextEditingController(text: "Test");
+  final TextEditingController businessNameController =
+      TextEditingController(text: "Test");
 
   final TextEditingController businessNumberController =
       TextEditingController(text: "1234567890");
@@ -140,57 +142,6 @@ class RegistrationKycFromController extends GetxController
     }
   }
 
-  //* submit Vender kyc   venderKycBasicStatus()
-  Future<ResponseModel> venderKycBasicStatus() async {
-    log('----------- venderKycBasicStatus Called ----------');
-
-    isLoading = true;
-    update();
-
-    try {
-      final response = await venderKycRepo.venderKycBasicStatus();
-
-      log('STATUS CODE: ${response.statusCode}');
-      log('RESPONSE BODY: ${response.body}');
-      log('RESPONSE TYPE: ${response.body.runtimeType}');
-
-      final body = response.body;
-
-      if (response.statusCode == 200 &&
-          body is Map &&
-          body['status']?.toString().toLowerCase() == 'success') {
-        return ResponseModel(
-          true,
-          body['message']?.toString() ??
-              'venderKycBasicStatus details submitted successfully',
-        );
-      }
-
-      String message = 'Something went wrong';
-
-      if (body is Map && body['message'] != null) {
-        message = body['message'].toString();
-      } else if (response.statusText != null &&
-          response.statusText!.isNotEmpty) {
-        message = response.statusText!;
-      }
-
-      return ResponseModel(false, message);
-    } catch (e, stackTrace) {
-      log(
-        'ERROR AT venderKycBasicStatus(): $e',
-        stackTrace: stackTrace,
-      );
-
-      return ResponseModel(
-        false,
-        'Error while submitting venderKycBasicStatus details: $e',
-      );
-    } finally {
-      isLoading = false;
-      update();
-    }
-  }
   // ============================================================
   // CLEAR
   // ============================================================

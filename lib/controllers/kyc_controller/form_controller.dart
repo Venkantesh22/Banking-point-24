@@ -1,47 +1,38 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
-import 'package:lekra/data/repositories/form_repo.dart';
+import 'package:lekra/data/models/response/response_model.dart';
+import 'package:lekra/data/repositories/card_withdrawal_repo/vender_kyc_repo.dart';
 
 class FormController extends GetxController implements GetxService {
-  final FormRepo formRepo;
+  final VenderKycRepo venderKycRepo;
 
-  FormController({required this.formRepo});
+  FormController({required this.venderKycRepo});
 
   // ============================================================
   // KYC STEP CONFIGURATION
   // ============================================================
 
-  static const int totalSteps = 9;
+  bool isLoading = false;
 
-  /// Current step index.
-  ///
-  /// 0 = Basic
-  /// 1 = Documents
-  /// 2 = KYC Info
-  /// 3 = Business
-  /// 4 = Shop
-  /// 5 = Selfie
-  /// 6 = Bank
-  /// 7 = Bank Document
+  static const int totalSteps = 9;
   int selectedIndex = 0;
+
+  final List<String> headings = [
+    'Basic',
+    'KYC Info',
+    'Business',
+    'Shop',
+    'Selfie',
+    'Bank',
+    'KYC Doc',
+    'Bank Doc',
+    'Review',
+  ];
 
   /// Completion status for each step.
   final List<bool> completed = List<bool>.filled(totalSteps, false);
 
-  // ============================================================
-  // STEP NAMES
-  // ============================================================
-
-  // static const List<String> stepNames = [
-  //   'Basic',
-  //   'KYC Info',
-  //   'Business',
-  //   'Shop',
-  //   'Selfie',
-  //   'Bank',
-  //   'KYC Doc',
-  //   'Bank Doc',
-  //   'Review',
-  // ];
 
   // ============================================================
   // NAVIGATION
@@ -141,5 +132,59 @@ class FormController extends GetxController implements GetxService {
     }
 
     update();
+  }
+
+  // ============================================================
+  //! Api Call
+  // ============================================================
+
+  //* submit Vender kyc Status  venderKycStatus()
+  Future<ResponseModel> venderKycStatus() async {
+    log('----------- venderKycStatus Called ----------');
+
+    isLoading = true;
+    update();
+
+    try {
+      final response = await venderKycRepo.venderKycStatus();
+
+
+
+      final body = response.body;
+
+      if (response.statusCode == 200 &&
+          body is Map &&
+          body['status']?.toString().toLowerCase() == 'success') {
+        return ResponseModel(
+          true,
+          body['message']?.toString() ??
+              'venderKycStatus details submitted successfully',
+        );
+      }
+
+      String message = 'Something went wrong';
+
+      if (body is Map && body['message'] != null) {
+        message = body['message'].toString();
+      } else if (response.statusText != null &&
+          response.statusText!.isNotEmpty) {
+        message = response.statusText!;
+      }
+
+      return ResponseModel(false, message);
+    } catch (e, stackTrace) {
+      log(
+        'ERROR AT venderKycStatus(): $e',
+        stackTrace: stackTrace,
+      );
+
+      return ResponseModel(
+        false,
+        'Error while submitting venderKycStatus details: $e',
+      );
+    } finally {
+      isLoading = false;
+      update();
+    }
   }
 }

@@ -29,7 +29,6 @@ import 'package:lekra/data/repositories/card_withdrawal_repo/credit_card_repo.da
 import 'package:lekra/data/repositories/card_withdrawal_repo/custom_kyc_repo.dart';
 import 'package:lekra/data/repositories/card_withdrawal_repo/vender_kyc_repo.dart';
 import 'package:lekra/data/repositories/dispute_repo.dart';
-import 'package:lekra/data/repositories/form_repo.dart';
 import 'package:lekra/data/repositories/kyc_repo.dart';
 import 'package:lekra/data/repositories/mobile_service_repo.dart';
 import 'package:lekra/data/repositories/product_repo.dart';
@@ -73,7 +72,6 @@ class Init {
       Get.lazyPut(() =>
           BasicRepo(sharedPreferences: Get.find(), apiClient: Get.find()));
       Get.lazyPut(() => WalletRepo(apiClient: Get.find()));
-      Get.lazyPut(() => FormRepo(apiClient: Get.find()));
       Get.lazyPut(() =>
           ProductRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
       Get.lazyPut(() =>
@@ -106,7 +104,7 @@ class Init {
           sharedPreferences: sharedPreferences, basicRepo: Get.find()));
       Get.lazyPut(() => ReportController(reportRepo: Get.find()));
       Get.lazyPut(() => WalletController(walletRepo: Get.find()));
-      Get.lazyPut(() => FormController(formRepo: Get.find()));
+      Get.lazyPut(() => FormController(venderKycRepo: Get.find()));
       Get.lazyPut(() => RechargeController(
           rechargeRepo: Get.find(), sharedPreferences: sharedPreferences));
       Get.lazyPut(() => ProductController(
@@ -128,7 +126,8 @@ class Init {
           () => RegistrationKycFromController(venderKycRepo: Get.find()));
       Get.lazyPut(() => KycDocumentUploadController(venderKycRepo: Get.find()));
       Get.lazyPut(() => DocumentDetailsController(venderKycRepo: Get.find()));
-      Get.lazyPut(() => BusinessInformationController());
+      Get.lazyPut(
+          () => BusinessInformationController(venderKycRepo: Get.find()));
       Get.lazyPut(() => LiveShopVerificationController());
       Get.lazyPut(() => SelfLiveVerificationController());
       Get.lazyPut(() => BankDetailsController());

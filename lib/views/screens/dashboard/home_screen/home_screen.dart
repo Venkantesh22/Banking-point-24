@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lekra/controllers/auth_controller.dart';
 import 'package:lekra/controllers/basic_controlller.dart';
+import 'package:lekra/controllers/kyc_controller/form_controller.dart';
 import 'package:lekra/controllers/report_contoller.dart';
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
@@ -38,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       final auth = Get.find<AuthController>();
       final reportContro = Get.find<ReportController>();
+      Get.find<FormController>().venderKycStatus();
 
       if (widget.isReload) {
         auth.checkBalance().then((value) {

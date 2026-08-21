@@ -30,24 +30,6 @@ class VenderKycRepo {
     );
   }
 
-  Future<Response> venderKycKYCDocUpload({
-    required Map<String, dynamic> data,
-  }) async {
-    final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
-
-    return await apiClient.postData(
-      AppConstants.postVenderKycKYCDocUpload,
-      "venderKycKYCDocUpload",
-      data,
-      contentType: 'application/json',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $apiToken',
-      },
-    );
-  }
-
   Future<Response> venderKycDocumentDetails({
     required Map<String, dynamic> data,
   }) async {
@@ -66,12 +48,48 @@ class VenderKycRepo {
     );
   }
 
-  Future<Response> venderKycBasicStatus() async {
+  Future<Response> venderKycBusinessInfo({
+    required Map<String, dynamic> data,
+  }) async {
+    final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
+
+    return await apiClient.postData(
+      AppConstants.postVenderKycBusinessInfo,
+      "venderKycBusinessInfo",
+      data,
+      contentType: 'application/json',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $apiToken',
+      },
+    );
+  }
+
+  Future<Response> venderKycKYCDocUpload({
+    required Map<String, dynamic> data,
+  }) async {
+    final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
+
+    return await apiClient.postData(
+      AppConstants.postVenderKycKYCDocUpload,
+      "venderKycKYCDocUpload",
+      data,
+      contentType: 'application/json',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $apiToken',
+      },
+    );
+  }
+
+  Future<Response> venderKycStatus() async {
     final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
 
     return await apiClient.getData(
       AppConstants.getVenderKycStatus,
-      "venderKycBasicStatus",
+      "venderKycStatus",
       contentType: 'application/json',
       headers: {
         'Accept': 'application/json',
