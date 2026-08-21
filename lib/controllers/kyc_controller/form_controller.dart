@@ -19,7 +19,7 @@ class FormController extends GetxController implements GetxService {
   static const int totalSteps = 9;
   int selectedIndex = 0;
 
-   final List<String> headings = [
+  final List<String> headings = [
     'Basic',
     'KYC Info',
     'Business',
@@ -175,6 +175,11 @@ class FormController extends GetxController implements GetxService {
   // ============================================================
   //! Api Call
   // ============================================================
+
+  // registration_started
+  //kyc_submitted
+  //correction_required
+  //(approved,rejected)
   VenderKycStatusModel? venderKycStatusModel;
 
   Future<ResponseModel> venderKycStatus() async {
@@ -226,6 +231,63 @@ class FormController extends GetxController implements GetxService {
       return ResponseModel(
         false,
         'Error while fetching KYC status: $e',
+      );
+    } finally {
+      isLoading = false;
+      update();
+    }
+  }
+
+  Future<ResponseModel> venderKycDetail() async {
+    log('----------- venderKycDetail Called ----------');
+
+    isLoading = true;
+    update();
+
+    try {
+      final response = await venderKycRepo.venderKycDetail();
+
+      log('STATUS CODE: ${response.statusCode}');
+      log('RESPONSE BODY: ${response.body}');
+      log('RESPONSE TYPE: ${response.body.runtimeType}');
+
+      final body = response.body;
+
+      if (response.statusCode == 200 &&
+          body is Map &&
+          body['status']?.toString().toLowerCase() == 'success') {
+        // venderKycStatusModel = VenderKycStatusModel.fromJson(
+        //   Map<String, dynamic>.from(body),
+        // );
+
+        // applyKycStatus();
+
+        return ResponseModel(
+          true,
+          body['message']?.toString() ??
+              'venderKycDetail status fetched successfully',
+        );
+      }
+
+      String message = 'Something went wrong';
+
+      if (body is Map && body['message'] != null) {
+        message = body['message'].toString();
+      } else if (response.statusText != null &&
+          response.statusText!.isNotEmpty) {
+        message = response.statusText!;
+      }
+
+      return ResponseModel(false, message);
+    } catch (e, stackTrace) {
+      log(
+        'ERROR AT venderKycDetail(): $e',
+        stackTrace: stackTrace,
+      );
+
+      return ResponseModel(
+        false,
+        'Error while fetching venderKycDetail: $e',
       );
     } finally {
       isLoading = false;

@@ -295,7 +295,7 @@ class AppConstants {
   static const String postVenderKycKYCDocUpload =
       "api/application/v1/merchant-kyc/upload-document";
 
-  static const String getVenderKycDetails = "api/application/v1/merchant-kyc";
+  static const String venderKycDetail = "api/application/v1/merchant-kyc";
 
   static const String getVenderKycStatus =
       "api/application/v1/merchant-kyc/status";

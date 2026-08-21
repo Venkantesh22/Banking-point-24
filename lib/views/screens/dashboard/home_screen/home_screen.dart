@@ -12,6 +12,7 @@ import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/date_formatters_and_converters.dart';
 import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/custom_image.dart';
+import 'package:lekra/views/base/shimmer.dart';
 import 'package:lekra/views/screens/auth_screens/login_screen.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/banner_image_section.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/kyc_pending_card.dart';
@@ -127,8 +128,6 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
 
-          final bool isKycDone = authController.userModel?.isKYCDone ?? false;
-
           return SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             padding: EdgeInsets.only(
@@ -153,18 +152,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 // KYC PENDING
                 // ==================================================
 
-                if (!isKycDone) ...[
-                  KycPendingCard(
-                    kycStatus: "Not apply",
-                    onTap: () {
-                      navigate(
-                        context: context,
-                        page: const KycFormScreen(),
-                      );
-                    },
-                  ),
-                  SizedBox(height: 20.h),
-                ],
+                GetBuilder<FormController>(builder: (formController) {
+                  if (formController.venderKycStatusModel?.kycStatus ==
+                      "approved") {
+                    return SizedBox();
+                  }
+
+                  return CustomShimmer(
+                    isLoading: formController.isLoading,
+                    child: KycPendingCard(
+                      kycStatus:
+                          formController.venderKycStatusModel?.kycStatus ?? "",
+                      onTap: () {
+                        navigate(
+                          context: context,
+                          page: const KycFormScreen(),
+                        );
+                      },
+                    ),
+                  );
+                }),
+                SizedBox(height: 20.h),
 
                 // ==================================================
                 // QUICK ACTIONS

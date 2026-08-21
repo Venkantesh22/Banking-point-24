@@ -153,4 +153,19 @@ class VenderKycRepo {
       },
     );
   }
+
+  Future<Response> venderKycDetail() async {
+    final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
+
+    return await apiClient.getData(
+      AppConstants.venderKycDetail,
+      "venderKycDetail",
+      contentType: 'application/json',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $apiToken',
+        'Content-Type': 'application/json',
+      },
+    );
+  }
 }

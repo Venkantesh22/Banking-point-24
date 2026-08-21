@@ -24,7 +24,6 @@ class KycReviewScreen extends StatelessWidget {
   final bool isComplete;
   final ValueChanged<bool> onCompleteChanged;
 
-  
   final ValueChanged<int> onEdit;
 
   const KycReviewScreen({

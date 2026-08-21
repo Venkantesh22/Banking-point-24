@@ -26,6 +26,7 @@ class _KycFormScreenState extends State<KycFormScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Get.find<BasicController>().fetchStatusList();
       Get.find<FormController>().venderKycStatus();
+      Get.find<FormController>().venderKycDetail();
     });
   }
 
