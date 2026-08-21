@@ -1,3 +1,5 @@
+import 'package:get/get_connect/http/src/multipart/form_data.dart';
+import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:lekra/data/api/api_client.dart';
 import 'package:lekra/services/constants.dart';
@@ -61,6 +63,40 @@ class VenderKycRepo {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $apiToken',
+      },
+    );
+  }
+
+  // ============================================================
+  // LIVE SHOP VERIFICATION - MULTIPART
+  // ============================================================
+
+  Future<Response> venderKycLiveShopVerification({
+    required String documentType,
+    required String latitude,
+    required String longitude,
+    required String documentFilePath,
+  }) async {
+    final apiToken =
+        sharedPreferences.getString(AppConstants.apiToken) ?? '';
+
+    final formData = FormData({
+      'document_type': documentType,
+      'latitude': latitude,
+      'longitude': longitude,
+      'document_file': MultipartFile(
+        documentFilePath,
+        filename: documentFilePath.split('/').last,
+      ),
+    });
+
+    return await apiClient.postData(
+      AppConstants.postVenderKycLiveShopVerification,
+      "venderKycLiveShopVerification",
+      formData,
+      headers: {
+        'Accept': 'application/json',
         'Authorization': 'Bearer $apiToken',
       },
     );

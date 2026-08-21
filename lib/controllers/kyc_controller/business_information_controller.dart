@@ -60,7 +60,7 @@ class BusinessInformationController extends GetxController
   final List<String> businessOwnershipTypeList = [
     'Owned',
     'Rented',
-    'Leased',
+    'other',
   ];
 
   // ============================================================
@@ -97,7 +97,7 @@ class BusinessInformationController extends GetxController
         "business_description": businessDescriptionController.text.trim(),
         "business_start_date": businessStartDateController.text.trim(),
         "expected_monthly_volume": expectedMonthlyTransactionVolume,
-        "ownership_type": businessOwnershipType,
+        "ownership_type": businessOwnershipType?.toLowerCase(),
       };
 
       final response = await venderKycRepo.venderKycBusinessInfo(

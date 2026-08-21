@@ -148,6 +148,7 @@ class _LiveShopVerificationScreenState
                         SizedBox(height: 2.h),
                         CustomText(
                           'Make sure your business name is clearly visible.',
+                          overflow: TextOverflow.clip,
                           style: Helper(context).textTheme.bodyMedium?.copyWith(
                                 fontSize: 11.sp,
                                 color: greyText6,
@@ -314,6 +315,7 @@ class _LiveShopVerificationScreenState
                       'Please capture the shop front clearly, '
                       'make sure the business signboard is visible, '
                       'and capture your current live location.',
+                      overflow: TextOverflow.clip,
                       style: Helper(context).textTheme.bodyMedium?.copyWith(
                             fontSize: 11.sp,
                             color: primaryColor,
@@ -351,9 +353,16 @@ class _LiveShopVerificationScreenState
                   );
                   return;
                 }
-
-                // Only FormController handles navigation.
-                widget.onCompleteChanged(true);
+                controller.venderKycLiveShopVerification().then((value) {
+                  if (value.isSuccess) {
+                    showToast(
+                        message: value.message, typeCheck: value.isSuccess);
+                    widget.onCompleteChanged(true);
+                  } else {
+                    showToast(
+                        message: value.message, typeCheck: value.isSuccess);
+                  }
+                });
               },
             ),
 

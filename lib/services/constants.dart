@@ -260,10 +260,13 @@ class AppConstants {
 
   static const String postSubmitCreditCardInfo =
       "api/credit-card-cash-withdrawal/v1/cards";
+
   static const String postSubmitCreditCardWithdrawalAmount =
       "api/credit-card-cash-withdrawal/v1/amount";
+
   static const String postSendCreditCardOTP =
       "api/credit-card-cash-withdrawal/v1/send-otp";
+
   static const String postCreditCardOTPVerify =
       "api/credit-card-cash-withdrawal/v1/verify-otp";
   static const String postConfirmAndTransaction =
@@ -283,6 +286,9 @@ class AppConstants {
   static const String postVenderKycBusinessInfo =
       "api/application/v1/merchant-kyc/save-section";
 
+  static const String postVenderKycLiveShopVerification =
+      "api/application/v1/merchant-kyc/upload-document";
+
   static const String postVenderKycKYCDocUpload =
       "api/application/v1/merchant-kyc/upload-document";
 
@@ -290,7 +296,6 @@ class AppConstants {
 
   static const String getVenderKycStatus =
       "api/application/v1/merchant-kyc/status";
-
 
   // helper
   static double horizontalPadding = 16.w;
