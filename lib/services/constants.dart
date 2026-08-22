@@ -269,17 +269,12 @@ class AppConstants {
       "api/credit-card-cash-withdrawal/v1/initiate-withdrawal";
 
 //
-  static const String postSubmitCreditCardInfo =
-      "api/credit-card-cash-withdrawal/v1/cards";
-
-  static const String postSubmitCreditCardWithdrawalAmount =
-      "api/credit-card-cash-withdrawal/v1/amount";
-
+  
   static const String postSendCreditCardOTP =
       "api/credit-card-cash-withdrawal/v1/send-otp";
 
   static const String postCreditCardOTPVerify =
-      "api/credit-card-cash-withdrawal/v1/verify-otp";
+      "api/credit-card-cash-withdrawal/v1/verify-withdrawal-otp";
 
   static const String postConfirmAndTransaction =
       "api/credit-card-cash-withdrawal/v1/confirm";

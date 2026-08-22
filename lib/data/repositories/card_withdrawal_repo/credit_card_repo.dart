@@ -16,20 +16,6 @@ class CreditCardRepo {
       );
 
   //
-  Future<Response> submitCreditCardInfo({required FormData data}) async =>
-      await apiClient.postData(
-        AppConstants.postSubmitCreditCardInfo,
-        "submitCreditCardInfo",
-        data,
-      );
-
-  Future<Response> submitCreditCardWithdrawalAmount(
-          {required FormData data}) async =>
-      await apiClient.postData(
-        AppConstants.postSubmitCreditCardWithdrawalAmount,
-        "submitCreditCardWithdrawalAmount",
-        data,
-      );
 
   Future<Response> sendCreditCardOTP({required FormData data}) async =>
       await apiClient.postData(

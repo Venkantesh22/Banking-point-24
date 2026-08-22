@@ -9,15 +9,30 @@ import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/common_button.dart';
 import 'package:lekra/views/screens/creadit_card/screen/transaction_success_screen/transaction_success_screen.dart';
 
-class WithdrawVerifyOtpScreen extends StatelessWidget {
+class WithdrawVerifyOtpScreen extends StatefulWidget {
   const WithdrawVerifyOtpScreen({
     super.key,
   });
 
   @override
+  State<WithdrawVerifyOtpScreen> createState() =>
+      _WithdrawVerifyOtpScreenState();
+}
+
+class _WithdrawVerifyOtpScreenState extends State<WithdrawVerifyOtpScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<CreditCardController>().startOtpTimer();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GetBuilder<CreditCardController>(
-      builder: (controller) {
+      builder: (creditCardController) {
         return Scaffold(
           backgroundColor: white,
           appBar: AppBar(
@@ -104,15 +119,16 @@ class WithdrawVerifyOtpScreen extends StatelessWidget {
                       6,
                       (index) {
                         return SizedBox(
-                          width: 42.w,
-                          height: 48.h,
+                          width: 60.w,
+                          height: 60.h,
                           child: TextField(
-                            controller: controller.otpControllers[index],
+                            controller:
+                                creditCardController.otpControllers[index],
                             keyboardType: TextInputType.number,
                             maxLength: 1,
                             textAlign: TextAlign.center,
                             onChanged: (value) {
-                              controller.updateOtp();
+                              creditCardController.updateOtp();
 
                               if (value.isNotEmpty && index < 5) {
                                 FocusScope.of(
@@ -139,12 +155,28 @@ class WithdrawVerifyOtpScreen extends StatelessWidget {
                   ),
 
                   CustomText(
-                    'Resend OTP in 00:25',
+                    creditCardController.canResendOtp
+                        ? 'Didn’t receive OTP?'
+                        : 'Resend OTP in ${creditCardController.otpTimerText}',
                     style: TextStyle(
                       fontSize: 11.sp,
                       color: greyDark,
                     ),
                   ),
+                  if (creditCardController.canResendOtp) ...[
+                    sizedBoxHeight(height: 10),
+                    TextButton(
+                      onPressed: creditCardController.resendOtp,
+                      child: CustomText(
+                        'Resend OTP',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w700,
+                          color: primaryColor,
+                        ),
+                      ),
+                    ),
+                  ],
 
                   sizedBoxHeight(
                     height: 35,
@@ -161,14 +193,26 @@ class WithdrawVerifyOtpScreen extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
-                      navigate(
-                          context: context, page: TransactionSuccessScreen());
-                      // controller.verifyOtp();
+                      if (!creditCardController.isOtpVerified) {
+                        return showToast(
+                            message: "Enter a valid OTP",
+                            toastType: ToastType.error);
+                      }
 
-                      // if (!controller
-                      //     .isOtpVerified) {
-                      //   return;
-                      // }
+                      creditCardController.creditCardOTPVerify().then((value) {
+                        if (value.isSuccess) {
+                          showToast(
+                              message: value.message,
+                              typeCheck: value.isSuccess);
+                          navigate(
+                              context: context,
+                              page: TransactionSuccessScreen());
+                        } else {
+                          showToast(
+                              message: value.message,
+                              typeCheck: value.isSuccess);
+                        }
+                      });
 
                       // API later.
                       //

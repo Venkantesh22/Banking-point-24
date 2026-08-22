@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -216,80 +217,6 @@ class CreditCardController extends GetxController implements GetxService {
     return responseModel;
   }
 
-  //* Call Submit credit card withdrawal amount submitCreditCardWithdrawalAmount()
-  Future<ResponseModel> submitCreditCardWithdrawalAmount({
-    required String? number,
-  }) async {
-    log('----------- submitCreditCardWithdrawalAmount Called ----------');
-
-    ResponseModel responseModel;
-    isLoading = true;
-    update();
-
-    try {
-      Map<String, dynamic> data = {
-        "withdrawal_amount": amountController.text.trim(),
-      };
-      Response response = await creditCardRepo.submitCreditCardWithdrawalAmount(
-          data: FormData(data));
-
-      if (response.statusCode == 200 && response.body['status'] == "success") {
-        responseModel = ResponseModel(
-            true,
-            response.body['message'] ??
-                " submitCreditCardWithdrawalAmount success");
-      } else {
-        responseModel = ResponseModel(
-            false,
-            response.body['message'] ??
-                "Error while submitCreditCardWithdrawalAmount");
-      }
-    } catch (e) {
-      log('ERROR AT submitCreditCardWithdrawalAmount(): $e');
-      responseModel = ResponseModel(
-          false, "Error while submitCreditCardWithdrawalAmount user $e");
-    }
-
-    isLoading = false;
-    update();
-    return responseModel;
-  }
-
-  //* Call Submit credit card info Api submitCreditCardInfo()
-  Future<ResponseModel> submitCreditCardInfo({
-    required String? number,
-  }) async {
-    log('----------- submitCreditCardInfo Called ----------');
-
-    ResponseModel responseModel;
-    isLoading = true;
-    update();
-
-    try {
-      Map<String, dynamic> data = {
-        // "selfie": livePhoto,
-      };
-      Response response =
-          await creditCardRepo.submitCreditCardInfo(data: FormData(data));
-
-      if (response.statusCode == 200 && response.body['status'] == "success") {
-        responseModel = ResponseModel(
-            true, response.body['message'] ?? " submitCreditCardInfo success");
-      } else {
-        responseModel = ResponseModel(false,
-            response.body['message'] ?? "Error while submitCreditCardInfo");
-      }
-    } catch (e) {
-      log('ERROR AT submitCreditCardInfo(): $e');
-      responseModel =
-          ResponseModel(false, "Error while submitCreditCardInfo user $e");
-    }
-
-    isLoading = false;
-    update();
-    return responseModel;
-  }
-
   //* Call request and resend opt credit card sendCreditCardOTP()
   Future<ResponseModel> sendCreditCardOTP({
     required String? number,
@@ -324,9 +251,7 @@ class CreditCardController extends GetxController implements GetxService {
   }
 
   //* Call verify opt credit card creditCardOTPVerify()
-  Future<ResponseModel> creditCardOTPVerify({
-    required String? number,
-  }) async {
+  Future<ResponseModel> creditCardOTPVerify() async {
     log('----------- creditCardOTPVerify Called ----------');
 
     ResponseModel responseModel;
@@ -334,8 +259,12 @@ class CreditCardController extends GetxController implements GetxService {
     update();
 
     try {
+      final sessionId =
+          sharedPreferences.getString(AppConstants.apiToken) ?? '';
       Map<String, dynamic> data = {
-        "otp": otp,
+        "session_id": sessionId,
+        "transaction_id": withdrawalModel?.transactionId ?? "",
+        "otp": otp
       };
       Response response =
           await creditCardRepo.creditCardOTPVerify(data: FormData(data));
@@ -392,6 +321,53 @@ class CreditCardController extends GetxController implements GetxService {
   }
 
   // ============================================================
+  // OTP TIMER
+  // ============================================================
+
+  Timer? _otpTimer;
+
+  int otpSecondsRemaining = 30;
+
+  bool get canResendOtp => otpSecondsRemaining <= 0;
+
+  String get otpTimerText {
+    final seconds = otpSecondsRemaining.toString().padLeft(2, '0');
+    return '00:$seconds';
+  }
+
+  void startOtpTimer() {
+    _otpTimer?.cancel();
+
+    otpSecondsRemaining = 30;
+    update();
+
+    _otpTimer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        if (otpSecondsRemaining > 0) {
+          otpSecondsRemaining--;
+          update();
+        } else {
+          timer.cancel();
+          _otpTimer = null;
+          update();
+        }
+      },
+    );
+  }
+
+  void resendOtp() {
+    if (!canResendOtp) {
+      return;
+    }
+
+    // Call your resend OTP API here.
+
+    startOtpTimer();
+    update();
+  }
+
+  // ============================================================
   // DISPOSE
   // ============================================================
 
@@ -404,6 +380,10 @@ class CreditCardController extends GetxController implements GetxService {
     cardHolderNameController.dispose();
     bankNameController.dispose();
 
+    for (final controller in otpControllers) {
+      controller.dispose();
+    }
+    _otpTimer?.cancel();
     for (final controller in otpControllers) {
       controller.dispose();
     }
