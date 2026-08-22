@@ -37,7 +37,7 @@ class LiveShopVerificationController extends GetxController
   DateTime? capturedAt;
 
   String? shopLivePhotoPath;
-  // String? selfLivePhotoPath;
+  String? insideShopPhotoPath;
 
   // ============================================================
   // LOCATION
@@ -82,6 +82,10 @@ class LiveShopVerificationController extends GetxController
       }
 
       shopLivePhoto = File(image.path);
+
+      // Remove old server image from UI.
+      shopLivePhotoPath = null;
+
       capturedAt = DateTime.now();
 
       update();
@@ -140,11 +144,13 @@ class LiveShopVerificationController extends GetxController
 
   void removeShopPhoto() {
     shopLivePhoto = null;
+    shopLivePhotoPath = null;
     update();
   }
 
   void removeInsideShopPhoto() {
     insideShopPhoto = null;
+    insideShopPhotoPath = null;
     update();
   }
 
@@ -232,8 +238,6 @@ class LiveShopVerificationController extends GetxController
     update();
 
     try {
-
-
       final response = await venderKycRepo.venderKycLiveShopVerification(
         documentType: 'shop_live_photo',
         latitude: latitude!.toString(),

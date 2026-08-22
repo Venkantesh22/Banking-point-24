@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lekra/controllers/kyc_controller/bank_document_upload_controller.dart';
+import 'package:lekra/controllers/kyc_controller/form_controller.dart';
 import 'package:lekra/controllers/kyc_controller/kyc_document_upload_controller.dart';
 
 import 'package:lekra/controllers/kyc_controller/self_live_verification_controller.dart';
@@ -271,7 +272,13 @@ class _SelfLiveVerificationScreenState
                     if (value.isSuccess) {
                       showToast(
                           message: value.message, typeCheck: value.isSuccess);
-                      widget.onCompleteChanged(true);
+                      Get.find<FormController>()
+                          .venderKycDetail()
+                          .then((value) {
+                        if (value.isSuccess) {
+                          widget.onCompleteChanged(true);
+                        }
+                      });
                     } else {
                       showToast(
                           message: value.message, typeCheck: value.isSuccess);

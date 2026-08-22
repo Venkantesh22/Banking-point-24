@@ -295,7 +295,7 @@ class AppConstants {
       "api/application/v1/merchant-kyc/save-section";
 
   static const String postVenderKycLiveShopVerification =
-      "api/application/v1/merchant-kyc/upload-document";
+      "api/application/v1/merchant-kyc/upload-shop-photo";
 
   static const String postVenderKycBankDetails =
       "api/application/v1/merchant-kyc/save-section";

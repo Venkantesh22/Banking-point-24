@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lekra/controllers/auth_controller.dart';
 import 'package:lekra/controllers/basic_controlller.dart';
+import 'package:lekra/controllers/dashboard_controller.dart';
 import 'package:lekra/controllers/kyc_controller/form_controller.dart';
 import 'package:lekra/controllers/report_contoller.dart';
 import 'package:lekra/services/constants.dart';
@@ -14,11 +15,13 @@ import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/custom_image.dart';
 import 'package:lekra/views/base/shimmer.dart';
 import 'package:lekra/views/screens/auth_screens/login_screen.dart';
+import 'package:lekra/views/screens/dashboard/dashboard_screen.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/banner_image_section.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/kyc_pending_card.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/quick_acitons_section/quick_actions_section.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/top_banner_section.dart';
 import 'package:lekra/views/screens/dashboard/home_screen/components/transaction_history_section.dart';
+import 'package:lekra/views/screens/kyc_form/components/screen/kycSubmittedSuccessScreen/kyc_submitted_success_screen.dart';
 import 'package:lekra/views/screens/kyc_form/kyc_form_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -164,10 +167,24 @@ class _HomeScreenState extends State<HomeScreen> {
                       kycStatus:
                           formController.venderKycStatusModel?.kycStatus ?? "",
                       onTap: () {
-                        navigate(
-                          context: context,
-                          page: const KycFormScreen(),
-                        );
+                        (formController.venderKycStatusModel
+                                    ?.isRegistrationStarted ??
+                                false)
+                            ? navigate(
+                                context: context,
+                                page: const KycFormScreen(),
+                              )
+                            : navigate(
+                                context: context,
+                                page: KycSubmittedSuccessScreen(
+                                  onGoToDashboard: () {
+                                    Get.find<DashBoardController>().dashPage =
+                                        0;
+                                    navigate(
+                                        context: context,
+                                        page: DashboardScreen());
+                                  },
+                                ));
                       },
                     ),
                   );

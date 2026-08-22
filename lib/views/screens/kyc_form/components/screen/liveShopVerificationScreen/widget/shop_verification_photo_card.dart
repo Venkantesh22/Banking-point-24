@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
+
 class ShopVerificationPhotoCard extends StatelessWidget {
   final File? file;
   final String? imageUrl;
@@ -27,8 +28,7 @@ class ShopVerificationPhotoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool hasLocalFile = file != null;
 
-    final bool hasRemoteImage =
-        imageUrl != null && imageUrl!.trim().isNotEmpty;
+    final bool hasRemoteImage = imageUrl != null && imageUrl!.trim().isNotEmpty;
 
     final bool hasImage = hasLocalFile || hasRemoteImage;
 
@@ -112,14 +112,12 @@ class ShopVerificationPhotoCard extends StatelessWidget {
                   top: 10.h,
                   right: 10.w,
                   child: GestureDetector(
-                    onTap: onRemove,
+                    onTap: isLoading ? null : onRemove,
                     child: Container(
                       width: 34.w,
                       height: 34.w,
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(
-                          alpha: 0.55,
-                        ),
+                        color: Colors.black.withValues(alpha: 0.55),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -153,9 +151,7 @@ class ShopVerificationPhotoCard extends StatelessWidget {
                         ),
                         SizedBox(width: 6.w),
                         CustomText(
-                          hasLocalFile
-                              ? 'Photo captured'
-                              : 'Uploaded photo',
+                          hasLocalFile ? 'Photo captured' : 'Uploaded photo',
                           style: TextStyle(
                             color: white,
                             fontSize: 12.sp,
@@ -198,13 +194,8 @@ class ShopVerificationPhotoCard extends StatelessWidget {
                   ),
                   SizedBox(height: 12.h),
                   CustomText(
-                    isLoading
-                        ? 'Opening camera...'
-                        : 'Capture Photo',
-                    style: Helper(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(
+                    isLoading ? 'Opening camera...' : 'Capture Photo',
+                    style: Helper(context).textTheme.bodyMedium?.copyWith(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w700,
                           color: primaryColor,
@@ -213,10 +204,7 @@ class ShopVerificationPhotoCard extends StatelessWidget {
                   SizedBox(height: 4.h),
                   CustomText(
                     'Use camera to capture a live photo',
-                    style: Helper(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(
+                    style: Helper(context).textTheme.bodySmall?.copyWith(
                           fontSize: 11.sp,
                           color: greyText6,
                         ),

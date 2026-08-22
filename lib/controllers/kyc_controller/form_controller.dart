@@ -158,8 +158,28 @@ class FormController extends GetxController implements GetxService {
     final verifiedSections =
         venderKycStatusModel?.correctionRemarks?.verifiedSections ?? [];
 
+    final bool kycDocumentGroupCompleted =
+        verifiedSections.contains('self_live');
+
     for (int i = 0; i < completed.length; i++) {
-      completed[i] = verifiedSections.contains(sectionKeys[i]);
+      final String section = sectionKeys[i];
+
+      // ----------------------------------------------------------
+      // KYC DOC + BANK DOC + SELFIE
+      // ----------------------------------------------------------
+
+      if (section == 'kyc_documents' ||
+          section == 'bank_documents' ||
+          section == 'self_live') {
+        completed[i] = kycDocumentGroupCompleted;
+        continue;
+      }
+
+      // ----------------------------------------------------------
+      // NORMAL SECTIONS
+      // ----------------------------------------------------------
+
+      completed[i] = verifiedSections.contains(section);
     }
 
     selectedIndex = getNextIncompleteStep();
@@ -168,16 +188,14 @@ class FormController extends GetxController implements GetxService {
   }
 
   int getNextIncompleteStep() {
-    final verifiedSections =
-        venderKycStatusModel?.correctionRemarks?.verifiedSections ?? [];
-
-    for (int i = 0; i < sectionKeys.length; i++) {
-      if (!verifiedSections.contains(sectionKeys[i])) {
+    for (int i = 0; i < completed.length; i++) {
+      if (!completed[i]) {
         return i;
       }
     }
 
-    return sectionKeys.length - 1;
+    // Everything except review is completed.
+    return totalSteps - 1;
   }
 
   // ============================================================
@@ -486,75 +504,80 @@ class FormController extends GetxController implements GetxService {
 // }
 
   void updateDataOfKycToSection() {
-  final verifiedSections =
-      venderKycStatusModel?.correctionRemarks?.verifiedSections ?? [];
+    final verifiedSections =
+        venderKycStatusModel?.correctionRemarks?.verifiedSections ?? [];
 
-  // ============================================================
-  // BASIC
-  // ============================================================
+    isDocSectionComplete = verifiedSections.contains('self_live');
+    isShopVerifiedSectionComplete = verifiedSections.contains('shop_live');
 
-  if (verifiedSections.contains('basic_details')) {
-    updateBasicDetailsFromKyc();
+    // ============================================================
+    // BASIC
+    // ============================================================
+
+    if (verifiedSections.contains('basic_details')) {
+      updateBasicDetailsFromKyc();
+    }
+
+    // ============================================================
+    // KYC INFO
+    // ============================================================
+
+    if (verifiedSections.contains('document_numbers')) {
+      updateKycInfoFromKyc();
+    }
+
+    // ============================================================
+    // BUSINESS
+    // ============================================================
+
+    if (verifiedSections.contains('business_info')) {
+      updateBusinessInfoFromKyc();
+    }
+
+    // ============================================================
+    // SHOP
+    // ============================================================
+
+    // if (verifiedSections.contains('shop_live')) {
+    //   updateShopInfoFromKyc();
+    // }
+
+    // ============================================================
+    // BANK
+    // ============================================================
+
+    if (verifiedSections.contains('bank_details')) {
+      updateBankDetailsFromKyc();
+    }
+
+    // ============================================================
+    // KYC DOCUMENTS
+    // ============================================================
+
+    // if (verifiedSections.contains('kyc_documents')) {
+    //
+    // }
+
+    // // ============================================================
+    // // BANK DOCUMENTS
+    // // ============================================================
+
+    // if (verifiedSections.contains('bank_documents')) {
+    //
+    // }
+
+    // // ============================================================
+    // // SELFIE
+    // // ============================================================
+
+    // if (verifiedSections.contains('self_live')) {
+    //   updateSelfieFromKyc();
+    // updateKycDocumentsFromKyc();
+    // updateBankDocumentsFromKyc();
+    // }
+
+    update();
   }
-
-  // ============================================================
-  // KYC INFO
-  // ============================================================
-
-  if (verifiedSections.contains('document_numbers')) {
-    updateKycInfoFromKyc();
-  }
-
-  // ============================================================
-  // BUSINESS
-  // ============================================================
-
-  if (verifiedSections.contains('business_info')) {
-    updateBusinessInfoFromKyc();
-  }
-
-  // ============================================================
-  // SHOP
-  // ============================================================
-
-  if (verifiedSections.contains('shop_live')) {
-    updateShopInfoFromKyc();
-  }
-
-  // ============================================================
-  // BANK
-  // ============================================================
-
-  if (verifiedSections.contains('bank_details')) {
-    updateBankDetailsFromKyc();
-  }
-
-  // ============================================================
-  // KYC DOCUMENTS
-  // ============================================================
-
-  // if (verifiedSections.contains('kyc_documents')) {
-  //   updateKycDocumentsFromKyc();
-  // }
-
-  // // ============================================================
-  // // BANK DOCUMENTS
-  // // ============================================================
-
-  // if (verifiedSections.contains('bank_documents')) {
-  //   updateBankDocumentsFromKyc();
-  // }
-
-  // // ============================================================
-  // // SELFIE
-  // // ============================================================
-
-  // if (verifiedSections.contains('self_live')) {
-  //   updateSelfieFromKyc();
-  // }
-
-  update();
-}
 
   String? getRemoteImageUrl(String? path) {
     if (path == null || path.trim().isEmpty) {
@@ -567,4 +590,7 @@ class FormController extends GetxController implements GetxService {
 
     return '${AppConstants.baseUrl}/$path';
   }
+
+  bool isDocSectionComplete = false;
+  bool isShopVerifiedSectionComplete = false;
 }

@@ -106,32 +106,6 @@ class KycReviewController extends GetxController implements GetxService {
     }
   }
 
-  // Future<bool> submitKyc() async {
-  //   if (!declarationAccepted) {
-  //     return false;
-  //   }
-
-  //   try {
-  //     setSubmitting(true);
-
-  //     // ========================================================
-  //     // TODO:
-  //     // Call your final KYC submit API here.
-  //     // ========================================================
-
-  //     await Future.delayed(
-  //       const Duration(milliseconds: 800),
-  //     );
-
-  //     setSubmitting(false);
-
-  //     return true;
-  //   } catch (e) {
-  //     setSubmitting(false);
-
-  //     return false;
-  //   }
-  // }
 
   // ============================================================
   // CLEAR

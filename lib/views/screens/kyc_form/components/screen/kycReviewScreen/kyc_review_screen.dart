@@ -7,6 +7,7 @@ import 'package:lekra/controllers/kyc_controller/bank_details_controller.dart';
 import 'package:lekra/controllers/kyc_controller/bank_document_upload_controller.dart';
 import 'package:lekra/controllers/kyc_controller/business_information_controller.dart';
 import 'package:lekra/controllers/kyc_controller/document_details_controller.dart';
+import 'package:lekra/controllers/kyc_controller/form_controller.dart';
 import 'package:lekra/controllers/kyc_controller/kyc_review_controller.dart';
 import 'package:lekra/controllers/kyc_controller/kyc_document_upload_controller.dart';
 import 'package:lekra/controllers/kyc_controller/live_shop_verification_controller.dart';
@@ -47,14 +48,8 @@ class KycReviewScreen extends StatelessWidget {
 
         final businessController = Get.find<BusinessInformationController>();
 
-        final shopController = Get.find<LiveShopVerificationController>();
-
-        final selfieController = Get.find<SelfLiveVerificationController>();
-
         final bankController = Get.find<BankDetailsController>();
-
-        final bankDocUploadController =
-            Get.find<BankDocumentUploadController>();
+        final formController = Get.find<FormController>();
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,26 +202,26 @@ class KycReviewScreen extends StatelessWidget {
               items: [
                 ReviewItem(
                   label: 'Shop Photo',
-                  value: shopController.shopLivePhoto != null
+                  value: formController.isShopVerifiedSectionComplete
                       ? 'Captured'
                       : 'Not captured',
                 ),
                 ReviewItem(
                   label: 'Signboard',
-                  value: shopController.shopSignboardVisible
+                  value: formController.isShopVerifiedSectionComplete
                       ? 'Visible'
                       : 'Not confirmed',
                 ),
                 ReviewItem(
                   label: 'Inside Shop',
-                  value: shopController.insideShopPhoto != null
+                  value: formController.isShopVerifiedSectionComplete
                       ? 'Captured'
                       : 'Optional / Not uploaded',
                 ),
                 ReviewItem(
                   label: 'Location',
-                  value: shopController.locationCaptured
-                      ? shopController.locationText
+                  value: formController.isShopVerifiedSectionComplete
+                      ? "${formController.venderKycDetails?.shopLatitude} - ${formController.venderKycDetails?.shopLongitude}"
                       : 'Not captured',
                 ),
               ],
@@ -285,7 +280,7 @@ class KycReviewScreen extends StatelessWidget {
                 ),
                 ReviewItem(
                   label: 'Status',
-                  value: documentUploadController.allRequiredDocumentsUploaded
+                  value: formController.isDocSectionComplete
                       ? 'Completed'
                       : 'Incomplete',
                 ),
@@ -302,13 +297,13 @@ class KycReviewScreen extends StatelessWidget {
               items: [
                 ReviewItem(
                   label: 'Cancelled Cheque',
-                  value: bankDocUploadController.cancelledCheque != null
+                  value: formController.isDocSectionComplete
                       ? 'Captured'
                       : 'Not captured',
                 ),
                 ReviewItem(
                   label: 'Bank Statement',
-                  value: bankDocUploadController.bankStatement != null
+                  value: formController.isDocSectionComplete
                       ? 'Captured'
                       : 'Not captured',
                 ),
@@ -326,19 +321,19 @@ class KycReviewScreen extends StatelessWidget {
               items: [
                 ReviewItem(
                   label: 'Selfie',
-                  value: selfieController.selfLivePhoto != null
+                  value: formController.isDocSectionComplete
                       ? 'Captured'
                       : 'Not captured',
                 ),
                 ReviewItem(
                   label: 'Liveness',
-                  value: selfieController.livenessCompleted
+                  value: formController.isDocSectionComplete
                       ? 'Completed'
                       : 'Pending',
                 ),
                 ReviewItem(
                   label: 'KYC Match',
-                  value: selfieController.photoToKycMatched
+                  value: formController.isDocSectionComplete
                       ? 'Matched'
                       : 'Pending',
                 ),
@@ -412,6 +407,7 @@ class KycReviewScreen extends StatelessWidget {
             // ==================================================
 
             CustomButton(
+              isLoading: reviewController.isSubmitting,
               title: reviewController.isSubmitting
                   ? 'Submitting...'
                   : 'Submit KYC',
@@ -431,15 +427,25 @@ class KycReviewScreen extends StatelessWidget {
                       toastType: ToastType.info);
                 }
 
-                onCompleteChanged(true);
-                navigate(
-                    context: context,
-                    page: KycSubmittedSuccessScreen(
-                      onGoToDashboard: () {
-                        Get.find<DashBoardController>().dashPage = 0;
-                        navigate(context: context, page: DashboardScreen());
-                      },
-                    ));
+                reviewController.venderKycFinalSubmit().then((value) {
+                  if (value.isSuccess) {
+                    showToast(
+                        message: value.message, typeCheck: value.isSuccess);
+
+                    onCompleteChanged(true);
+                    navigate(
+                        context: context,
+                        page: KycSubmittedSuccessScreen(
+                          onGoToDashboard: () {
+                            Get.find<DashBoardController>().dashPage = 0;
+                            navigate(context: context, page: DashboardScreen());
+                          },
+                        ));
+                  } else {
+                    showToast(
+                        message: value.message, typeCheck: value.isSuccess);
+                  }
+                });
               },
             ),
 
