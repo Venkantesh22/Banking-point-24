@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:lekra/controllers/basic_controlller.dart';
 import 'package:lekra/controllers/kyc_controller/bank_details_controller.dart';
+import 'package:lekra/controllers/kyc_controller/bank_document_upload_controller.dart';
 import 'package:lekra/controllers/kyc_controller/business_information_controller.dart';
 import 'package:lekra/controllers/kyc_controller/document_details_controller.dart';
 import 'package:lekra/controllers/kyc_controller/live_shop_verification_controller.dart';
@@ -468,16 +469,93 @@ class FormController extends GetxController implements GetxService {
     controller.update();
   }
 
+//   void updateBankDocumentsFromKyc() {
+//   final controller =
+//       Get.find<BankDocumentUploadController>();
+
+//   controller.cancelledCheque =
+//       getRemoteImageUrl(
+//         venderKycDetails?.c,
+//       );
+
+//   controller.bankStatementPath =
+//       getRemoteImageUrl(
+//         venderKycDetails?.bankStatementPath,
+//       );
+
+//   controller.update();
+// }
+
   void updateDataOfKycToSection() {
+  final verifiedSections =
+      venderKycStatusModel?.correctionRemarks?.verifiedSections ?? [];
+
+  // ============================================================
+  // BASIC
+  // ============================================================
+
+  if (verifiedSections.contains('basic_details')) {
     updateBasicDetailsFromKyc();
-    updateKycInfoFromKyc();
-    updateBusinessInfoFromKyc();
-    updateShopInfoFromKyc();
-    updateBankDetailsFromKyc();
-    // updateKycDocumentsFromKyc();
-    // updateBankDocumentsFromKyc();
-    // updateSelfieFromKyc();
   }
+
+  // ============================================================
+  // KYC INFO
+  // ============================================================
+
+  if (verifiedSections.contains('document_numbers')) {
+    updateKycInfoFromKyc();
+  }
+
+  // ============================================================
+  // BUSINESS
+  // ============================================================
+
+  if (verifiedSections.contains('business_info')) {
+    updateBusinessInfoFromKyc();
+  }
+
+  // ============================================================
+  // SHOP
+  // ============================================================
+
+  if (verifiedSections.contains('shop_live')) {
+    updateShopInfoFromKyc();
+  }
+
+  // ============================================================
+  // BANK
+  // ============================================================
+
+  if (verifiedSections.contains('bank_details')) {
+    updateBankDetailsFromKyc();
+  }
+
+  // ============================================================
+  // KYC DOCUMENTS
+  // ============================================================
+
+  // if (verifiedSections.contains('kyc_documents')) {
+  //   updateKycDocumentsFromKyc();
+  // }
+
+  // // ============================================================
+  // // BANK DOCUMENTS
+  // // ============================================================
+
+  // if (verifiedSections.contains('bank_documents')) {
+  //   updateBankDocumentsFromKyc();
+  // }
+
+  // // ============================================================
+  // // SELFIE
+  // // ============================================================
+
+  // if (verifiedSections.contains('self_live')) {
+  //   updateSelfieFromKyc();
+  // }
+
+  update();
+}
 
   String? getRemoteImageUrl(String? path) {
     if (path == null || path.trim().isEmpty) {
