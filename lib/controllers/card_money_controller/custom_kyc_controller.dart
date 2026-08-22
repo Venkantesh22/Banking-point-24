@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lekra/data/models/cash%20withdrawal%20model/cash_card_withdrawal_kyc_status_model.dart';
 import 'package:lekra/data/models/cash%20withdrawal%20model/check_custom_kyc_model.dart';
 import 'package:lekra/data/models/response/response_model.dart';
 import 'package:lekra/data/repositories/card_withdrawal_repo/custom_kyc_repo.dart';
@@ -335,6 +336,22 @@ class CustomKycController extends GetxController implements GetxService {
     return responseModel;
   }
 
+  KycStatus getKycStatus(String? value) {
+    switch (value?.trim().toLowerCase()) {
+      case 'verified':
+        return KycStatus.verified;
+
+      case 'rejected':
+        return KycStatus.rejected;
+
+      case 'pending':
+      default:
+        return KycStatus.pending;
+    }
+  }
+
+  CardCashWithdrawalCustomKycStatusModel?
+      cardCashWithdrawalCustomKycStatusModel;
   //* Call Submit custom Kyc Api cardWithdrawalCustomerKYC()
   Future<ResponseModel> cardWithdrawalCustomerKYC() async {
     log('----------- cardWithdrawalCustomerKYC Called ----------');
@@ -412,6 +429,13 @@ class CustomKycController extends GetxController implements GetxService {
       if (response.statusCode == 200 &&
           body is Map &&
           body['status']?.toString().toLowerCase() == 'success') {
+        cardCashWithdrawalCustomKycStatusModel =
+            CardCashWithdrawalCustomKycStatusModel.fromJson(response.body);
+
+        status = getKycStatus(
+          cardCashWithdrawalCustomKycStatusModel?.kycStatus,
+        );
+
         return ResponseModel(
           true,
           body['message']?.toString() ?? 'cardWithdrawalCustomerKYC success',

@@ -376,10 +376,9 @@ class CustomKycScreen extends StatelessWidget {
                     // ==================================================
 
                     CustomButton(
-                      
-                      title: controller.isSubmitting
-                          ? 'Submitting...'
-                          : 'Submit KYC',
+                      isLoading: controller.isLoading,
+                      title:
+                          controller.isLoading ? 'Submitting...' : 'Submit KYC',
                       height: 48.h,
                       radius: 8.r,
                       gradient: LinearGradient(
@@ -388,7 +387,7 @@ class CustomKycScreen extends StatelessWidget {
                           secondaryColor,
                         ],
                       ),
-                      onTap: controller.isSubmitting
+                      onTap: controller.isLoading
                           ? null
                           : () {
                               final bool valid =
@@ -410,25 +409,25 @@ class CustomKycScreen extends StatelessWidget {
                               //       toastType: ToastType.warning);
                               // }
 
-                              // if (controller.panCardImage == null) {
-                              //   return showToast(
-                              //       message: 'Please upload PAN card',
-                              //       toastType: ToastType.warning);
-                              // }
+                              if (controller.panCardImage == null) {
+                                return showToast(
+                                    message: 'Please upload PAN card',
+                                    toastType: ToastType.warning);
+                              }
 
-                              // if (controller.aadhaarFrontImage == null ||
-                              //     controller.aadhaarBackImage == null) {
-                              //   return showToast(
-                              //       message:
-                              //           'Please upload Aadhaar front and back',
-                              //       toastType: ToastType.warning);
-                              // }
+                              if (controller.aadhaarFrontImage == null ||
+                                  controller.aadhaarBackImage == null) {
+                                return showToast(
+                                    message:
+                                        'Please upload Aadhaar front and back',
+                                    toastType: ToastType.warning);
+                              }
 
-                              // if (controller.livePhoto == null) {
-                              //   return showToast(
-                              //       message: 'Please capture live photo',
-                              //       toastType: ToastType.warning);
-                              // }
+                              if (controller.livePhoto == null) {
+                                return showToast(
+                                    message: 'Please capture live photo',
+                                    toastType: ToastType.warning);
+                              }
 
                               controller
                                   .cardWithdrawalCustomerKYC()

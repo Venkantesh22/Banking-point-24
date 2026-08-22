@@ -64,9 +64,17 @@ class CustomKycStatusScreen extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
-                      navigate(context: context, page: WithdrawMoneyScreen());
+                      if (controller
+                              .cardCashWithdrawalCustomKycStatusModel?.status ==
+                          "Verified") {
+                        navigate(context: context, page: WithdrawMoneyScreen());
+                      }
                     },
-                    title: "Container",
+                    title: controller.cardCashWithdrawalCustomKycStatusModel
+                                ?.kycStatus ==
+                            "Verified"
+                        ? "Container"
+                        : "Wait for KYC Verified",
                   )
                 ],
               ),
