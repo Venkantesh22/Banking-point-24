@@ -12,12 +12,26 @@ import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/common_button.dart';
 import 'package:lekra/views/base/custom_image.dart';
 import 'package:lekra/views/screens/creadit_card/screen/custom_kyc_screen/custom_kyc_screen.dart';
+import 'package:lekra/views/screens/creadit_card/screen/withdraw_money_screen/withdraw_money_screen.dart';
 import 'package:lekra/views/screens/widget/text_box/app_text_box.dart';
 
-class CheckCustomerKycScreen extends StatelessWidget {
+class CheckCustomerKycScreen extends StatefulWidget {
   CheckCustomerKycScreen({
     super.key,
   });
+
+  @override
+  State<CheckCustomerKycScreen> createState() => _CheckCustomerKycScreenState();
+}
+
+class _CheckCustomerKycScreenState extends State<CheckCustomerKycScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<CustomKycController>().mobileNumberController.clear();
+    });
+  }
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -279,8 +293,12 @@ class CheckCustomerKycScreen extends StatelessWidget {
                               showToast(
                                   message: value.message,
                                   typeCheck: value.isSuccess);
-                              navigate(
-                                  context: context, page: CustomKycScreen());
+                              (controller.checkCustomKyc?.canWithdraw == false)
+                                  ? navigate(
+                                      context: context, page: CustomKycScreen())
+                                  : navigate(
+                                      context: context,
+                                      page: WithdrawMoneyScreen());
                             } else {
                               showToast(
                                   message: value.message,

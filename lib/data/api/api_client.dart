@@ -37,13 +37,13 @@ class ApiClient extends GetConnect implements GetxService {
   }
 
   void updateHeader(String? token) {
-  this.token = token;
+    this.token = token;
 
-  _mainHeaders = {
-    'Accept': 'application/json',
-    'Authorization': 'Bearer ${token ?? ''}',
-  };
-}
+    _mainHeaders = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${token ?? ''}',
+    };
+  }
 
   Future<Response> getData(
     String uri,
@@ -81,59 +81,113 @@ class ApiClient extends GetConnect implements GetxService {
   }
 
   Future<Response> postData(
-  String uri,
-  String name,
-  dynamic body, {
-  Map<String, dynamic>? query,
-  String? contentType,
-  Map<String, String>? headers,
-  Function(dynamic)? decoder,
-  Function(double)? uploadProgress,
-}) async {
-  try {
-    final currentToken =
-        sharedPreferences.getString(AppConstants.token) ?? '';
+    String uri,
+    String name,
+    dynamic body, {
+    Map<String, dynamic>? query,
+    String? contentType,
+    Map<String, String>? headers,
+    Function(dynamic)? decoder,
+    Function(double)? uploadProgress,
+  }) async {
+    try {
+      final currentToken =
+          sharedPreferences.getString(AppConstants.token) ?? '';
 
-    updateHeader(currentToken);
+      updateHeader(currentToken);
 
-    if (kDebugMode) {
-      log(
-        '====> GetX Call: $uri\nToken: $currentToken',
+      // ------------------------------------------------------------
+      // BUILD FULL URL
+      // ------------------------------------------------------------
+
+      final String base = baseUrl ?? '';
+
+      String fullUrl = '$base$uri';
+
+      if (query != null && query.isNotEmpty) {
+        final queryString = query.entries
+            .map(
+              (entry) => '${Uri.encodeQueryComponent(entry.key)}='
+                  '${Uri.encodeQueryComponent(entry.value.toString())}',
+            )
+            .join('&');
+
+        fullUrl = '$fullUrl?$queryString';
+      }
+
+      // ------------------------------------------------------------
+      // LOG REQUEST
+      // ------------------------------------------------------------
+
+      if (kDebugMode) {
+        log('========================================');
+        log('API REQUEST');
+        log('Method      : POST');
+        log('Base URL    : $base');
+        log('URI         : $uri');
+        log('Full URL    : $fullUrl');
+        log('Token       : $currentToken');
+
+        if (body is FormData) {
+          log(
+            'Body Fields : ${body.fields.map(
+                  (e) => '${e.key}=${e.value}',
+                ).join(', ')}',
+          );
+
+          log(
+            'Body Files  : ${body.files.map(
+                  (e) => '${e.key}=${e.value.filename}',
+                ).join(', ')}',
+          );
+        } else {
+          log('Body        : $body');
+        }
+
+        log('Headers     : ${headers ?? _mainHeaders}');
+        log('Query       : $query');
+        log('========================================');
+      }
+
+      // ------------------------------------------------------------
+      // API CALL
+      // ------------------------------------------------------------
+
+      Response response = await post(
+        uri,
+        body,
+        query: query,
+        contentType: contentType,
+        headers: headers ?? _mainHeaders,
+        decoder: decoder,
+        uploadProgress: uploadProgress,
       );
 
+      // ------------------------------------------------------------
+      // LOG RESPONSE
+      // ------------------------------------------------------------
+
       log(
-        '====> GetX Body: ${body is FormData ? body.fields : body}',
-        name: uri,
+        '====> GetX Response: [${response.statusCode}] $fullUrl\n'
+        '${response.bodyString}',
+        name: name,
+      );
+
+      response = handleResponse(response);
+
+      return response;
+    } catch (e, stackTrace) {
+      log(
+        '$e\n$stackTrace',
+        name: 'ERROR AT POST',
+      );
+
+      return Response(
+        statusCode: 1,
+        statusText: e.toString(),
       );
     }
-
-    Response response = await post(
-      uri,
-      body,
-      query: query,
-      contentType: contentType,
-      headers: headers ?? _mainHeaders,
-      decoder: decoder,
-      uploadProgress: uploadProgress,
-    );
-
-    log(
-      '====> GetX Response: [${response.statusCode}] $uri\n${response.bodyString}',
-      name: name,
-    );
-
-    response = handleResponse(response);
-
-    return response;
-  } catch (e) {
-    log('$e', name: 'ERROR AT POST');
-
-    return Response(
-      statusCode: 1,
-      statusText: e.toString(),
-    );
   }
-}
 
   Future<Response> putData(
     String uri,

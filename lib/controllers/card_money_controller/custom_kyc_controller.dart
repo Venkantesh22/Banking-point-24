@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lekra/data/models/cash%20withdrawal%20model/check_custom_kyc_model.dart';
 import 'package:lekra/data/models/response/response_model.dart';
 import 'package:lekra/data/repositories/card_withdrawal_repo/custom_kyc_repo.dart';
 import 'package:lekra/services/constants.dart';
@@ -294,6 +295,7 @@ class CustomKycController extends GetxController implements GetxService {
     update();
   }
 
+  CheckCustomKyc? checkCustomKyc;
   //* Call Submit custom Kyc Api checkCustomerKYC()
   Future<ResponseModel> checkCustomerKYC() async {
     log('----------- checkCustomerKYC Called ----------');
@@ -314,6 +316,7 @@ class CustomKycController extends GetxController implements GetxService {
           await customKycRepo.checkCustomerKYC(data: FormData(data));
 
       if (response.statusCode == 200 && response.body['status'] == "success") {
+        checkCustomKyc = CheckCustomKyc.fromJson(response.body);
         responseModel = ResponseModel(
             true, response.body['message'] ?? " checkCustomerKYC success");
       } else {
