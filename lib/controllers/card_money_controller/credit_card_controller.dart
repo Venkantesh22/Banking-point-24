@@ -2,12 +2,20 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lekra/data/models/cash%20withdrawal%20model/withdrawal_model.dart';
 import 'package:lekra/data/models/response/response_model.dart';
 import 'package:lekra/data/repositories/card_withdrawal_repo/credit_card_repo.dart';
+import 'package:lekra/services/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreditCardController extends GetxController implements GetxService {
   final CreditCardRepo creditCardRepo;
-  CreditCardController({required this.creditCardRepo});
+  final SharedPreferences sharedPreferences;
+
+  CreditCardController({
+    required this.creditCardRepo,
+    required this.sharedPreferences,
+  });
 
   // ============================================================
   // CONTROLLERS
@@ -15,14 +23,18 @@ class CreditCardController extends GetxController implements GetxService {
 
   final TextEditingController amountController = TextEditingController();
 
-  final TextEditingController cardNumberController = TextEditingController();
+  final TextEditingController cardNumberController =
+      TextEditingController(text: "4532758912345678");
 
   final TextEditingController expiryDateController = TextEditingController();
 
-  final TextEditingController cvvController = TextEditingController();
+  final TextEditingController cvvController =
+      TextEditingController(text: "999");
 
   final TextEditingController cardHolderNameController =
-      TextEditingController();
+      TextEditingController(text: "Rahul Sharma");
+  final TextEditingController bankNameController =
+      TextEditingController(text: "HDFC Bank");
 
   final List<TextEditingController> otpControllers = List.generate(
     6,
@@ -156,6 +168,53 @@ class CreditCardController extends GetxController implements GetxService {
   // ============================================================
   // SUBMIT WITHDRAWAL
   // ============================================================
+
+  WithdrawalModel? withdrawalModel;
+  //* Call Submit credit card withdrawal amount cardWithdrawalInitiate()
+  Future<ResponseModel> cardWithdrawalInitiate(
+      {required String? number}) async {
+    log('----------- cardWithdrawalInitiate Called ----------');
+
+    ResponseModel responseModel;
+    isLoading = true;
+    update();
+    log('-----------  number = $number ----------');
+
+    try {
+      final sessionId =
+          sharedPreferences.getString(AppConstants.apiToken) ?? '';
+
+      Map<String, dynamic> data = {
+        "session_id": sessionId,
+        "mobile_number": number,
+        "withdrawal_amount": amountController.text.trim(),
+        "card_number": cardNumberController.text.trim(),
+        "expiry_date": "08\/29",
+        "cvv": cvvController.text.trim(),
+        "card_holder_name": cardHolderNameController.text.trim(),
+        "bank_name": bankNameController.text.trim(),
+      };
+      Response response =
+          await creditCardRepo.cardWithdrawalInitiate(data: FormData(data));
+
+      if (response.statusCode == 200 && response.body['status'] == "success") {
+        withdrawalModel = WithdrawalModel.fromJson(response.body['data']);
+        responseModel = ResponseModel(true,
+            response.body['message'] ?? " cardWithdrawalInitiate success");
+      } else {
+        responseModel = ResponseModel(false,
+            response.body['message'] ?? "Error while cardWithdrawalInitiate");
+      }
+    } catch (e) {
+      log('ERROR AT cardWithdrawalInitiate(): $e');
+      responseModel =
+          ResponseModel(false, "Error while cardWithdrawalInitiate user $e");
+    }
+
+    isLoading = false;
+    update();
+    return responseModel;
+  }
 
   //* Call Submit credit card withdrawal amount submitCreditCardWithdrawalAmount()
   Future<ResponseModel> submitCreditCardWithdrawalAmount({
@@ -302,7 +361,6 @@ class CreditCardController extends GetxController implements GetxService {
     return responseModel;
   }
 
- 
   // ============================================================
   // CLEAR
   // ============================================================
@@ -344,6 +402,7 @@ class CreditCardController extends GetxController implements GetxService {
     expiryDateController.dispose();
     cvvController.dispose();
     cardHolderNameController.dispose();
+    bankNameController.dispose();
 
     for (final controller in otpControllers) {
       controller.dispose();

@@ -4,10 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'package:lekra/controllers/card_money_controller/credit_card_controller.dart';
+import 'package:lekra/controllers/card_money_controller/custom_kyc_controller.dart';
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
 import 'package:lekra/views/base/common_button.dart';
+import 'package:lekra/views/screens/creadit_card/screen/withdraw_money_screen/widget/expiry_dateInput_formatter.dart';
 import 'package:lekra/views/screens/creadit_card/screen/withdraw_verify_otp_screen/withdraw_verify_otp_screen.dart';
 import 'package:lekra/views/screens/widget/text_box/app_text_box.dart';
 
@@ -103,55 +105,57 @@ class WithdrawMoneyScreen extends StatelessWidget {
                     // WITHDRAW BUTTON
                     // ==================================================
 
-                    CustomButton(
-                      title: 'Withdraw Money (Send OTP)',
-  height: 48.h,
-                      radius: 8.r,
-                      gradient: LinearGradient(
-                        colors: [
-                          primaryColor,
-                          secondaryColor,
-                        ],
-                      ),
-                      onTap: () {
-                        navigate(
-                            context: context, page: WithdrawVerifyOtpScreen());
-                        // final bool valid =
-                        //     formKey.currentState?.validate() ?? false;
+                    GetBuilder<CustomKycController>(
+                        builder: (customKycController) {
+                      return CustomButton(
+                        title: 'Withdraw Money (Send OTP)',
+                        height: 48.h,
+                        radius: 8.r,
+                        gradient: LinearGradient(
+                          colors: [
+                            primaryColor,
+                            secondaryColor,
+                          ],
+                        ),
+                        onTap: () {
+                          if (!controller.isAmountValid) {
+                            return showToast(
+                                message:
+                                    'Please enter a valid withdrawal amount',
+                                toastType: ToastType.warning);
+                          }
 
-                        // controller.calculateAmount();
+                          // if (!controller.isCardValid) {
+                          //   return showToast(
+                          //       message: 'Please enter valid card details',
+                          //       toastType: ToastType.warning);
+                          // }
 
-                        // if (!valid) {
-                        //   return;
-                        // }
-
-                        // if (!controller.isAmountValid) {
-                        //   _showMessage(
-                        //     context,
-                        //     'Please enter a valid withdrawal amount',
-                        //   );
-                        //   return;
-                        // }
-
-                        // controller.submitWithdrawal();
-
-                        // if (!controller.isCardValid) {
-                        //   _showMessage(
-                        //     context,
-                        //     'Please enter valid card details',
-                        //   );
-                        //   return;
-                        // }
-
-                        // API will be connected later.
-                        //
-                        // navigate(
-                        //   context: context,
-                        //   page:
-                        //       WithdrawVerifyOtpScreen(),
-                        // );
-                      },
-                    ),
+                          if (formKey.currentState?.validate() ?? false) {
+                            controller
+                                .cardWithdrawalInitiate(
+                                    number: customKycController
+                                        .mobileNumberController.text
+                                        .trim())
+                                .then((value) {
+                              if (value.isSuccess) {
+                                showToast(
+                                    message: value.message,
+                                    typeCheck: value.isSuccess);
+                                navigate(
+                                  context: context,
+                                  page: WithdrawVerifyOtpScreen(),
+                                );
+                              } else {
+                                showToast(
+                                    message: value.message,
+                                    typeCheck: value.isSuccess);
+                              }
+                            });
+                          }
+                        },
+                      );
+                    }),
 
                     sizedBoxHeight(
                       height: 20,
@@ -163,17 +167,6 @@ class WithdrawMoneyScreen extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  void _showMessage(
-    BuildContext context,
-    String message,
-  ) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
     );
   }
 }
@@ -388,6 +381,21 @@ class _CreditCardForm extends StatelessWidget {
       child: Column(
         children: [
           AppTextFieldWithHeading(
+            controller: controller.bankNameController,
+            heading: 'Bank Name',
+            hindText: 'Enter card bank name',
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Please enter card bank name';
+              }
+
+              return null;
+            },
+          ),
+          sizedBoxHeight(
+            height: 14,
+          ),
+          AppTextFieldWithHeading(
             controller: controller.cardNumberController,
             heading: 'Card Number',
             hindText: '1234 5678 9012 3456',
@@ -419,6 +427,7 @@ class _CreditCardForm extends StatelessWidget {
             height: 14,
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: AppTextFieldWithHeading(
@@ -426,7 +435,11 @@ class _CreditCardForm extends StatelessWidget {
                   heading: 'Expiry Date',
                   hindText: 'MM/YY',
                   keyboardType: TextInputType.number,
-                  maxLength: 5,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(4),
+                    ExpiryDateInputFormatter(),
+                  ],
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return 'Required';

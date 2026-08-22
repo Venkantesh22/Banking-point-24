@@ -265,6 +265,10 @@ class AppConstants {
   static const String postCardWithdrawalCustomerKYC =
       "api/credit-card-cash-withdrawal/v1/submit-kyc";
 
+  static const String postCardWithdrawalInitiate =
+      "api/credit-card-cash-withdrawal/v1/initiate-withdrawal";
+
+//
   static const String postSubmitCreditCardInfo =
       "api/credit-card-cash-withdrawal/v1/cards";
 

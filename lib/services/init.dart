@@ -146,6 +146,7 @@ class Init {
 
       Get.lazyPut(() => CreditCardController(
             creditCardRepo: Get.find(),
+            sharedPreferences: Get.find(),
           ));
       Get.lazyPut(() => BankController());
     } catch (e) {

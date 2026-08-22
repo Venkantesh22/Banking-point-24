@@ -8,6 +8,14 @@ class CreditCardRepo {
 
   CreditCardRepo({required this.apiClient});
 
+  Future<Response> cardWithdrawalInitiate({required FormData data}) async =>
+      await apiClient.postData(
+        AppConstants.postCardWithdrawalInitiate,
+        "cardWithdrawalInitiate",
+        data,
+      );
+
+  //
   Future<Response> submitCreditCardInfo({required FormData data}) async =>
       await apiClient.postData(
         AppConstants.postSubmitCreditCardInfo,
@@ -36,6 +44,4 @@ class CreditCardRepo {
         "creditCardOTPVerify",
         data,
       );
-
-  
 }
