@@ -5,9 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lekra/services/constants.dart';
 import 'package:lekra/services/custom_text.dart';
 import 'package:lekra/services/theme.dart';
-
 class ShopVerificationPhotoCard extends StatelessWidget {
   final File? file;
+  final String? imageUrl;
   final VoidCallback onCapture;
   final VoidCallback onRemove;
   final bool isLoading;
@@ -20,10 +20,18 @@ class ShopVerificationPhotoCard extends StatelessWidget {
     required this.onRemove,
     required this.isLoading,
     required this.icon,
+    this.imageUrl,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bool hasLocalFile = file != null;
+
+    final bool hasRemoteImage =
+        imageUrl != null && imageUrl!.trim().isNotEmpty;
+
+    final bool hasImage = hasLocalFile || hasRemoteImage;
+
     return Container(
       width: double.infinity,
       height: 190.h,
@@ -31,20 +39,75 @@ class ShopVerificationPhotoCard extends StatelessWidget {
         color: greyBackGround,
         borderRadius: BorderRadius.circular(14.r),
         border: Border.all(
-          color: file != null ? primaryColor : greyBorder,
+          color: hasImage ? primaryColor : greyBorder,
         ),
       ),
       clipBehavior: Clip.antiAlias,
-      child: file != null
+      child: hasImage
           ? Stack(
               fit: StackFit.expand,
               children: [
-                Image.file(
-                  file!,
-                  fit: BoxFit.cover,
-                ),
+                // ==================================================
+                // IMAGE
+                // ==================================================
 
-                // Remove button
+                if (hasLocalFile)
+                  Image.file(
+                    file!,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Center(
+                        child: Icon(
+                          Icons.broken_image_outlined,
+                          size: 40.r,
+                          color: greyDark,
+                        ),
+                      );
+                    },
+                  )
+                else if (hasRemoteImage)
+                  Image.network(
+                    imageUrl!,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (
+                      context,
+                      child,
+                      loadingProgress,
+                    ) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return Center(
+                        child: Icon(
+                          Icons.broken_image_outlined,
+                          size: 40.r,
+                          color: greyDark,
+                        ),
+                      );
+                    },
+                  )
+                else
+                  Icon(
+                    icon,
+                    size: 40.r,
+                    color: primaryColor,
+                  ),
+
+                // ==================================================
+                // REMOVE
+                // ==================================================
+
                 Positioned(
                   top: 10.h,
                   right: 10.w,
@@ -68,7 +131,10 @@ class ShopVerificationPhotoCard extends StatelessWidget {
                   ),
                 ),
 
-                // Captured indicator
+                // ==================================================
+                // CAPTURED
+                // ==================================================
+
                 Positioned(
                   left: 0,
                   right: 0,
@@ -87,7 +153,9 @@ class ShopVerificationPhotoCard extends StatelessWidget {
                         ),
                         SizedBox(width: 6.w),
                         CustomText(
-                          'Photo captured',
+                          hasLocalFile
+                              ? 'Photo captured'
+                              : 'Uploaded photo',
                           style: TextStyle(
                             color: white,
                             fontSize: 12.sp,
@@ -128,9 +196,7 @@ class ShopVerificationPhotoCard extends StatelessWidget {
                             color: primaryColor,
                           ),
                   ),
-
                   SizedBox(height: 12.h),
-
                   CustomText(
                     isLoading
                         ? 'Opening camera...'
@@ -144,9 +210,7 @@ class ShopVerificationPhotoCard extends StatelessWidget {
                           color: primaryColor,
                         ),
                   ),
-
                   SizedBox(height: 4.h),
-
                   CustomText(
                     'Use camera to capture a live photo',
                     style: Helper(context)

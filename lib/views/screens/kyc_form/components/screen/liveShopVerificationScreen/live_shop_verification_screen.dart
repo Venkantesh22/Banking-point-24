@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lekra/controllers/kyc_controller/form_controller.dart';
 
 import 'package:lekra/controllers/kyc_controller/live_shop_verification_controller.dart';
 import 'package:lekra/services/constants.dart';
@@ -76,6 +79,7 @@ class _LiveShopVerificationScreenState
               onRemove: controller.removeShopPhoto,
               isLoading: controller.isCapturingShopPhoto,
               icon: Icons.storefront_outlined,
+              imageUrl: controller.shopLivePhotoPath ?? "",
             ),
 
             SizedBox(height: 22.h),
@@ -97,6 +101,7 @@ class _LiveShopVerificationScreenState
               onRemove: controller.removeInsideShopPhoto,
               isLoading: controller.isCapturingInsidePhoto,
               icon: Icons.store_outlined,
+              imageUrl: controller.shopLivePhotoPath ?? "",
             ),
 
             SizedBox(height: 22.h),

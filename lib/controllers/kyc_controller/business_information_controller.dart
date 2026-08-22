@@ -27,12 +27,11 @@ class BusinessInformationController extends GetxController
   // ============================================================
 
   final TextEditingController businessDescriptionController =
-      TextEditingController(text: "Test");
+      TextEditingController();
 
   final TextEditingController businessStartDateController =
-      TextEditingController(text: "2026-01-09");
-  TextEditingController natureOfBusinessController =
-      TextEditingController(text: "Test");
+      TextEditingController();
+  TextEditingController natureOfBusinessController = TextEditingController();
 
   // ============================================================
   // DROPDOWN LISTS
@@ -58,8 +57,8 @@ class BusinessInformationController extends GetxController
   ];
 
   final List<String> businessOwnershipTypeList = [
-    'Owned',
-    'Rented',
+    'owned',
+    'rented',
     'other',
   ];
 

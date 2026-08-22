@@ -15,16 +15,16 @@ class DocumentDetailsController extends GetxController implements GetxService {
   // DOCUMENT DETAILS
   // ============================================================
 
-  final TextEditingController aadhaarNumberController = TextEditingController(text: "123456789012");
+  final TextEditingController aadhaarNumberController = TextEditingController();
 
-  final TextEditingController panNumberController = TextEditingController(text: "ABCDE1234F");
+  final TextEditingController panNumberController = TextEditingController();
 
-  final TextEditingController gstNumberController = TextEditingController(text: "");
+  final TextEditingController gstNumberController = TextEditingController();
 
   final TextEditingController tradeLicenseNumberController =
-      TextEditingController(text: "");
+      TextEditingController();
 
-  final TextEditingController msmeNumberController = TextEditingController(text: "");
+  final TextEditingController msmeNumberController = TextEditingController();
 
   // ============================================================
   // VALIDATION

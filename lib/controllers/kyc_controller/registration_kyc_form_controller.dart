@@ -18,36 +18,36 @@ class RegistrationKycFromController extends GetxController
   // ============================================================
 
   final TextEditingController firstNameController =
-      TextEditingController(text: "Test");
+      TextEditingController();
 
   final TextEditingController lastNameController =
-      TextEditingController(text: "Test");
+      TextEditingController();
 
   final TextEditingController businessNameController =
-      TextEditingController(text: "Test");
+      TextEditingController();
 
   final TextEditingController businessNumberController =
-      TextEditingController(text: "1234567890");
+      TextEditingController();
 
   final TextEditingController businessEmailController =
-      TextEditingController(text: "test@gmail.com");
-
-  final TextEditingController sellerIdentifierController =
       TextEditingController();
+
+  // final TextEditingController sellerIdentifierController =
+  //     TextEditingController();
 
   final TextEditingController businessMCCController = TextEditingController();
 
   final TextEditingController shopAddressController =
-      TextEditingController(text: "Test");
+      TextEditingController();
 
   final TextEditingController pincodeController =
-      TextEditingController(text: "123456");
+      TextEditingController();
 
   // final TextEditingController cityController =
   //     TextEditingController();
 
-  final TextEditingController dateOfIncorporationController =
-      TextEditingController();
+  // final TextEditingController dateOfIncorporationController =
+  //     TextEditingController();
 
   // ============================================================
   // STATE / DISTRICT
@@ -60,7 +60,6 @@ class RegistrationKycFromController extends GetxController
   void setState(StateModel? state) {
     selectState = state;
 
-    // Reset district whenever state changes.
     selectCity = null;
 
     update();
@@ -149,7 +148,7 @@ class RegistrationKycFromController extends GetxController
   void clearForm() {
     firstNameController.clear();
     lastNameController.clear();
-    sellerIdentifierController.clear();
+    // sellerIdentifierController.clear();
     businessNameController.clear();
     businessNumberController.clear();
     businessEmailController.clear();
@@ -157,7 +156,7 @@ class RegistrationKycFromController extends GetxController
     shopAddressController.clear();
     pincodeController.clear();
     // cityController.clear();
-    dateOfIncorporationController.clear();
+    // dateOfIncorporationController.clear();
 
     selectState = null;
     selectCity = null;
@@ -173,7 +172,7 @@ class RegistrationKycFromController extends GetxController
   void onClose() {
     firstNameController.dispose();
     lastNameController.dispose();
-    sellerIdentifierController.dispose();
+    // sellerIdentifierController.dispose();
     businessNameController.dispose();
     businessNumberController.dispose();
     businessEmailController.dispose();
@@ -181,7 +180,7 @@ class RegistrationKycFromController extends GetxController
     shopAddressController.dispose();
     pincodeController.dispose();
     // cityController.dispose();
-    dateOfIncorporationController.dispose();
+    // dateOfIncorporationController.dispose();
 
     super.onClose();
   }

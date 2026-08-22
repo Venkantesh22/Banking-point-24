@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -24,7 +26,7 @@ class _KycFormScreenState extends State<KycFormScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Get.find<BasicController>().fetchStatusList();
+      // Get.find<BasicController>().fetchStatusList();
       Get.find<FormController>().venderKycStatus();
       Get.find<FormController>().venderKycDetail();
     });

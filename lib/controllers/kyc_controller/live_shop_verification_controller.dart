@@ -36,6 +36,9 @@ class LiveShopVerificationController extends GetxController
 
   DateTime? capturedAt;
 
+  String? shopLivePhotoPath;
+  // String? selfLivePhotoPath;
+
   // ============================================================
   // LOCATION
   // ============================================================

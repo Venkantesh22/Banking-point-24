@@ -275,21 +275,33 @@ class KycDocumentUploadController extends GetxController
       }
 
       // ----------------------------------------------------------
-      // LOG SELECTED FILES
+      // LOG SELECTED DOCUMENTS
       // ----------------------------------------------------------
 
       for (int i = 0; i < kycDocuments.length; i++) {
         final file = kycDocuments[i];
 
         log(
-          'Document[$i] ${kycDocumentNames[i]} = '
-          '${file?.path ?? 'NOT SELECTED'}',
+          '[KYC DOCUMENT] '
+          '${kycDocumentNames[i]} '
+          '=> ${file?.path ?? 'NOT SELECTED'}',
         );
       }
 
-      log('Cancelled Cheque: ${cancelledChequeImage?.path ?? ""}');
-      log('Bank Statement: ${bankStatementImage?.path}');
-      log('Live Selfie: ${liveSelfieImage?.path}');
+      log(
+        '[EXTRA DOCUMENT] cancelled_cheque => '
+        '${cancelledChequeImage?.path ?? 'NOT SELECTED'}',
+      );
+
+      log(
+        '[EXTRA DOCUMENT] bank_statement => '
+        '${bankStatementImage?.path ?? 'NOT SELECTED'}',
+      );
+
+      log(
+        '[EXTRA DOCUMENT] self_live_photo => '
+        '${liveSelfieImage?.path ?? 'NOT SELECTED'}',
+      );
 
       // ----------------------------------------------------------
       // BUILD MULTIPART DATA
@@ -297,7 +309,7 @@ class KycDocumentUploadController extends GetxController
 
       final Map<String, dynamic> data = {};
 
-      // 0 - Aadhaar Front
+      // 1. Aadhaar Front
       if (kycDocuments[0] != null) {
         data['aadhaar_front'] = MultipartFile(
           kycDocuments[0]!.path,
@@ -305,7 +317,7 @@ class KycDocumentUploadController extends GetxController
         );
       }
 
-      // 1 - Aadhaar Back
+      // 2. Aadhaar Back
       if (kycDocuments[1] != null) {
         data['aadhaar_back'] = MultipartFile(
           kycDocuments[1]!.path,
@@ -313,7 +325,7 @@ class KycDocumentUploadController extends GetxController
         );
       }
 
-      // 2 - PAN Card
+      // 3. PAN Card
       if (kycDocuments[2] != null) {
         data['pan_card'] = MultipartFile(
           kycDocuments[2]!.path,
@@ -321,7 +333,7 @@ class KycDocumentUploadController extends GetxController
         );
       }
 
-      // 3 - Passport Photo
+      // 4. Passport Photo
       if (kycDocuments[3] != null) {
         data['passport_photo'] = MultipartFile(
           kycDocuments[3]!.path,
@@ -329,7 +341,7 @@ class KycDocumentUploadController extends GetxController
         );
       }
 
-      // 4 - GST Certificate
+      // 5. GST Certificate
       if (kycDocuments[4] != null) {
         data['gst_certificate'] = MultipartFile(
           kycDocuments[4]!.path,
@@ -337,7 +349,7 @@ class KycDocumentUploadController extends GetxController
         );
       }
 
-      // 5 - Trade Licence
+      // 6. Trade Licence
       if (kycDocuments[5] != null) {
         data['trade_licence'] = MultipartFile(
           kycDocuments[5]!.path,
@@ -345,7 +357,7 @@ class KycDocumentUploadController extends GetxController
         );
       }
 
-      // 6 - MSME / Udyam Certificate
+      // 7. MSME Certificate
       if (kycDocuments[6] != null) {
         data['msme_certificate'] = MultipartFile(
           kycDocuments[6]!.path,
@@ -353,27 +365,60 @@ class KycDocumentUploadController extends GetxController
         );
       }
 
+      // 8. Cancelled Cheque
+      if (cancelledChequeImage != null) {
+        data['cancelled_cheque'] = MultipartFile(
+          cancelledChequeImage.path,
+          filename: _getFileName(cancelledChequeImage),
+        );
+      }
+
+      // 9. Bank Statement
+      if (bankStatementImage != null) {
+        data['bank_statement'] = MultipartFile(
+          bankStatementImage.path,
+          filename: _getFileName(bankStatementImage),
+        );
+      }
+
+      // 10. Live Selfie
+      if (liveSelfieImage != null) {
+        data['self_live_photo'] = MultipartFile(
+          liveSelfieImage.path,
+          filename: _getFileName(liveSelfieImage),
+        );
+      }
+
       // ----------------------------------------------------------
-      // EXTRA REQUIRED FILES
+      // LOG ALL KEYS BEFORE FORM DATA
       // ----------------------------------------------------------
 
-      // Cancelled Cheque
-      data['cancelled_cheque'] = MultipartFile(
-        cancelledChequeImage?.path,
-        filename: _getFileName(cancelledChequeImage),
+      log('========== KYC MULTIPART REQUEST ==========');
+
+      log('Total keys: ${data.length}');
+
+      log(
+        'Keys being sent: '
+        '${data.keys.toList()}',
       );
 
-      // Bank Statement
-      data['bank_statement'] = MultipartFile(
-        bankStatementImage?.path,
-        filename: _getFileName(bankStatementImage),
-      );
+      for (final entry in data.entries) {
+        final value = entry.value;
 
-      // Live Selfie
-      data['self_live_photo'] = MultipartFile(
-        liveSelfieImage?.path,
-        filename: _getFileName(liveSelfieImage),
-      );
+        if (value is MultipartFile) {
+          log(
+            'KEY: ${entry.key} | '
+            'FILE: ${value.filename}',
+          );
+        } else {
+          log(
+            'KEY: ${entry.key} | '
+            'VALUE: $value',
+          );
+        }
+      }
+
+      log('==========================================');
 
       // ----------------------------------------------------------
       // CREATE FORM DATA
@@ -381,10 +426,35 @@ class KycDocumentUploadController extends GetxController
 
       final FormData formData = FormData(data);
 
-      log(
-        'KYC multipart fields: '
-        '${formData.fields.map((e) => '${e.key}=${e.value}').toList()}',
-      );
+      // ----------------------------------------------------------
+      // LOG FORMDATA FIELDS
+      // ----------------------------------------------------------
+
+      log('========== FORM DATA FIELDS ==========');
+
+      for (final field in formData.fields) {
+        log(
+          'FIELD KEY: ${field.key} | '
+          'VALUE: ${field.value}',
+        );
+      }
+
+      log('======================================');
+
+      // ----------------------------------------------------------
+      // LOG FORMDATA FILES
+      // ----------------------------------------------------------
+
+      log('========== FORM DATA FILES ==========');
+
+      for (final file in formData.files) {
+        log(
+          'FILE KEY: ${file.key} | '
+          'FILENAME: ${file.value.filename}',
+        );
+      }
+
+      log('=====================================');
 
       // ----------------------------------------------------------
       // API CALL

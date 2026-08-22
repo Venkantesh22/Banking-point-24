@@ -1,9 +1,17 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:lekra/controllers/basic_controlller.dart';
+import 'package:lekra/controllers/kyc_controller/bank_details_controller.dart';
+import 'package:lekra/controllers/kyc_controller/business_information_controller.dart';
+import 'package:lekra/controllers/kyc_controller/document_details_controller.dart';
+import 'package:lekra/controllers/kyc_controller/live_shop_verification_controller.dart';
+import 'package:lekra/controllers/kyc_controller/registration_kyc_form_controller.dart';
 import 'package:lekra/data/models/response/response_model.dart';
+import 'package:lekra/data/models/vender_kyc/vender_kyc_details_model.dart';
 import 'package:lekra/data/models/vender_kyc/vender_kyc_status_model.dart';
 import 'package:lekra/data/repositories/card_withdrawal_repo/vender_kyc_repo.dart';
+import 'package:lekra/services/constants.dart';
 
 class FormController extends GetxController implements GetxService {
   final VenderKycRepo venderKycRepo;
@@ -191,10 +199,6 @@ class FormController extends GetxController implements GetxService {
     try {
       final response = await venderKycRepo.venderKycStatus();
 
-      log('STATUS CODE: ${response.statusCode}');
-      log('RESPONSE BODY: ${response.body}');
-      log('RESPONSE TYPE: ${response.body.runtimeType}');
-
       final body = response.body;
 
       if (response.statusCode == 200 &&
@@ -238,6 +242,7 @@ class FormController extends GetxController implements GetxService {
     }
   }
 
+  VenderKycDetails? venderKycDetails;
   Future<ResponseModel> venderKycDetail() async {
     log('----------- venderKycDetail Called ----------');
 
@@ -247,20 +252,16 @@ class FormController extends GetxController implements GetxService {
     try {
       final response = await venderKycRepo.venderKycDetail();
 
-      log('STATUS CODE: ${response.statusCode}');
-      log('RESPONSE BODY: ${response.body}');
-      log('RESPONSE TYPE: ${response.body.runtimeType}');
-
       final body = response.body;
 
       if (response.statusCode == 200 &&
           body is Map &&
           body['status']?.toString().toLowerCase() == 'success') {
-        // venderKycStatusModel = VenderKycStatusModel.fromJson(
-        //   Map<String, dynamic>.from(body),
-        // );
+        venderKycDetails = VenderKycDetails.fromJson(
+          Map<String, dynamic>.from(body["data"]),
+        );
 
-        // applyKycStatus();
+        updateDataOfKycToSection();
 
         return ResponseModel(
           true,
@@ -293,5 +294,200 @@ class FormController extends GetxController implements GetxService {
       isLoading = false;
       update();
     }
+  }
+
+  Future<void> updateBasicDetailsFromKyc() async {
+    final basicController = Get.find<BasicController>();
+
+    final registrationController = Get.find<RegistrationKycFromController>();
+
+    final data = venderKycDetails;
+
+    if (data == null) {
+      return;
+    }
+
+    // ============================================================
+    // BASIC DETAILS
+    // ============================================================
+
+    registrationController.firstNameController.text = data.firstName ?? '';
+
+    registrationController.lastNameController.text = data.lastName ?? '';
+
+    registrationController.businessNumberController.text =
+        data.mobileNumber ?? '';
+
+    registrationController.businessEmailController.text = data.email ?? '';
+
+    registrationController.businessNameController.text = data.shopName ?? '';
+
+    registrationController.shopAddressController.text = data.shopAddress ?? '';
+
+    registrationController.pincodeController.text = data.pinCode ?? '';
+
+    // ============================================================
+    // LOAD STATE LIST
+    // ============================================================
+
+    await basicController.fetchStatusList();
+
+    // ============================================================
+    // FIND STATE FROM API LIST
+
+    // ============================================================
+
+    if ((data.state ?? '').isNotEmpty) {
+      final stateMatches = basicController.statusList.where(
+        (item) =>
+            item.stateName?.trim().toLowerCase() ==
+            data.state!.trim().toLowerCase(),
+      );
+
+      if (stateMatches.isNotEmpty) {
+        final selectedState = stateMatches.first;
+
+        registrationController.setState(selectedState);
+
+        basicController.setSelectStateModel(
+          stateName: selectedState.stateName,
+        );
+
+        // ==========================================================
+        // LOAD DISTRICTS FOR SELECTED STATE
+        // ==========================================================
+
+        await basicController.fetchDistrictByState();
+
+        // ==========================================================
+        // FIND CITY / DISTRICT
+        // ==========================================================
+
+        if ((data.city ?? '').isNotEmpty) {
+          final districtMatches = basicController.districtList.where(
+            (item) =>
+                item.districtName?.trim().toLowerCase() ==
+                data.city!.trim().toLowerCase(),
+          );
+
+          if (districtMatches.isNotEmpty) {
+            final selectedDistrict = districtMatches.first;
+
+            registrationController.setDistrict(
+              selectedDistrict,
+            );
+          }
+        }
+      }
+    }
+
+    registrationController.update();
+    update();
+  }
+
+  void updateKycInfoFromKyc() {
+    final controller = Get.find<DocumentDetailsController>();
+
+    controller.aadhaarNumberController.text =
+        venderKycDetails?.aadhaarNumber ?? '';
+
+    controller.panNumberController.text = venderKycDetails?.panNumber ?? '';
+
+    controller.gstNumberController.text = venderKycDetails?.gstin ?? '';
+
+    controller.tradeLicenseNumberController.text =
+        venderKycDetails?.tradeLicenceNumber ?? '';
+
+    controller.msmeNumberController.text =
+        venderKycDetails?.msmeRegistrationNumber ?? '';
+
+    controller.update();
+    update();
+  }
+
+  void updateBusinessInfoFromKyc() {
+    final controller = Get.find<BusinessInformationController>();
+
+    controller.businessCategory = venderKycDetails?.businessCategory ?? '';
+
+    controller.natureOfBusinessController.text =
+        venderKycDetails?.natureOfBusiness ?? '';
+
+    controller.businessDescriptionController.text =
+        venderKycDetails?.businessDescription ?? '';
+
+    final date = venderKycDetails?.businessStartDate?.toLocal();
+
+    controller.businessStartDateController.text = date != null
+        ? "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}"
+        : '';
+
+    controller.expectedMonthlyTransactionVolume =
+        venderKycDetails?.expectedMonthlyVolume ?? '';
+
+    controller.businessOwnershipType = venderKycDetails?.ownershipType;
+  }
+
+//*  Bank details section
+  void updateBankDetailsFromKyc() {
+    final controller = Get.find<BankDetailsController>();
+
+    controller.accountNameController.text =
+        venderKycDetails?.accountHolderName ?? '';
+
+    controller.bankNameController.text = venderKycDetails?.bankName ?? '';
+
+    controller.accountNumberController.text =
+        venderKycDetails?.accountNumber ?? '';
+
+    controller.ifscController.text = venderKycDetails?.ifscCode ?? '';
+
+    controller.branchNameController.text = venderKycDetails?.branchName ?? '';
+
+    controller.registeredMobileController.text =
+        venderKycDetails?.bankRegisteredMobile ?? '';
+
+    controller.setAccountType(venderKycDetails?.accountType ?? "");
+    update();
+    controller.update();
+  }
+
+  //* Shop verification
+
+  void updateShopInfoFromKyc() {
+    final controller = Get.find<LiveShopVerificationController>();
+
+    controller.shopSignboardVisible = true;
+    controller.locationCaptured = true;
+
+    controller.shopLivePhotoPath =
+        getRemoteImageUrl(venderKycDetails?.shopLivePhotoPath ?? "");
+    log("image a of show ${venderKycDetails?.shopLivePhotoPath ?? ""}");
+
+    update();
+    controller.update();
+  }
+
+  void updateDataOfKycToSection() {
+    updateBasicDetailsFromKyc();
+    updateKycInfoFromKyc();
+    updateBusinessInfoFromKyc();
+    updateShopInfoFromKyc();
+    updateBankDetailsFromKyc();
+    // updateKycDocumentsFromKyc();
+    // updateBankDocumentsFromKyc();
+    // updateSelfieFromKyc();
+  }
+
+  String? getRemoteImageUrl(String? path) {
+    if (path == null || path.trim().isEmpty) {
+      return null;
+    }
+
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
+    }
+
+    return '${AppConstants.baseUrl}/$path';
   }
 }

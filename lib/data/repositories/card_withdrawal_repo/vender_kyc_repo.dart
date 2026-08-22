@@ -129,7 +129,7 @@ class VenderKycRepo {
     final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
 
     return await apiClient.postData(
-      AppConstants.postVenderKycBasicDetails,
+      AppConstants.postVenderKycKYCDocUpload,
       'venderKycKYCDocUpload',
       data,
       headers: {
