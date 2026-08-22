@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:lekra/controllers/basic_controlller.dart';
 import 'package:lekra/controllers/kyc_controller/bank_details_controller.dart';
-import 'package:lekra/controllers/kyc_controller/bank_document_upload_controller.dart';
 import 'package:lekra/controllers/kyc_controller/business_information_controller.dart';
 import 'package:lekra/controllers/kyc_controller/document_details_controller.dart';
 import 'package:lekra/controllers/kyc_controller/live_shop_verification_controller.dart';

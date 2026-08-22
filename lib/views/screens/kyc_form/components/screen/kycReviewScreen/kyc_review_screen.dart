@@ -174,8 +174,7 @@ class KycReviewScreen extends StatelessWidget {
                 ),
                 ReviewItem(
                   label: 'Nature',
-                  value:
-                      businessController.natureOfBusinessController.text ?? '',
+                  value: businessController.natureOfBusinessController.text,
                 ),
                 ReviewItem(
                   label: 'Description',
