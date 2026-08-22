@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lekra/data/models/response/response_model.dart';
 import 'package:lekra/data/repositories/card_withdrawal_repo/custom_kyc_repo.dart';
+import 'package:lekra/services/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum KycStatus {
   pending,
@@ -15,8 +17,12 @@ enum KycStatus {
 
 class CustomKycController extends GetxController implements GetxService {
   final CustomKycRepo customKycRepo;
+  final SharedPreferences sharedPreferences;
 
-  CustomKycController({required this.customKycRepo});
+  CustomKycController({
+    required this.customKycRepo,
+    required this.sharedPreferences,
+  });
 
   bool isLoading = false;
 
@@ -286,6 +292,43 @@ class CustomKycController extends GetxController implements GetxService {
   void removeLivePhoto() {
     livePhoto = null;
     update();
+  }
+
+  //* Call Submit custom Kyc Api checkCustomerKYC()
+  Future<ResponseModel> checkCustomerKYC() async {
+    log('----------- checkCustomerKYC Called ----------');
+
+    ResponseModel responseModel;
+
+    isLoading = true;
+    update();
+
+    try {
+      final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
+
+      Map<String, dynamic> data = {
+        "session_id": apiToken,
+        "mobile_number": mobileNumberController.text.trim(),
+      };
+      Response response =
+          await customKycRepo.checkCustomerKYC(data: FormData(data));
+
+      if (response.statusCode == 200 && response.body['status'] == "success") {
+        responseModel = ResponseModel(
+            true, response.body['message'] ?? " checkCustomerKYC success");
+      } else {
+        responseModel = ResponseModel(
+            false, response.body['message'] ?? "Error while checkCustomerKYC");
+      }
+    } catch (e) {
+      log('ERROR AT checkCustomerKYC(): $e');
+      responseModel =
+          ResponseModel(false, "Error while checkCustomerKYC user $e");
+    }
+
+    isLoading = false;
+    update();
+    return responseModel;
   }
 
   //* Call Submit custom Kyc Api submitCustomKyc()

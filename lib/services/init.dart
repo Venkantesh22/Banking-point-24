@@ -139,6 +139,7 @@ class Init {
 
       Get.lazyPut(() => CustomKycController(
             customKycRepo: Get.find(),
+            sharedPreferences: Get.find(),
           ));
 
       //* cried card controller

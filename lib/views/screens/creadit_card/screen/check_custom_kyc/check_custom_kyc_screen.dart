@@ -273,27 +273,21 @@ class CheckCustomerKycScreen extends StatelessWidget {
                         ],
                       ),
                       onTap: () {
-                        // final bool isValid =
-                        //     formKey.currentState?.validate() ?? false;
-
-                        // if (!isValid) {
-                        //   return;
-                        // }
-
-                        final String mobile =
-                            controller.mobileNumberController.text.trim();
-
-                        debugPrint(
-                          'Customer mobile: $mobile',
-                        );
-                        navigate(context: context, page: CustomKycScreen());
-
-                        /*
-                         * API LOGIC WILL BE ADDED LATER.
-                         *
-                         * For now only validate the
-                         * mobile number and continue.
-                         */
+                        if (formKey.currentState?.validate() ?? false) {
+                          controller.checkCustomerKYC().then((value) {
+                            if (value.isSuccess) {
+                              showToast(
+                                  message: value.message,
+                                  typeCheck: value.isSuccess);
+                              navigate(
+                                  context: context, page: CustomKycScreen());
+                            } else {
+                              showToast(
+                                  message: value.message,
+                                  typeCheck: value.isSuccess);
+                            }
+                          });
+                        }
                       },
                     ),
 

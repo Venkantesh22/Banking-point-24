@@ -8,6 +8,13 @@ class CustomKycRepo {
 
   CustomKycRepo({required this.apiClient});
 
+  Future<Response> checkCustomerKYC({required FormData data}) async =>
+      await apiClient.postData(
+        AppConstants.postCheckCustomer,
+        "checkCustomerKYC",
+        data,
+      );
+
   Future<Response> submitCustomKyc({required FormData data}) async =>
       await apiClient.postData(
         AppConstants.postSubmitCustomKyc,
