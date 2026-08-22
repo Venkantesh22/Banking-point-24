@@ -168,4 +168,22 @@ class VenderKycRepo {
       },
     );
   }
+
+  Future<Response> venderKycFinalSubmit({
+    required Map<String, dynamic> data,
+  }) async {
+    final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
+
+    return await apiClient.postData(
+      AppConstants.postVenderKycFinalSubmit,
+      "venderKycFinalSubmit",
+      data,
+      contentType: 'application/json',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $apiToken',
+        'Content-Type': 'application/json',
+      },
+    );
+  }
 }

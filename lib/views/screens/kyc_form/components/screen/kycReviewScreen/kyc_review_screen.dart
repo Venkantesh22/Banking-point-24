@@ -302,11 +302,15 @@ class KycReviewScreen extends StatelessWidget {
               items: [
                 ReviewItem(
                   label: 'Cancelled Cheque',
-                  value: '${bankDocUploadController.cancelledCheque}',
+                  value: bankDocUploadController.cancelledCheque != null
+                      ? 'Captured'
+                      : 'Not captured',
                 ),
                 ReviewItem(
                   label: 'Bank Statement',
-                  value: '${bankDocUploadController.bankStatement}',
+                  value: bankDocUploadController.bankStatement != null
+                      ? 'Captured'
+                      : 'Not captured',
                 ),
               ],
             ),
@@ -419,44 +423,24 @@ class KycReviewScreen extends StatelessWidget {
                   secondaryColor,
                 ],
               ),
-              onTap: reviewController.isSubmitting
-                  ? null
-                  : () async {
-                      // if (!reviewController.validateBeforeSubmit()) {
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     const SnackBar(
-                      //       content: Text(
-                      //         'Please accept the declaration before submitting.',
-                      //       ),
-                      //     ),
-                      //   );
-                      //   return;
-                      // }
+              onTap: () async {
+                if (!reviewController.validateBeforeSubmit()) {
+                  return showToast(
+                      message:
+                          'Please accept the declaration before submitting.',
+                      toastType: ToastType.info);
+                }
 
-                      // final success = await reviewController.submitKyc();
-
-                      // if (!success) {
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     const SnackBar(
-                      //       content: Text(
-                      //         'Unable to submit KYC.',
-                      //       ),
-                      //     ),
-                      //   );
-                      //   return;
-                      // }
-
-                      onCompleteChanged(true);
-                      navigate(
-                          context: context,
-                          page: KycSubmittedSuccessScreen(
-                            onGoToDashboard: () {
-                              Get.find<DashBoardController>().dashPage = 0;
-                              navigate(
-                                  context: context, page: DashboardScreen());
-                            },
-                          ));
-                    },
+                onCompleteChanged(true);
+                navigate(
+                    context: context,
+                    page: KycSubmittedSuccessScreen(
+                      onGoToDashboard: () {
+                        Get.find<DashBoardController>().dashPage = 0;
+                        navigate(context: context, page: DashboardScreen());
+                      },
+                    ));
+              },
             ),
 
             SizedBox(height: 20.h),

@@ -133,7 +133,7 @@ class Init {
       Get.lazyPut(() => SelfLiveVerificationController());
       Get.lazyPut(() => BankDetailsController(venderKycRepo: Get.find()));
       Get.lazyPut(() => BankDocumentUploadController());
-      Get.lazyPut(() => KycReviewController());
+      Get.lazyPut(() => KycReviewController(venderKycRepo: Get.find()));
 
       //* Custom KYC controller
 
