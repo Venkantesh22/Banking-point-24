@@ -15,10 +15,10 @@ class CustomKycRepo {
         data,
       );
 
-  Future<Response> submitCustomKyc({required FormData data}) async =>
+  Future<Response> cardWithdrawalCustomerKYC({required FormData data}) async =>
       await apiClient.postData(
-        AppConstants.postSubmitCustomKyc,
-        "submitCustomKyc",
+        AppConstants.postCardWithdrawalCustomerKYC,
+        "cardWithdrawalCustomerKYC",
         data,
       );
 

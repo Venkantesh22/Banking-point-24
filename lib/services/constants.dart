@@ -262,6 +262,9 @@ class AppConstants {
   static const String postCheckCustomer =
       "api/credit-card-cash-withdrawal/v1/check-kyc";
 
+  static const String postCardWithdrawalCustomerKYC =
+      "api/credit-card-cash-withdrawal/v1/submit-kyc";
+
   static const String postSubmitCreditCardInfo =
       "api/credit-card-cash-withdrawal/v1/cards";
 
@@ -273,6 +276,7 @@ class AppConstants {
 
   static const String postCreditCardOTPVerify =
       "api/credit-card-cash-withdrawal/v1/verify-otp";
+
   static const String postConfirmAndTransaction =
       "api/credit-card-cash-withdrawal/v1/confirm";
 

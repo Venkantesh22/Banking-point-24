@@ -221,6 +221,35 @@ class CustomKycScreen extends StatelessWidget {
                     ),
 
                     sizedBoxHeight(height: 22),
+                    // --------------------------------------------------
+                    // Pan text
+                    // --------------------------------------------------
+
+                    AppTextFieldWithHeading(
+                      controller: controller.panController,
+                      heading: 'Pan card Number',
+                      hindText: 'Enter you can pan card no.',
+                      isRequired: true,
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please enter pan card no.';
+                        }
+
+                        if (value.trim().length < 3) {
+                          return 'Please enter a valid pan card no.';
+                        }
+
+                        if (!RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$')
+                            .hasMatch(value.toUpperCase())) {
+                          return 'Please enter a valid email address';
+                        }
+
+                        return null;
+                      },
+                    ),
+
+                    sizedBoxHeight(height: 16),
 
                     // ==================================================
                     // PAN VERIFICATION
@@ -347,6 +376,7 @@ class CustomKycScreen extends StatelessWidget {
                     // ==================================================
 
                     CustomButton(
+                      
                       title: controller.isSubmitting
                           ? 'Submitting...'
                           : 'Submit KYC',
@@ -361,58 +391,61 @@ class CustomKycScreen extends StatelessWidget {
                       onTap: controller.isSubmitting
                           ? null
                           : () {
-                              navigate(
-                                  context: context,
-                                  page: CustomKycStatusScreen());
-                              // final bool valid =
-                              //     formKey.currentState?.validate() ?? false;
+                              final bool valid =
+                                  formKey.currentState?.validate() ?? false;
 
-                              // if (!valid) {
-                              //   return;
-                              // }
+                              if (!valid) {
+                                return;
+                              }
 
                               // if (!controller.isMobileVerified) {
-                              //   _showMessage(
-                              //     context,
-                              //     'Please verify mobile number',
-                              //   );
-                              //   return;
+                              //   return showToast(
+                              //       message: 'Please verify mobile number',
+                              //       toastType: ToastType.warning);
                               // }
 
                               // if (!controller.isOtpVerified) {
-                              //   _showMessage(
-                              //     context,
-                              //     'Please verify OTP',
-                              //   );
-                              //   return;
+                              //   return showToast(
+                              //       message: 'Please verify OTP',
+                              //       toastType: ToastType.warning);
                               // }
 
                               // if (controller.panCardImage == null) {
-                              //   _showMessage(
-                              //     context,
-                              //     'Please upload PAN card',
-                              //   );
-                              //   return;
+                              //   return showToast(
+                              //       message: 'Please upload PAN card',
+                              //       toastType: ToastType.warning);
                               // }
 
                               // if (controller.aadhaarFrontImage == null ||
                               //     controller.aadhaarBackImage == null) {
-                              //   _showMessage(
-                              //     context,
-                              //     'Please upload Aadhaar front and back',
-                              //   );
-                              //   return;
+                              //   return showToast(
+                              //       message:
+                              //           'Please upload Aadhaar front and back',
+                              //       toastType: ToastType.warning);
                               // }
 
                               // if (controller.livePhoto == null) {
-                              //   _showMessage(
-                              //     context,
-                              //     'Please capture live photo',
-                              //   );
-                              //   return;
+                              //   return showToast(
+                              //       message: 'Please capture live photo',
+                              //       toastType: ToastType.warning);
                               // }
 
-                              // controller.submitKyc();
+                              controller
+                                  .cardWithdrawalCustomerKYC()
+                                  .then((value) {
+                                if (value.isSuccess) {
+                                  showToast(
+                                      message: value.message,
+                                      typeCheck: value.isSuccess);
+                                  navigate(
+                                      context: context,
+                                      page: CustomKycStatusScreen());
+                                } else {
+                                  showToast(
+                                      message: value.message,
+                                      typeCheck: value.isSuccess);
+                                }
+                              });
                             },
                     ),
 
@@ -426,6 +459,4 @@ class CustomKycScreen extends StatelessWidget {
       },
     );
   }
-
-
 }

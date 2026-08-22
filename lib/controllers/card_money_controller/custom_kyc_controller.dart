@@ -36,6 +36,7 @@ class CustomKycController extends GetxController implements GetxService {
   final TextEditingController mobileNumberController = TextEditingController();
 
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController panController = TextEditingController();
 
   final List<TextEditingController> otpControllers = List.generate(
     6,
@@ -334,44 +335,114 @@ class CustomKycController extends GetxController implements GetxService {
     return responseModel;
   }
 
-  //* Call Submit custom Kyc Api submitCustomKyc()
-  Future<ResponseModel> submitCustomKyc({
-    required String? number,
-  }) async {
-    log('----------- submitCustomKyc Called ----------');
+  //* Call Submit custom Kyc Api cardWithdrawalCustomerKYC()
+  Future<ResponseModel> cardWithdrawalCustomerKYC() async {
+    log('----------- cardWithdrawalCustomerKYC Called ----------');
 
-    ResponseModel responseModel;
     isLoading = true;
     update();
 
     try {
-      Map<String, dynamic> data = {
+      final apiToken = sharedPreferences.getString(AppConstants.apiToken) ?? '';
+
+      if (panCardImage == null) {
+        return ResponseModel(false, 'Please upload PAN image');
+      }
+
+      if (aadhaarFrontImage == null) {
+        return ResponseModel(false, 'Please upload Aadhaar front image');
+      }
+
+      if (aadhaarBackImage == null) {
+        return ResponseModel(false, 'Please upload Aadhaar back image');
+      }
+
+      if (livePhoto == null) {
+        return ResponseModel(false, 'Please capture live photo');
+      }
+
+      final FormData formData = FormData({
+        "session_id": apiToken,
         "full_name": fullNameController.text.trim(),
         "mobile_number": mobileNumberController.text.trim(),
         "email": emailController.text.trim(),
-        "dob": "",
-      };
-      Response response =
-          await customKycRepo.submitCustomKyc(data: FormData(data));
+        "pan": panController.text.trim(),
+        "pan_image": MultipartFile(
+          panCardImage!.path,
+          filename: _getFileName(panCardImage!),
+        ),
+        "aadhaar_front_image": MultipartFile(
+          aadhaarFrontImage!.path,
+          filename: _getFileName(aadhaarFrontImage!),
+        ),
+        "aadhaar_back_image": MultipartFile(
+          aadhaarBackImage!.path,
+          filename: _getFileName(aadhaarBackImage!),
+        ),
+        "live_photo": MultipartFile(
+          livePhoto!.path,
+          filename: _getFileName(livePhoto!),
+        ),
+      });
 
-      if (response.statusCode == 200 && response.body['status'] == "success") {
-        responseModel = ResponseModel(true,
-            response.body['message'] ?? " generateOTPForPrepaidCard success");
-      } else {
-        responseModel = ResponseModel(
-            false,
-            response.body['message'] ??
-                "Error while generateOTPForPrepaidCard");
+      // Debug
+      log('========== CUSTOMER KYC REQUEST ==========');
+
+      for (final field in formData.fields) {
+        log('FIELD: ${field.key} = ${field.value}');
       }
-    } catch (e) {
-      log('ERROR AT generateOTPForPrepaidCard(): $e');
-      responseModel =
-          ResponseModel(false, "Error while generateOTPForPrepaidCard user $e");
-    }
 
-    isLoading = false;
-    update();
-    return responseModel;
+      for (final file in formData.files) {
+        log(
+          'FILE: ${file.key} = ${file.value.filename}',
+        );
+      }
+
+      log('==========================================');
+
+      final Response response = await customKycRepo.cardWithdrawalCustomerKYC(
+        data: formData,
+      );
+
+      log('STATUS CODE: ${response.statusCode}');
+      log('RESPONSE BODY: ${response.body}');
+
+      final body = response.body;
+
+      if (response.statusCode == 200 &&
+          body is Map &&
+          body['status']?.toString().toLowerCase() == 'success') {
+        return ResponseModel(
+          true,
+          body['message']?.toString() ?? 'cardWithdrawalCustomerKYC success',
+        );
+      }
+
+      return ResponseModel(
+        false,
+        body is Map
+            ? body['message']?.toString() ??
+                'Error while cardWithdrawalCustomerKYC'
+            : response.statusText ?? 'Error while cardWithdrawalCustomerKYC',
+      );
+    } catch (e, stackTrace) {
+      log(
+        'ERROR AT cardWithdrawalCustomerKYC(): $e',
+        stackTrace: stackTrace,
+      );
+
+      return ResponseModel(
+        false,
+        'Error while cardWithdrawalCustomerKYC: $e',
+      );
+    } finally {
+      isLoading = false;
+      update();
+    }
+  }
+
+  String _getFileName(File file) {
+    return file.path.split(Platform.pathSeparator).last;
   }
 
   //* Call Submit custom Kyc Live photo Api submitCustomKycLivePhoto()
